@@ -1,97 +1,148 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atlas - Soluções</title>
-    <style>
-        /* Reset e Base */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-        
-        body {
-            background-color: #0f172a; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            color: #f8fafc;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlas - Soluções</title>
+    <style>
+        /* Reset e Base Modernizada */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; 
+        }
+        
+        body {
+            background: radial-gradient(circle at top left, #1e293b, #0f172a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: #f8fafc;
+        }
 
-        /* Card Principal */
-        .card {
-            background: #1e293b;
-            width: 100%;
-            max-width: 400px;
-            padding: 40px 25px;
-            border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            text-align: center;
-            border: 1px solid #334155;
-        }
+        /* Card com Glassmorphism leve */
+        .card {
+            background: #1e293b;
+            width: 100%;
+            max-width: 380px;
+            padding: 40px 28px;
+            border-radius: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
 
-        /* Container da Logo Atualizado */
-        .logo-container {
-            width: 120px; /* Aumentado para valorizar o dragão */
-            height: 120px;
-            margin: 0 auto 25px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden; /* Garante que a imagem não saia do arredondado */
-            border-radius: 20px;
-        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
 
-        .logo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain; /* Faz a logo se ajustar sem distorcer */
-        }
+        /* Container da Logo */
+        .logo-container {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-        h1 { font-size: 1.8rem; margin-bottom: 10px; letter-spacing: -0.5px; }
-        p { color: #94a3b8; margin-bottom: 30px; font-size: 0.95rem; }
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.3));
+        }
 
-        /* Botões */
-        .btn-group { display: flex; flex-direction: column; gap: 12px; }
+        h1 { 
+            font-size: 1.75rem; 
+            font-weight: 700;
+            margin-bottom: 8px; 
+            letter-spacing: -0.025em; 
+        }
 
-        .btn {
-            display: block;
-            background: #334155;
-            color: white;
-            text-decoration: none;
-            padding: 16px;
-            border-radius: 14px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            border: 1px solid transparent;
-        }
+        p { 
+            color: #94a3b8; 
+            margin-bottom: 32px; 
+            font-size: 0.95rem; 
+            line-height: 1.5;
+        }
 
-        .btn:active { transform: scale(0.97); background: #475569; }
-        
-        .btn-primary { 
-            background: #2563eb; 
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-        }
-        .btn-primary:active { background: #1d4ed8; }
+        /* Botões Estilizados */
+        .btn-group { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 14px; 
+        }
 
-    </style>
+        .btn {
+            display: block;
+            padding: 16px;
+            border-radius: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+        }
+
+        /* Botão Secundário */
+        .btn-secondary {
+            background: rgba(51, 65, 85, 0.5);
+            color: #e2e8f0;
+            border: 1px solid #334155;
+        }
+
+        .btn-secondary:hover {
+            background: #334155;
+            border-color: #475569;
+            transform: scale(1.02);
+        }
+
+        /* Botão Primário */
+        .btn-primary { 
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); 
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.4);
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+
+        .btn:active { 
+            transform: scale(0.98); 
+        }
+
+    </style>
 </head>
 <body>
 
-    <div class="card">
-        <div class="logo-container">
-            <img src="https://github.com/danmaxy/atlas/blob/main/ATLAS.png?raw=true" alt="Atlas Logo">
-        </div>
-        
-        <h1>Bem-vindo à Atlas</h1>
-        <p>Sua central de soluções técnicas e performance digital.</p>
+    <main class="card">
+        <div class="logo-container">
+            <img src="https://github.com/danmaxy/atlas/blob/main/ATLAS.png?raw=true" alt="Logotipo Atlas">
+        </div>
+        
+        <header>
+            <h1>Bem-vindo à Atlas</h1>
+            <p>Sua central de soluções técnicas e performance digital.</p>
+        </header>
 
-        <div class="btn-group">
-            <a href="#servicos" class="btn btn-primary">Serviços</a>
-            <a href="#pecas" class="btn">Peças</a>
-            <a href="softwares.html" class="btn">Softwares</a>
-        </div>
-    </div>
+        <nav class="btn-group">
+            <a href="#servicos" class="btn btn-primary">Serviços</a>
+            <a href="#pecas" class="btn btn-secondary">Peças</a>
+            <a href="softwares.html" class="btn btn-secondary">Softwares</a>
+        </nav>
+    </main>
 
 </body>
 </html>
