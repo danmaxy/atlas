@@ -3,144 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atlas Imperium - Tecnologia Sustentável</title>
+    <title>Atlas - Soluções Tecnológicas</title>
     <style>
         /* Reset e Base */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
         
         body {
-            background-color: #f0f4f8; /* Fundo cinza-azulado muito claro */
+            background-color: #0f172a; 
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            color: #f8fafc;
         }
 
         /* Card Principal */
         .card {
-            background: #ffffff;
+            background: #1e293b;
             width: 100%;
-            max-width: 420px; /* Um pouco mais largo para acomodar o logo */
-            padding: 40px 30px;
+            max-width: 400px;
+            padding: 40px 25px;
             border-radius: 24px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
             text-align: center;
-            border: 1px solid #e1e8ed;
+            border: 1px solid #334155;
         }
 
-        /* Recriação do Logotipo ATLAS IMPERIUM (CSS) */
+        /* Container da Logo Atualizado */
         .logo-container {
-            position: relative;
-            margin: 0 auto 30px;
-            width: 140px; /* Largura total do conjunto */
-            height: 140px;
+            width: 120px; /* Aumentado para valorizar o dragão */
+            height: 120px;
+            margin: 0 auto 25px;
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden; /* Garante que a imagem não saia do arredondado */
+            border-radius: 20px;
         }
 
-        /* Faixa central preta */
-        .logo-banner {
-            background-color: #000000;
-            color: #ffffff;
-            padding: 8px 12px;
-            border-radius: 4px;
-            z-index: 10;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .logo-at {
-            font-size: 20px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            text-transform: uppercase;
-        }
-
-        .logo-imperium {
-            font-size: 6px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 300;
-            color: #ccc;
-            margin-top: -2px;
-        }
-
-        /* O dragão como um grafismo radial minimalista */
-        .dragon-swoosh {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .logo-container img {
             width: 100%;
             height: 100%;
-            border-radius: 50%;
-            /* Gradiente em arco que lembra o movimento do dragão */
-            background: conic-gradient(from 180deg, #1d4ed8 0deg, transparent 60deg, #1d4ed8 120deg, transparent 240deg);
-            opacity: 0.15; /* Sutil */
-            z-index: 1;
-        }
-        
-        /* Círculo externo para estrutura */
-        .dragon-swoosh::after {
-            content: '';
-            position: absolute;
-            top: 10px; left: 10px; right: 10px; bottom: 10px;
-            background: #ffffff;
-            border-radius: 50%;
+            object-fit: contain; /* Faz a logo se ajustar sem distorcer */
         }
 
-        /* Conteúdo do Texto */
-        h1 { font-size: 1.6rem; color: #1e293b; margin-bottom: 8px; letter-spacing: -0.5px; }
-        .tagline { font-size: 0.9rem; color: #1d4ed8; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
-        p { color: #64748b; margin-bottom: 30px; font-size: 0.95rem; line-height: 1.5; }
+        h1 { font-size: 1.8rem; margin-bottom: 10px; letter-spacing: -0.5px; }
+        p { color: #94a3b8; margin-bottom: 30px; font-size: 0.95rem; }
 
-        /* Estilização dos Botões */
-        .btn-group { display: flex; flex-direction: column; gap: 14px; }
+        /* Botões */
+        .btn-group { display: flex; flex-direction: column; gap: 12px; }
 
         .btn {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #ffffff;
-            color: #1e293b;
+            display: block;
+            background: #334155;
+            color: white;
             text-decoration: none;
-            padding: 18px 25px;
-            border-radius: 16px;
+            padding: 16px;
+            border-radius: 14px;
             font-weight: 600;
             transition: all 0.2s ease;
-            border: 1px solid #e1e8ed;
+            border: 1px solid transparent;
         }
 
-        /* Ícone interno sutil (usando emojis para simplificar) */
-        .btn-icon { font-size: 1.2rem; margin-right: 15px; }
-        .btn-text { flex-grow: 1; text-align: left; }
-        .btn-arrow { color: #cbd5e1; font-size: 0.8rem; }
-
-        /* Interações */
-        .btn:hover {
-            border-color: #1d4ed8;
-            box-shadow: 0 4px 12px rgba(29, 78, 216, 0.05);
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-            background-color: #f8fafc;
-        }
-
-        /* Botão de Destaque (Principal Serviço) */
+        .btn:active { transform: scale(0.97); background: #475569; }
+        
         .btn-primary { 
-            background: #1d4ed8; 
-            color: #ffffff;
-            border-color: #1d4ed8;
-            box-shadow: 0 6px 15px rgba(29, 78, 216, 0.15);
+            background: #2563eb; 
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
         }
-        .btn-primary .btn-arrow { color: rgba(255,255,255,0.5); }
-        .btn-primary:hover { background: #1a44c0; border-color: #1a44c0; }
-        .btn-primary:active { background: #163da1; }
+        .btn-primary:active { background: #1d4ed8; }
 
     </style>
 </head>
@@ -148,33 +80,16 @@
 
     <div class="card">
         <div class="logo-container">
-            <div class="dragon-swoosh"></div>
-            <div class="logo-banner">
-                <span class="logo-at">ATLAS</span>
-                <span class="logo-imperium">IMPERIUM</span>
-            </div>
+            <img src="https://github.com/danmaxy/atlas/blob/main/ATLAS.png?raw=true" alt="Atlas Logo">
         </div>
         
-        <h1>Soluções em Tecnologia</h1>
-        <div class="tagline">Reparo | Peças | Sustentabilidade</div>
-        <p>Manutenção especializada de celulares, notebooks e computadores. Sua tecnologia de volta à vida, com responsabilidade.</p>
+        <h1>Bem-vindo à Atlas</h1>
+        <p>Sua central de soluções técnicas e performance digital.</p>
 
         <div class="btn-group">
-            <a href="#servicos" class="btn btn-primary">
-                <span class="btn-icon">🔧</span>
-                <span class="btn-text">Serviços de Manutenção</span>
-                <span class="btn-arrow">▶</span>
-            </a>
-            <a href="#pecas" class="btn">
-                <span class="btn-icon">📦</span>
-                <span class="btn-text">Venda de Peças</span>
-                <span class="btn-arrow">▶</span>
-            </a>
-            <a href="#softwares" class="btn">
-                <span class="btn-icon">♻️</span>
-                <span class="btn-text">Reciclagem Eletrônica</span>
-                <span class="btn-arrow">▶</span>
-            </a>
+            <a href="#servicos" class="btn btn-primary">Serviços</a>
+            <a href="#pecas" class="btn">Peças</a>
+            <a href="#softwares" class="btn">Softwares</a>
         </div>
     </div>
 
