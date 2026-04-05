@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Site Mobile</title>
+    <style>
+        /* Reset básico e fontes */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Container principal estilo Mobile-First */
+        .card {
+            background: white;
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            background: #007AFF; /* Cor azul padrão */
+            border-radius: 50%;
+            margin: 0 auto 20px;
+        }
+
+        h1 { font-size: 1.5rem; color: #333; margin-bottom: 10px; }
+        p { color: #666; margin-bottom: 25px; line-height: 1.5; }
+
+        /* Botões otimizados para o polegar */
+        .btn {
+            display: block;
+            background: #007AFF;
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        .btn:active { transform: scale(0.98); background: #0056b3; }
+
+        .btn-secondary { background: #333; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="profile-img"></div>
+        <h1>Bem-vindo ao meu Domínio</h1>
+        <p>Este é um site otimizado para celulares. Simples, rápido e direto ao ponto.</p>
+
+        <a href="https://wa.me/SEUNUMERO" class="btn">Chamar no WhatsApp</a>
+        <a href="mailto:email@exemplo.com" class="btn btn-secondary">Enviar E-mail</a>
+    </div>
+
+</body>
+</html>
