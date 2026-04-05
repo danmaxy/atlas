@@ -3,57 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atlas - Downloads de Softwares</title>
+    <title>Atlas - Softwares</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: #0f172a; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; color: #f8fafc; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { 
+            background-color: #0f172a; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 40px 20px; 
+            color: #f8fafc; 
+        }
         
         .card {
             background: #1e293b;
             width: 100%;
-            max-width: 450px;
+            max-width: 500px;
             padding: 30px;
             border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
             border: 1px solid #334155;
         }
 
-        h1 { font-size: 1.5rem; margin-bottom: 20px; text-align: center; color: #38bdf8; }
+        h1 { 
+            font-size: 1.6rem; 
+            margin-bottom: 25px; 
+            text-align: center; 
+            color: #38bdf8;
+            letter-spacing: 1px;
+        }
+
+        .software-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
 
         .software-item {
             background: #334155;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 10px;
+            padding: 16px;
+            border-radius: 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: 0.2s;
+            transition: transform 0.2s, background 0.2s;
+            border: 1px solid transparent;
         }
 
-        .software-info h3 { font-size: 1rem; color: #fff; }
-        .software-info p { font-size: 0.8rem; color: #94a3b8; }
+        .software-item:hover {
+            background: #3e4e63;
+            transform: translateY(-2px);
+            border-color: #38bdf8;
+        }
+
+        .software-info h3 { 
+            font-size: 1rem; 
+            color: #fff; 
+            margin-bottom: 2px;
+        }
+        
+        .software-info p { 
+            font-size: 0.75rem; 
+            color: #94a3b8; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
         .download-btn {
-            background: #22c55e; /* Verde para download */
+            background: #22c55e;
             color: white;
             text-decoration: none;
-            padding: 8px 15px;
+            padding: 8px 18px;
             border-radius: 8px;
             font-size: 0.85rem;
             font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .download-btn:hover {
+            background: #16a34a;
         }
 
         .back-btn {
             display: block;
             text-align: center;
-            margin-top: 20px;
+            margin-top: 25px;
             color: #94a3b8;
             text-decoration: none;
             font-size: 0.9rem;
+            transition: color 0.2s;
         }
         
-        .back-btn:hover { color: #fff; }
+        .back-btn:hover { color: #38bdf8; }
+
+        /* Scrollbar customizada para listas longas */
+        .card::-webkit-scrollbar { width: 6px; }
+        .card::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -61,20 +108,62 @@
     <div class="card">
         <h1>Central de Softwares</h1>
 
-        <div class="software-item">
-            <div class="software-info">
-                <h3>Driver Pack 2026</h3>
-                <p>Pack essencial de drivers</p>
+        <div class="software-list">
+            <div class="software-item">
+                <div class="software-info">
+                    <h3>CorelDRAW</h3>
+                    <p>Design Gráfico</p>
+                </div>
+                <a href="https://drive.google.com/drive/folders/18OPpfZbKRTRxCJw9AeI-eNDxlF3kumtv?usp=drive_link" target="_blank" class="download-btn">Baixar</a>
             </div>
-            <a href="LINK_DO_SEU_GOOGLE_DRIVE" target="_blank" class="download-btn">Baixar</a>
-        </div>
 
-        <div class="software-item">
-            <div class="software-info">
-                <h3>Otimizador Atlas</h3>
-                <p>Melhora performance PC</p>
+            <div class="software-item">
+                <div class="software-info">
+                    <h3>Adobe Photoshop</h3>
+                    <p>Edição de Imagem</p>
+                </div>
+                <a href="https://drive.google.com/drive/folders/18OPpfZbKRTRxCJw9AeI-eNDxlF3kumtv?usp=drive_link" target="_blank" class="download-btn">Baixar</a>
             </div>
-            <a href="OUTRO_LINK_AQUI" target="_blank" class="download-btn">Baixar</a>
+
+            <div class="software-item">
+                <div class="software-info">
+                    <h3>Pacote Office</h3>
+                    <p>Produtividade</p>
+                </div>
+                <a href="https://drive.google.com/drive/folders/18OPpfZbKRTRxCJw9AeI-eNDxlF3kumtv?usp=drive_link" target="_blank" class="download-btn">Baixar</a>
+            </div>
+
+            <div class="software-item">
+                <div class="software-info">
+                    <h3>Autodesk Revit</h3>
+                    <p>Modelagem BIM</p>
+                </div>
+                <a href="https://drive.google.com/drive/folders/18OPpfZbKRTRxCJw9AeI-eNDxlF3kumtv?usp=drive_link" target="_blank" class="download-btn">Baixar</a>
+            </div>
+
+            <div class="software-item">
+                <div class="software-info">
+                    <h3>Enscape</h3>
+                    <p>Renderização Real-time</p>
+                </div>
+                <a href="https://drive.google.com/drive/folders/18OPpfZbKRTRxCJw9AeI-eNDxlF3kumtv?usp=drive_link" target="_blank" class="download-btn">Baixar</a>
+            </div>
+
+            <div class="software-item">
+                <div class="software-info">
+                    <h3>V-Ray</h3>
+                    <p>Renderização Profissional</p>
+                </div>
+                <a href="https://drive.google.com/drive/folders/18OPpfZbKRTRxCJw9AeI-eNDxlF3kumtv?usp=drive_link" target="_blank" class="download-btn">Baixar</a>
+            </div>
+
+            <div class="software-item">
+                <div class="software-info">
+                    <h3>AutoCAD</h3>
+                    <p>Desenho Técnico</p>
+                </div>
+                <a href="https://drive.google.com/drive/folders/18OPpfZbKRTRxCJw9AeI-eNDxlF3kumtv?usp=drive_link" target="_blank" class="download-btn">Baixar</a>
+            </div>
         </div>
 
         <a href="index.html" class="back-btn">← Voltar ao Início</a>
