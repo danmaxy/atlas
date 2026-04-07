@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atlas - Softwares</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; }
         
         body { 
             background-color: #0f172a; 
+            background-image: radial-gradient(circle at top right, #1e293b, #0f172a);
             display: flex; 
             justify-content: center; 
             align-items: center; 
@@ -18,155 +19,175 @@
         }
         
         .card {
-            background: #1e293b;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
             width: 100%;
-            max-width: 500px;
-            padding: 30px;
-            border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-            border: 1px solid #334155;
+            max-width: 550px;
+            padding: 40px;
+            border-radius: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         h1 { 
-            font-size: 1.6rem; 
-            margin-bottom: 25px; 
+            font-size: 1.8rem; 
+            margin-bottom: 8px; 
             text-align: center; 
-            color: #38bdf8;
-            letter-spacing: 1px;
+            color: #fff;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
         }
 
         .software-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 8px;
         }
 
+        /* Custom Scrollbar */
+        .software-list::-webkit-scrollbar { width: 5px; }
+        .software-list::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+
         .software-item {
-            background: #334155;
-            padding: 16px;
-            border-radius: 14px;
+            background: rgba(51, 65, 85, 0.4);
+            padding: 18px;
+            border-radius: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: transform 0.2s, background 0.2s;
-            border: 1px solid transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .software-item:hover {
-            background: #3e4e63;
-            transform: translateY(-2px);
-            border-color: #38bdf8;
+            background: rgba(51, 65, 85, 0.8);
+            transform: scale(1.02);
+            border-color: #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
         }
 
         .software-info h3 { 
-            font-size: 1rem; 
-            color: #fff; 
-            margin-bottom: 2px;
+            font-size: 1.05rem; 
+            color: #f8fafc; 
+            margin-bottom: 4px;
         }
         
-        .software-info p { 
-            font-size: 0.75rem; 
-            color: #94a3b8; 
+        .category-tag { 
+            display: inline-block;
+            font-size: 0.65rem; 
+            color: #3b82f6; 
+            background: rgba(59, 130, 246, 0.1);
+            padding: 2px 8px;
+            border-radius: 6px;
             text-transform: uppercase;
+            font-weight: 700;
             letter-spacing: 0.5px;
         }
 
         .download-btn {
-            background: #22c55e;
+            background: #3b82f6; /* Azul solicitado */
             color: white;
             text-decoration: none;
-            padding: 8px 18px;
-            border-radius: 8px;
+            padding: 10px 20px;
+            border-radius: 10px;
             font-size: 0.85rem;
-            font-weight: bold;
-            transition: background 0.2s;
+            font-weight: 600;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         .download-btn:hover {
-            background: #16a34a;
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
         }
 
         .back-btn {
-            display: block;
+            display: inline-block;
+            width: 100%;
             text-align: center;
-            margin-top: 25px;
-            color: #94a3b8;
+            margin-top: 30px;
+            color: #64748b;
             text-decoration: none;
             font-size: 0.9rem;
+            font-weight: 500;
             transition: color 0.2s;
         }
         
-        .back-btn:hover { color: #38bdf8; }
+        .back-btn:hover { color: #f8fafc; }
 
-        /* Scrollbar customizada para listas longas */
-        .card::-webkit-scrollbar { width: 6px; }
-        .card::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     </style>
 </head>
 <body>
 
     <div class="card">
         <h1>Central de Softwares</h1>
+        <p class="subtitle">Selecione o programa para download</p>
 
         <div class="software-list">
             <div class="software-item">
                 <div class="software-info">
                     <h3>CorelDRAW</h3>
-                    <p>Design Gráfico</p>
+                    <span class="category-tag">Design Gráfico</span>
                 </div>
-                <a href="https://drive.google.com/drive/folders/18OPpfZbKRTRxCJw9AeI-eNDxlF3kumtv?usp=drive_link" target="_blank" class="download-btn">Baixar</a>
+                <a href="URL_AQUI" target="_blank" class="download-btn">Download</a>
             </div>
 
             <div class="software-item">
                 <div class="software-info">
                     <h3>Adobe Photoshop</h3>
-                    <p>Edição de Imagem</p>
+                    <span class="category-tag">Edição de Imagem</span>
                 </div>
-                <a href="https://drive.google.com/drive/folders/18OPpfZbKRTRxCJw9AeI-eNDxlF3kumtv?usp=drive_link" target="_blank" class="download-btn">Baixar</a>
+                <a href="URL_AQUI" target="_blank" class="download-btn">Download</a>
             </div>
 
             <div class="software-item">
                 <div class="software-info">
                     <h3>Pacote Office</h3>
-                    <p>Produtividade</p>
+                    <span class="category-tag">Produtividade</span>
                 </div>
-                <a href="https://drive.google.com/drive/folders/18OPpfZbKRTRxCJw9AeI-eNDxlF3kumtv?usp=drive_link" target="_blank" class="download-btn">Baixar</a>
+                <a href="URL_AQUI" target="_blank" class="download-btn">Download</a>
             </div>
 
             <div class="software-item">
                 <div class="software-info">
                     <h3>Autodesk Revit</h3>
-                    <p>Modelagem BIM</p>
+                    <span class="category-tag">Modelagem BIM</span>
                 </div>
-                <a href="https://drive.google.com/drive/folders/18OPpfZbKRTRxCJw9AeI-eNDxlF3kumtv?usp=drive_link" target="_blank" class="download-btn">Baixar</a>
+                <a href="URL_AQUI" target="_blank" class="download-btn">Download</a>
             </div>
 
             <div class="software-item">
                 <div class="software-info">
                     <h3>Enscape</h3>
-                    <p>Renderização Real-time</p>
+                    <span class="category-tag">Renderização</span>
                 </div>
-                <a href="https://drive.google.com/drive/folders/18OPpfZbKRTRxCJw9AeI-eNDxlF3kumtv?usp=drive_link" target="_blank" class="download-btn">Baixar</a>
+                <a href="URL_AQUI" target="_blank" class="download-btn">Download</a>
             </div>
-
-            <div class="software-item">
-                <div class="software-info">
-                    <h3>V-Ray</h3>
-                    <p>Renderização Profissional</p>
-                </div>
-                <a href="https://drive.google.com/drive/folders/18OPpfZbKRTRxCJw9AeI-eNDxlF3kumtv?usp=drive_link" target="_blank" class="download-btn">Baixar</a>
-            </div>
-
+            
             <div class="software-item">
                 <div class="software-info">
                     <h3>AutoCAD</h3>
-                    <p>Desenho Técnico</p>
+                    <span class="category-tag">Desenho Técnico</span>
                 </div>
-                <a href="https://drive.google.com/drive/folders/18OPpfZbKRTRxCJw9AeI-eNDxlF3kumtv?usp=drive_link" target="_blank" class="download-btn">Baixar</a>
+                <a href="URL_AQUI" target="_blank" class="download-btn">Download</a>
             </div>
         </div>
 
-        <a href="index.html" class="back-btn">← Voltar ao Início</a>
+        <a href="index.html" class="back-btn">← Voltar ao painel principal</a>
     </div>
 
 </body>
