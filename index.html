@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atlas - Soluções</title>
     <style>
-        /* Reset e Base Modernizada */
+        /* Reset e Base */
         * { 
             margin: 0; 
             padding: 0; 
@@ -23,35 +23,36 @@
             color: #f8fafc;
         }
 
-        /* Card Principal */
+        /* Container Principal (Grid) */
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Duas colunas iguais */
+            gap: 24px;
+            width: 100%;
+            max-width: 900px; /* Aumentado para caber os dois lado a lado */
+        }
+
+        /* Estilo comum dos Cards */
         .card {
             background: #1e293b;
-            width: 100%;
-            max-width: 380px;
-            padding: 40px 28px;
+            padding: 32px 24px;
             border-radius: 28px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .logo-container {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 24px;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
+        }
+
+        /* Coluna da Esquerda (Menu) */
+        .logo-container {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 24px;
-            padding: 15px;
+            border-radius: 20px;
+            padding: 10px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow: hidden;
         }
 
         .logo-container img {
@@ -61,144 +62,116 @@
             filter: drop-shadow(0 0 10px rgba(37, 99, 235, 0.4));
         }
 
-        h1 { 
-            font-size: 1.75rem; 
-            font-weight: 700;
-            margin-bottom: 8px; 
-            letter-spacing: -0.025em; 
-        }
-
-        p { 
-            color: #94a3b8; 
-            margin-bottom: 32px; 
-            font-size: 0.95rem; 
-            line-height: 1.5;
-        }
+        h1 { font-size: 1.5rem; margin-bottom: 8px; }
+        .subtitle { color: #94a3b8; font-size: 0.9rem; margin-bottom: 24px; }
 
         /* Botões */
-        .btn-group { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 14px; 
-        }
-
+        .btn-group { display: flex; flex-direction: column; gap: 12px; }
         .btn {
-            display: block;
-            padding: 16px;
-            border-radius: 16px;
+            padding: 14px;
+            border-radius: 14px;
             font-weight: 600;
             text-decoration: none;
-            font-size: 1rem;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid transparent;
+            font-size: 0.95rem;
+            transition: all 0.25s ease;
             cursor: pointer;
+            border: 1px solid transparent;
         }
+        .btn-primary { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; }
+        .btn-secondary { background: rgba(51, 65, 85, 0.5); color: #e2e8f0; border-color: #334155; }
+        .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
-        .btn-secondary {
-            background: rgba(51, 65, 85, 0.5);
-            color: #e2e8f0;
-            border: 1px solid #334155;
-        }
-
-        .btn-secondary:hover {
-            background: #334155;
-            border-color: #475569;
-            transform: scale(1.02);
-        }
-
-        .btn-primary { 
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); 
-            color: white;
-            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
-        }
-
-        .btn-primary:hover {
-            box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.4);
-            transform: scale(1.02);
-            filter: brightness(1.1);
-        }
-
-        /* Área do Fórum/Chat */
-        #forum-area {
-            display: none;
-            margin-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 20px;
-        }
-
+        /* Coluna da Direita (Fórum) */
+        .forum-header { margin-bottom: 15px; font-weight: 700; color: #f8fafc; }
+        
         #chat-window {
-            height: 200px;
-            background: rgba(15, 23, 42, 0.5);
-            border-radius: 12px;
-            padding: 10px;
+            flex-grow: 1; /* Faz o chat ocupar o espaço disponível */
+            min-height: 300px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 16px;
+            padding: 15px;
             overflow-y: auto;
             margin-bottom: 15px;
             text-align: left;
-            font-size: 0.85rem;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .msg { margin-bottom: 8px; }
-        .msg b { color: #2563eb; }
+        .msg { margin-bottom: 10px; font-size: 0.85rem; line-height: 1.4; }
+        .msg b { color: #3b82f6; }
 
         input#chat-input {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border-radius: 12px;
             border: 1px solid #334155;
             background: #0f172a;
             color: white;
             margin-bottom: 10px;
+            outline: none;
+        }
+
+        /* Responsividade para Celular */
+        @media (max-width: 768px) {
+            .main-container { grid-template-columns: 1fr; }
+            body { padding: 40px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <main class="card">
-        <div class="logo-container">
-            <img src="https://github.com/danmaxy/atlas/blob/main/IMPERIUM.png?raw=true" alt="Logotipo Atlas">
-        </div>
-        
-        <header>
-            <h1>Bem-vindo à ATLAS</h1>
-            <p>Sua central de soluções direcionadas para técnicos.</p>
-        </header>
-
-        <nav class="btn-group">
-            <a href="#servicos" class="btn btn-primary">Serviços</a>
-            <a href="#pecas" class="btn btn-secondary">Peças</a>
-            <a href="softwares.html" class="btn btn-secondary">Softwares</a>
-            <button class="btn btn-secondary" onclick="abrirForum()">Comunidade</button>
-        </nav>
-
-        <section id="forum-area">
-            <h3>Fórum Técnico</h3>
-            <div id="chat-window">
-                <div class="msg"><b>Sistema:</b> Conecte-se para conversar...</div>
+    <div class="main-container">
+        <main class="card">
+            <div class="logo-container">
+                <img src="https://github.com/danmaxy/atlas/blob/main/IMPERIUM.png?raw=true" alt="Logotipo Atlas">
             </div>
-            <input type="text" id="chat-input" placeholder="Escreva sua mensagem...">
-            <button class="btn btn-primary" onclick="enviarMensagem()" style="padding: 10px; width: 100%;">Enviar</button>
+            
+            <header>
+                <h1>ATLAS</h1>
+                <p class="subtitle">Sua central de soluções para técnicos.</p>
+            </header>
+
+            <nav class="btn-group">
+                <a href="#servicos" class="btn btn-primary">Serviços</a>
+                <a href="#pecas" class="btn btn-secondary">Peças</a>
+                <a href="softwares.html" class="btn btn-secondary">Softwares</a>
+                <a href="#ajuda" class="btn btn-secondary">Suporte</a>
+            </nav>
+        </main>
+
+        <section class="card">
+            <div class="forum-header">Fórum em Tempo Real</div>
+            <div id="chat-window">
+                <div class="msg"><b>Sistema:</b> Bem-vindo, Daniel! O chat está ativo.</div>
+            </div>
+            <div class="chat-controls">
+                <input type="text" id="chat-input" placeholder="Digite sua dúvida técnica...">
+                <button class="btn btn-primary" onclick="enviarMensagem()" style="width: 100%;">Enviar Mensagem</button>
+            </div>
         </section>
-    </main>
+    </div>
 
     <script>
-        function abrirForum() {
-            const forum = document.getElementById('forum-area');
-            forum.style.display = forum.style.display === 'block' ? 'none' : 'block';
-        }
-
         function enviarMensagem() {
             const input = document.getElementById('chat-input');
-            const window = document.getElementById('chat-window');
+            const chatWindow = document.getElementById('chat-window');
+            
             if(input.value.trim() !== "") {
-                const p = document.createElement('div');
-                p.className = 'msg';
-                p.innerHTML = `<b>Você:</b> ${input.value}`;
-                window.appendChild(p);
+                const div = document.createElement('div');
+                div.className = 'msg';
+                div.innerHTML = `<b>Você:</b> ${input.value}`;
+                chatWindow.appendChild(div);
+                
                 input.value = "";
-                window.scrollTop = window.scrollHeight;
+                chatWindow.scrollTop = chatWindow.scrollHeight;
             }
         }
+
+        // Enviar com a tecla Enter
+        document.getElementById('chat-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                enviarMensagem();
+            }
+        });
     </script>
 
 </body>
