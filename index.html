@@ -62,6 +62,16 @@
             filter: drop-shadow(0 0 10px rgba(37, 99, 235, 0.4));
         }
 
+        /* Saudação no Menu */
+        .welcome-msg {
+            color: #3b82f6;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
         h1 { font-size: 1.5rem; margin-bottom: 8px; letter-spacing: -1px; }
         .subtitle { color: #94a3b8; font-size: 0.85rem; margin-bottom: 24px; }
 
@@ -105,6 +115,12 @@
             border-left: 3px solid #3b82f6;
         }
         .msg b { color: #3b82f6; display: block; margin-bottom: 2px; text-transform: capitalize; }
+        
+        .msg-system {
+            border-left-color: #10b981;
+            background: rgba(16, 185, 129, 0.05);
+        }
+        .msg-system b { color: #10b981; }
 
         .chat-inputs { display: flex; flex-direction: column; gap: 8px; }
         
@@ -134,6 +150,7 @@
             </div>
             
             <header>
+                <div class="welcome-msg">Bem-vindo, Daniel</div>
                 <h1>ATLAS</h1>
                 <p class="subtitle">Sua central de soluções para técnicos.</p>
             </header>
@@ -142,7 +159,6 @@
                 <a href="#servicos" class="btn btn-primary">Serviços</a>
                 <a href="#pecas" class="btn btn-secondary">Peças</a>
                 <a href="softwares.html" class="btn btn-secondary">Softwares</a>
-                <a href="#ajuda" class="btn btn-secondary">Suporte Técnico</a>
             </nav>
         </main>
 
@@ -152,7 +168,7 @@
                 </div>
             
             <div class="chat-inputs">
-                <input type="text" id="user-name" placeholder="Seu Nome">
+                <input type="text" id="user-name" placeholder="Seu Nome" value="Daniel">
                 <input type="text" id="chat-input" placeholder="Mensagem...">
                 <button class="btn btn-primary" onclick="enviarMensagem()">Enviar</button>
             </div>
@@ -160,37 +176,45 @@
     </div>
 
     <script>
-        // Inicialização do Ably com sua chave
         const ably = new Ably.Realtime('FegUDg.EPNgHQ:lvwThwk9SyQO5vJNzlqGXKQqEvIC2HOpBwn8Bv1hdZ0');
         const channel = ably.channels.get('forum-atlas');
 
-        // 1. CARREGAR HISTÓRICO (MENSAGENS ANTIGAS)
+        function saudacaoSistema() {
+            const hora = new Date().getHours();
+            let saudacao = "";
+            
+            if (hora >= 5 && hora < 12) saudacao = "Bom dia";
+            else if (hora >= 12 && hora < 18) saudacao = "Boa tarde";
+            else saudacao = "Boa noite";
+
+            renderizarNaTela("Sistema", `${saudacao}! Bem-vindo à ATLAS. Explore nossos softwares e peças enquanto conversa com outros técnicos.`, true);
+        }
+
+        // 1. CARREGAR HISTÓRICO
         channel.history((err, resultPage) => {
             if (err) {
-                console.warn("Histórico não disponível ou não ativado no painel Ably.");
+                console.warn("Histórico não disponível.");
+                saudacaoSistema();
                 return;
             }
-            // Inverter para mostrar da mais antiga para a mais nova
             const messages = resultPage.items.reverse();
             messages.forEach(msg => {
                 renderizarNaTela(msg.data.user, msg.data.text);
             });
+            saudacaoSistema();
         });
 
-        // 2. OUVIR NOVAS MENSAGENS (TEMPO REAL)
+        // 2. OUVIR NOVAS MENSAGENS
         channel.subscribe('mensagem', (message) => {
             renderizarNaTela(message.data.user, message.data.text);
         });
 
-        // Função para colocar o texto no HTML
-        function renderizarNaTela(usuario, texto) {
+        function renderizarNaTela(usuario, texto, isSystem = false) {
             const chatWindow = document.getElementById('chat-window');
             const div = document.createElement('div');
-            div.className = 'msg';
+            div.className = isSystem ? 'msg msg-system' : 'msg';
             div.innerHTML = `<b>${usuario}:</b> ${texto}`;
-            
             chatWindow.appendChild(div);
-            // Scroll automático para a última mensagem
             chatWindow.scrollTop = chatWindow.scrollHeight;
         }
 
@@ -208,7 +232,6 @@
             }
         }
 
-        // Suporte ao "Enter"
         document.getElementById('chat-input').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') enviarMensagem();
         });
