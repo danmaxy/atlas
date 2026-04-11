@@ -23,7 +23,7 @@
             color: #f8fafc;
         }
 
-        /* Card com Glassmorphism leve */
+        /* Card Principal */
         .card {
             background: #1e293b;
             width: 100%;
@@ -40,17 +40,16 @@
             transform: translateY(-5px);
         }
 
-        /* CONTAINER DA LOGO CORRIGIDO */
         .logo-container {
-            width: 120px; /* Aumentado para melhor visualização */
+            width: 120px;
             height: 120px;
             margin: 0 auto 24px;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: rgba(255, 255, 255, 0.05); /* Fundo sutilmente mais claro */
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 24px;
-            padding: 15px; /* Respiro interno para a logo não tocar nas bordas */
+            padding: 15px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
         }
@@ -58,7 +57,7 @@
         .logo-container img {
             max-width: 100%;
             max-height: 100%;
-            object-fit: contain; /* Garante que a logo inteira apareça sem cortes */
+            object-fit: contain;
             filter: drop-shadow(0 0 10px rgba(37, 99, 235, 0.4));
         }
 
@@ -76,7 +75,7 @@
             line-height: 1.5;
         }
 
-        /* Botões Estilizados */
+        /* Botões */
         .btn-group { 
             display: flex; 
             flex-direction: column; 
@@ -92,9 +91,9 @@
             font-size: 1rem;
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid transparent;
+            cursor: pointer;
         }
 
-        /* Botão Secundário */
         .btn-secondary {
             background: rgba(51, 65, 85, 0.5);
             color: #e2e8f0;
@@ -107,7 +106,6 @@
             transform: scale(1.02);
         }
 
-        /* Botão Primário */
         .btn-primary { 
             background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); 
             color: white;
@@ -120,10 +118,38 @@
             filter: brightness(1.1);
         }
 
-        .btn:active { 
-            transform: scale(0.98); 
+        /* Área do Fórum/Chat */
+        #forum-area {
+            display: none;
+            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
         }
 
+        #chat-window {
+            height: 200px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+            padding: 10px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            text-align: left;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .msg { margin-bottom: 8px; }
+        .msg b { color: #2563eb; }
+
+        input#chat-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: white;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -142,8 +168,38 @@
             <a href="#servicos" class="btn btn-primary">Serviços</a>
             <a href="#pecas" class="btn btn-secondary">Peças</a>
             <a href="softwares.html" class="btn btn-secondary">Softwares</a>
+            <button class="btn btn-secondary" onclick="abrirForum()">Comunidade</button>
         </nav>
+
+        <section id="forum-area">
+            <h3>Fórum Técnico</h3>
+            <div id="chat-window">
+                <div class="msg"><b>Sistema:</b> Conecte-se para conversar...</div>
+            </div>
+            <input type="text" id="chat-input" placeholder="Escreva sua mensagem...">
+            <button class="btn btn-primary" onclick="enviarMensagem()" style="padding: 10px; width: 100%;">Enviar</button>
+        </section>
     </main>
+
+    <script>
+        function abrirForum() {
+            const forum = document.getElementById('forum-area');
+            forum.style.display = forum.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function enviarMensagem() {
+            const input = document.getElementById('chat-input');
+            const window = document.getElementById('chat-window');
+            if(input.value.trim() !== "") {
+                const p = document.createElement('div');
+                p.className = 'msg';
+                p.innerHTML = `<b>Você:</b> ${input.value}`;
+                window.appendChild(p);
+                input.value = "";
+                window.scrollTop = window.scrollHeight;
+            }
+        }
+    </script>
 
 </body>
 </html>
