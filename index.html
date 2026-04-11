@@ -24,13 +24,13 @@
             color: #f8fafc;
         }
 
-        /* Container Principal (Grid) */
+        /* Container Principal (Grid) - Ajuste de Proporção */
         .main-container {
             display: grid;
-            grid-template-columns: 1fr 1.2fr;
+            grid-template-columns: 320px 1fr; /* Menu com largura fixa e Chat flexível */
             gap: 24px;
             width: 100%;
-            max-width: 1000px;
+            max-width: 1100px;
         }
 
         /* Estilo dos Cards */
@@ -46,12 +46,12 @@
         }
 
         .logo-container {
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
             margin: 0 auto 20px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 20px;
-            padding: 15px;
+            padding: 12px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -62,27 +62,26 @@
             filter: drop-shadow(0 0 10px rgba(37, 99, 235, 0.4));
         }
 
-        /* Saudação no Menu */
         .welcome-msg {
             color: #3b82f6;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
         }
 
-        h1 { font-size: 1.5rem; margin-bottom: 8px; letter-spacing: -1px; }
-        .subtitle { color: #94a3b8; font-size: 0.85rem; margin-bottom: 24px; }
+        h1 { font-size: 1.4rem; margin-bottom: 6px; letter-spacing: -1px; }
+        .subtitle { color: #94a3b8; font-size: 0.8rem; margin-bottom: 24px; line-height: 1.4; }
 
         /* Botões */
-        .btn-group { display: flex; flex-direction: column; gap: 12px; }
+        .btn-group { display: flex; flex-direction: column; gap: 10px; }
         .btn {
-            padding: 14px;
-            border-radius: 14px;
+            padding: 13px;
+            border-radius: 12px;
             font-weight: 600;
             text-decoration: none;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             transition: all 0.25s ease;
             cursor: pointer;
             border: 1px solid transparent;
@@ -96,7 +95,7 @@
         
         #chat-window {
             flex-grow: 1;
-            height: 380px;
+            height: 400px;
             background: rgba(15, 23, 42, 0.6);
             border-radius: 16px;
             padding: 15px;
@@ -135,9 +134,9 @@
             font-size: 0.9rem;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 850px) {
             .main-container { grid-template-columns: 1fr; }
-            #chat-window { height: 300px; }
+            .card { width: 100%; max-width: 450px; margin: 0 auto; }
         }
     </style>
 </head>
@@ -150,9 +149,9 @@
             </div>
             
             <header>
-                <div class="welcome-msg">Bem-vindo, Daniel</div>
+                <div class="welcome-msg">Bem-vindo à Central</div>
                 <h1>ATLAS</h1>
-                <p class="subtitle">Sua central de soluções para técnicos.</p>
+                <p class="subtitle">Soluções inteligentes para técnicos de hardware e software.</p>
             </header>
 
             <nav class="btn-group">
@@ -168,8 +167,8 @@
                 </div>
             
             <div class="chat-inputs">
-                <input type="text" id="user-name" placeholder="Seu Nome" value="Daniel">
-                <input type="text" id="chat-input" placeholder="Mensagem...">
+                <input type="text" id="user-name" placeholder="Seu Nome (Identifique-se)">
+                <input type="text" id="chat-input" placeholder="Digite sua mensagem...">
                 <button class="btn btn-primary" onclick="enviarMensagem()">Enviar</button>
             </div>
         </section>
@@ -181,19 +180,13 @@
 
         function saudacaoSistema() {
             const hora = new Date().getHours();
-            let saudacao = "";
-            
-            if (hora >= 5 && hora < 12) saudacao = "Bom dia";
-            else if (hora >= 12 && hora < 18) saudacao = "Boa tarde";
-            else saudacao = "Boa noite";
-
-            renderizarNaTela("Sistema", `${saudacao}! Bem-vindo à ATLAS. Explore nossos softwares e peças enquanto conversa com outros técnicos.`, true);
+            let saudacao = (hora >= 5 && hora < 12) ? "Bom dia" : (hora >= 12 && hora < 18) ? "Boa tarde" : "Boa noite";
+            renderizarNaTela("Sistema", `${saudacao}! Bem-vindo ao chat. Identifique-se abaixo para conversar com a comunidade.`, true);
         }
 
         // 1. CARREGAR HISTÓRICO
         channel.history((err, resultPage) => {
             if (err) {
-                console.warn("Histórico não disponível.");
                 saudacaoSistema();
                 return;
             }
@@ -223,7 +216,7 @@
             const nameInput = document.getElementById('user-name');
             const msgInput = document.getElementById('chat-input');
             
-            const name = nameInput.value.trim() || "Técnico";
+            const name = nameInput.value.trim() || "Anônimo";
             const text = msgInput.value.trim();
 
             if(text !== "") {
