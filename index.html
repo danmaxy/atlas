@@ -27,13 +27,13 @@
         /* Container Principal (Grid) */
         .main-container {
             display: grid;
-            grid-template-columns: 1fr 1.2fr; /* Fórum um pouco mais largo */
+            grid-template-columns: 1fr 1.2fr;
             gap: 24px;
             width: 100%;
             max-width: 1000px;
         }
 
-        /* Estilo comum dos Cards */
+        /* Estilo dos Cards */
         .card {
             background: #1e293b;
             padding: 32px 24px;
@@ -45,7 +45,6 @@
             flex-direction: column;
         }
 
-        /* Coluna da Esquerda (Menu) */
         .logo-container {
             width: 100px;
             height: 100px;
@@ -82,12 +81,12 @@
         .btn-secondary { background: rgba(51, 65, 85, 0.5); color: #e2e8f0; border-color: #334155; }
         .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
-        /* Coluna da Direita (Fórum) */
+        /* Estilo do Fórum */
         .forum-header { margin-bottom: 15px; font-weight: 700; color: #f8fafc; font-size: 1.1rem; }
         
         #chat-window {
             flex-grow: 1;
-            height: 350px;
+            height: 380px;
             background: rgba(15, 23, 42, 0.6);
             border-radius: 16px;
             padding: 15px;
@@ -100,11 +99,12 @@
         .msg { 
             margin-bottom: 12px; 
             font-size: 0.85rem; 
-            padding: 8px 12px; 
+            padding: 10px 14px; 
             background: rgba(255,255,255,0.03); 
-            border-radius: 8px; 
+            border-radius: 12px; 
+            border-left: 3px solid #3b82f6;
         }
-        .msg b { color: #3b82f6; display: block; margin-bottom: 2px; }
+        .msg b { color: #3b82f6; display: block; margin-bottom: 2px; text-transform: capitalize; }
 
         .chat-inputs { display: flex; flex-direction: column; gap: 8px; }
         
@@ -119,10 +119,9 @@
             font-size: 0.9rem;
         }
 
-        /* Responsividade */
         @media (max-width: 768px) {
             .main-container { grid-template-columns: 1fr; }
-            body { padding: 20px; }
+            #chat-window { height: 300px; }
         }
     </style>
 </head>
@@ -150,49 +149,66 @@
         <section class="card">
             <div class="forum-header">Fórum da Comunidade</div>
             <div id="chat-window">
-                <div class="msg"><b>Sistema:</b> Conectado ao canal global. Digite seu nome e participe!</div>
-            </div>
+                </div>
             
             <div class="chat-inputs">
-                <input type="text" id="user-name" placeholder="Seu Nome (Ex: Daniel)">
-                <input type="text" id="chat-input" placeholder="Digite sua mensagem...">
+                <input type="text" id="user-name" placeholder="Seu Nome">
+                <input type="text" id="chat-input" placeholder="Mensagem...">
                 <button class="btn btn-primary" onclick="enviarMensagem()">Enviar</button>
             </div>
         </section>
     </div>
 
     <script>
-        // Configuração do Ably
+        // Inicialização do Ably com sua chave
         const ably = new Ably.Realtime('FegUDg.EPNgHQ:lvwThwk9SyQO5vJNzlqGXKQqEvIC2HOpBwn8Bv1hdZ0');
         const channel = ably.channels.get('forum-atlas');
 
-        // Escutar mensagens recebidas
+        // 1. CARREGAR HISTÓRICO (MENSAGENS ANTIGAS)
+        channel.history((err, resultPage) => {
+            if (err) {
+                console.warn("Histórico não disponível ou não ativado no painel Ably.");
+                return;
+            }
+            // Inverter para mostrar da mais antiga para a mais nova
+            const messages = resultPage.items.reverse();
+            messages.forEach(msg => {
+                renderizarNaTela(msg.data.user, msg.data.text);
+            });
+        });
+
+        // 2. OUVIR NOVAS MENSAGENS (TEMPO REAL)
         channel.subscribe('mensagem', (message) => {
+            renderizarNaTela(message.data.user, message.data.text);
+        });
+
+        // Função para colocar o texto no HTML
+        function renderizarNaTela(usuario, texto) {
             const chatWindow = document.getElementById('chat-window');
             const div = document.createElement('div');
             div.className = 'msg';
-            div.innerHTML = `<b>${message.data.user}:</b> ${message.data.text}`;
+            div.innerHTML = `<b>${usuario}:</b> ${texto}`;
             
             chatWindow.appendChild(div);
+            // Scroll automático para a última mensagem
             chatWindow.scrollTop = chatWindow.scrollHeight;
-        });
+        }
 
-        // Função para enviar
+        // 3. ENVIAR MENSAGEM
         function enviarMensagem() {
             const nameInput = document.getElementById('user-name');
             const msgInput = document.getElementById('chat-input');
             
-            const name = nameInput.value.trim() || "Técnico Anônimo";
+            const name = nameInput.value.trim() || "Técnico";
             const text = msgInput.value.trim();
 
             if(text !== "") {
-                // Publica no canal do Ably
                 channel.publish('mensagem', { user: name, text: text });
-                msgInput.value = ""; // Limpa apenas o campo de texto
+                msgInput.value = ""; 
             }
         }
 
-        // Enviar com a tecla Enter
+        // Suporte ao "Enter"
         document.getElementById('chat-input').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') enviarMensagem();
         });
