@@ -4,126 +4,166 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atlas - Softwares</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         
         body { 
             background-color: #0f172a; 
-            background-image: radial-gradient(circle at top right, #1e293b, #0f172a);
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 35%),
+                radial-gradient(circle at 100% 100%, rgba(37, 99, 235, 0.1) 0%, transparent 35%);
             display: flex; 
             justify-content: center; 
             align-items: center; 
             min-height: 100vh; 
-            padding: 40px 20px; 
+            padding: 20px; 
             color: #f8fafc; 
         }
         
         .card {
             background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             width: 100%;
-            max-width: 550px;
-            padding: 40px;
-            border-radius: 28px;
+            max-width: 500px;
+            padding: 32px;
+            border-radius: 24px;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
+        header { margin-bottom: 24px; text-align: center; }
+
         h1 { 
-            font-size: 1.8rem; 
-            margin-bottom: 8px; 
-            text-align: center; 
+            font-size: 1.75rem; 
             color: #fff;
             font-weight: 800;
+            letter-spacing: -0.025em;
         }
 
         .subtitle {
-            text-align: center;
             color: #94a3b8;
-            font-size: 0.9rem;
-            margin-bottom: 30px;
+            font-size: 0.95rem;
+            margin-top: 4px;
+        }
+
+        /* Barra de Busca - Melhora muito a Intuitividade */
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .search-input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 16px;
+            padding-left: 40px;
+            border-radius: 12px;
+            color: white;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .search-input:focus { border-color: #3b82f6; }
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
         }
 
         .software-list {
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            max-height: 500px;
+            gap: 12px;
+            max-height: 420px;
             overflow-y: auto;
-            padding-right: 8px;
+            padding-right: 6px;
         }
 
         /* Custom Scrollbar */
-        .software-list::-webkit-scrollbar { width: 5px; }
+        .software-list::-webkit-scrollbar { width: 4px; }
         .software-list::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
 
         .software-item {
-            background: rgba(51, 65, 85, 0.4);
-            padding: 18px;
-            border-radius: 16px;
+            background: rgba(51, 65, 85, 0.3);
+            padding: 14px 16px;
+            border-radius: 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
         }
 
         .software-item:hover {
-            background: rgba(51, 65, 85, 0.8);
-            transform: scale(1.02);
-            border-color: #3b82f6;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+            background: rgba(51, 65, 85, 0.6);
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: translateX(4px);
+        }
+
+        .software-info-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icon-box {
+            width: 40px;
+            height: 40px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #60a5fa;
         }
 
         .software-info h3 { 
-            font-size: 1.05rem; 
-            color: #f8fafc; 
-            margin-bottom: 4px;
+            font-size: 1rem; 
+            color: #f1f5f9; 
+            margin-bottom: 2px;
         }
         
         .category-tag { 
-            display: inline-block;
-            font-size: 0.65rem; 
-            color: #3b82f6; 
-            background: rgba(59, 130, 246, 0.1);
-            padding: 2px 8px;
-            border-radius: 6px;
+            font-size: 0.7rem; 
+            color: #94a3b8; 
             text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 0.5px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
         }
 
         .download-btn {
-            background: #3b82f6; /* Azul solicitado */
+            background: #3b82f6;
             color: white;
             text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-size: 0.85rem;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.8rem;
             font-weight: 600;
             transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .download-btn:hover {
             background: #2563eb;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
-        }
-
-        .download-btn:active {
-            transform: translateY(0);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         .back-btn {
-            display: inline-block;
-            width: 100%;
-            text-align: center;
-            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
             color: #64748b;
             text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
+            font-size: 0.85rem;
             transition: color 0.2s;
         }
         
@@ -134,61 +174,91 @@
 <body>
 
     <div class="card">
-        <h1>Central de Softwares</h1>
-        <p class="subtitle">Selecione o programa para download</p>
+        <header>
+            <h1>Central de Softwares</h1>
+            <p class="subtitle">Downloads rápidos e seguros</p>
+        </header>
+
+        <div class="search-container">
+            <i data-lucide="search" class="search-icon" size="18"></i>
+            <input type="text" class="search-input" placeholder="Buscar programa...">
+        </div>
 
         <div class="software-list">
             <div class="software-item">
-                <div class="software-info">
-                    <h3>CorelDRAW</h3>
-                    <span class="category-tag">Design Gráfico</span>
+                <div class="software-info-wrapper">
+                    <div class="icon-box"><i data-lucide="palette" size="20"></i></div>
+                    <div class="software-info">
+                        <h3>CorelDRAW</h3>
+                        <span class="category-tag">Design Gráfico</span>
+                    </div>
                 </div>
-                <a href="URL_AQUI" target="_blank" class="download-btn">Download</a>
+                <a href="#" class="download-btn">
+                    <i data-lucide="download" size="14"></i> Obter
+                </a>
             </div>
 
             <div class="software-item">
-                <div class="software-info">
-                    <h3>Adobe Photoshop</h3>
-                    <span class="category-tag">Edição de Imagem</span>
+                <div class="software-info-wrapper">
+                    <div class="icon-box"><i data-lucide="image" size="20"></i></div>
+                    <div class="software-info">
+                        <h3>Adobe Photoshop</h3>
+                        <span class="category-tag">Edição</span>
+                    </div>
                 </div>
-                <a href="URL_AQUI" target="_blank" class="download-btn">Download</a>
+                <a href="#" class="download-btn">
+                    <i data-lucide="download" size="14"></i> Obter
+                </a>
             </div>
 
             <div class="software-item">
-                <div class="software-info">
-                    <h3>Pacote Office</h3>
-                    <span class="category-tag">Produtividade</span>
+                <div class="software-info-wrapper">
+                    <div class="icon-box"><i data-lucide="file-text" size="20"></i></div>
+                    <div class="software-info">
+                        <h3>Pacote Office</h3>
+                        <span class="category-tag">Produtividade</span>
+                    </div>
                 </div>
-                <a href="URL_AQUI" target="_blank" class="download-btn">Download</a>
+                <a href="#" class="download-btn">
+                    <i data-lucide="download" size="14"></i> Obter
+                </a>
             </div>
 
             <div class="software-item">
-                <div class="software-info">
-                    <h3>Autodesk Revit</h3>
-                    <span class="category-tag">Modelagem BIM</span>
+                <div class="software-info-wrapper">
+                    <div class="icon-box"><i data-lucide="box" size="20"></i></div>
+                    <div class="software-info">
+                        <h3>Autodesk Revit</h3>
+                        <span class="category-tag">BIM</span>
+                    </div>
                 </div>
-                <a href="URL_AQUI" target="_blank" class="download-btn">Download</a>
-            </div>
-
-            <div class="software-item">
-                <div class="software-info">
-                    <h3>Enscape</h3>
-                    <span class="category-tag">Renderização</span>
-                </div>
-                <a href="URL_AQUI" target="_blank" class="download-btn">Download</a>
-            </div>
-            
-            <div class="software-item">
-                <div class="software-info">
-                    <h3>AutoCAD</h3>
-                    <span class="category-tag">Desenho Técnico</span>
-                </div>
-                <a href="URL_AQUI" target="_blank" class="download-btn">Download</a>
+                <a href="#" class="download-btn">
+                    <i data-lucide="download" size="14"></i> Obter
+                </a>
             </div>
         </div>
 
-        <a href="index.html" class="back-btn">← Voltar ao painel principal</a>
+        <a href="index.html" class="back-btn">
+            <i data-lucide="arrow-left" size="16"></i>
+            Voltar ao painel principal
+        </a>
     </div>
 
+    <script>
+        // Inicializa os ícones Lucide
+        lucide.createIcons();
+
+        // Filtro de Busca Simples
+        const searchInput = document.querySelector('.search-input');
+        const items = document.querySelectorAll('.software-item');
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            items.forEach(item => {
+                const text = item.querySelector('h3').textContent.toLowerCase();
+                item.style.display = text.includes(term) ? 'flex' : 'none';
+            });
+        });
+    </script>
 </body>
 </html>
