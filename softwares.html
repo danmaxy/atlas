@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atlas - Softwares</title>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
@@ -28,7 +28,7 @@
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             width: 100%;
-            max-width: 500px;
+            max-width: 550px;
             padding: 32px;
             border-radius: 24px;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
@@ -36,39 +36,24 @@
         }
 
         header { margin-bottom: 24px; text-align: center; }
+        h1 { font-size: 1.75rem; color: #fff; font-weight: 800; letter-spacing: -0.025em; }
+        .subtitle { color: #94a3b8; font-size: 0.95rem; margin-top: 4px; }
 
-        h1 { 
-            font-size: 1.75rem; 
-            color: #fff;
-            font-weight: 800;
-            letter-spacing: -0.025em;
-        }
-
-        .subtitle {
-            color: #94a3b8;
-            font-size: 0.95rem;
-            margin-top: 4px;
-        }
-
-        .search-container {
-            position: relative;
-            margin-bottom: 20px;
-        }
+        .search-container { position: relative; margin-bottom: 20px; }
         .search-input {
             width: 100%;
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px 16px;
-            padding-left: 40px;
+            padding: 12px 16px 12px 44px;
             border-radius: 12px;
             color: white;
             outline: none;
-            transition: border 0.2s;
+            transition: all 0.2s;
         }
-        .search-input:focus { border-color: #3b82f6; }
+        .search-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); }
         .search-icon {
             position: absolute;
-            left: 12px;
+            left: 14px;
             top: 50%;
             transform: translateY(-50%);
             color: #64748b;
@@ -78,12 +63,12 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            max-height: 420px;
+            max-height: 450px;
             overflow-y: auto;
-            padding-right: 6px;
+            padding-right: 8px;
         }
 
-        .software-list::-webkit-scrollbar { width: 4px; }
+        .software-list::-webkit-scrollbar { width: 5px; }
         .software-list::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
 
         .software-item {
@@ -103,12 +88,7 @@
             transform: translateX(4px);
         }
 
-        .software-info-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
+        .software-info-wrapper { display: flex; align-items: center; gap: 12px; }
         .icon-box {
             width: 40px;
             height: 40px;
@@ -120,27 +100,21 @@
             color: #60a5fa;
         }
 
-        .software-info h3 { 
-            font-size: 1rem; 
-            color: #f1f5f9; 
-            margin-bottom: 2px;
-        }
-        
+        .software-info h3 { font-size: 0.95rem; color: #f1f5f9; margin-bottom: 2px; }
         .category-tag { 
-            font-size: 0.7rem; 
+            font-size: 0.65rem; 
             color: #94a3b8; 
             text-transform: uppercase;
             font-weight: 600;
-            letter-spacing: 0.05em;
         }
 
         .download-btn {
             background: #3b82f6;
             color: white;
             text-decoration: none;
-            padding: 8px 16px;
+            padding: 8px 14px;
             border-radius: 8px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 600;
             transition: all 0.2s;
             display: flex;
@@ -148,10 +122,9 @@
             gap: 6px;
         }
 
-        .download-btn:hover {
-            background: #2563eb;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
+        .download-btn:hover { background: #2563eb; }
+
+        #no-results { text-align: center; padding: 20px; color: #64748b; display: none; }
 
         .back-btn {
             display: flex;
@@ -162,11 +135,7 @@
             color: #64748b;
             text-decoration: none;
             font-size: 0.85rem;
-            transition: color 0.2s;
         }
-        
-        .back-btn:hover { color: #f8fafc; }
-
     </style>
 </head>
 <body>
@@ -174,66 +143,147 @@
     <div class="card">
         <header>
             <h1>Central de Softwares</h1>
-            <p class="subtitle">Downloads rápidos e seguros</p>
+            <p class="subtitle">Seus links de download atualizados</p>
         </header>
 
         <div class="search-container">
             <i data-lucide="search" class="search-icon" size="18"></i>
-            <input type="text" class="search-input" placeholder="Buscar programa...">
+            <input type="text" class="search-input" placeholder="Buscar software ou categoria...">
         </div>
 
         <div class="software-list">
+            <div id="no-results">Nenhum programa encontrado.</div>
+
             <div class="software-item">
                 <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="palette" size="20"></i></div>
+                    <div class="icon-box"><i data-lucide="layers"></i></div>
+                    <div class="software-info">
+                        <h3>Autodesk Revit</h3>
+                        <span class="category-tag">BIM / Arquitetura</span>
+                    </div>
+                </div>
+                <a href="https://drive.google.com/file/d/1icEoRh-NbNy1pBALH7GVXHTxMUDXXidp/view?usp=sharing" target="_blank" class="download-btn">
+                    <i data-lucide="download" size="14"></i> Obter
+                </a>
+            </div>
+
+            <div class="software-item">
+                <div class="software-info-wrapper">
+                    <div class="icon-box"><i data-lucide="pen-tool"></i></div>
+                    <div class="software-info">
+                        <h3>Autodesk AutoCAD</h3>
+                        <span class="category-tag">CAD / Engenharia</span>
+                    </div>
+                </div>
+                <a href="https://drive.google.com/file/d/1TNuyRAEdVakMkcQKEqWwpgt7NRuU4EBP/view?usp=sharing" target="_blank" class="download-btn">
+                    <i data-lucide="download" size="14"></i> Obter
+                </a>
+            </div>
+
+            <div class="software-item">
+                <div class="software-info-wrapper">
+                    <div class="icon-box"><i data-lucide="video"></i></div>
+                    <div class="software-info">
+                        <h3>Adobe Premiere Pro</h3>
+                        <span class="category-tag">Edição de Vídeo</span>
+                    </div>
+                </div>
+                <a href="https://drive.google.com/file/d/1NwXNdqYqfFFuBSvsl_gR2cACiYVU2Vwe/view?usp=sharing" target="_blank" class="download-btn">
+                    <i data-lucide="download" size="14"></i> Obter
+                </a>
+            </div>
+
+            <div class="software-item">
+                <div class="software-info-wrapper">
+                    <div class="icon-box"><i data-lucide="file-text"></i></div>
+                    <div class="software-info">
+                        <h3>Adobe Acrobat Pro</h3>
+                        <span class="category-tag">Documentos PDF</span>
+                    </div>
+                </div>
+                <a href="https://drive.google.com/file/d/1SzTL6ChyVILzYEaYtttqBll0QNs31oer/view?usp=sharing" target="_blank" class="download-btn">
+                    <i data-lucide="download" size="14"></i> Obter
+                </a>
+            </div>
+
+            <div class="software-item">
+                <div class="software-info-wrapper">
+                    <div class="icon-box"><i data-lucide="image"></i></div>
+                    <div class="software-info">
+                        <h3>Adobe Photoshop</h3>
+                        <span class="category-tag">Edição de Imagem</span>
+                    </div>
+                </div>
+                <a href="https://drive.google.com/file/d/1zwxH0yrGLjEj43xXubASVtvW6OTbxRQP/view?usp=sharing" target="_blank" class="download-btn">
+                    <i data-lucide="download" size="14"></i> Obter
+                </a>
+            </div>
+
+            <div class="software-item">
+                <div class="software-info-wrapper">
+                    <div class="icon-box"><i data-lucide="bezier"></i></div>
+                    <div class="software-info">
+                        <h3>Adobe Illustrator</h3>
+                        <span class="category-tag">Vetor / Design</span>
+                    </div>
+                </div>
+                <a href="https://drive.google.com/file/d/177rST7zBH3FfMjO2alp1Fissld0SLDOM/view?usp=sharing" target="_blank" class="download-btn">
+                    <i data-lucide="download" size="14"></i> Obter
+                </a>
+            </div>
+
+            <div class="software-item">
+                <div class="software-info-wrapper">
+                    <div class="icon-box"><i data-lucide="palette"></i></div>
                     <div class="software-info">
                         <h3>CorelDRAW</h3>
                         <span class="category-tag">Design Gráfico</span>
                     </div>
                 </div>
-                <a href="https://drive.google.com/file/d/1H8FutTz5kAfQBXwgOPSgRWgM-vThrXW6/view?usp=sharing" target="_blank" class="download-btn">
+                <a href="https://drive.google.com/file/d/1laUa3RE9_5vf9cRUsWdHte-sUVNgepAo/view?usp=sharing" target="_blank" class="download-btn">
                     <i data-lucide="download" size="14"></i> Obter
                 </a>
             </div>
 
             <div class="software-item">
                 <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="image" size="20"></i></div>
+                    <div class="icon-box"><i data-lucide="box"></i></div>
                     <div class="software-info">
-                        <h3>Adobe Photoshop</h3>
-                        <span class="category-tag">Edição</span>
+                        <h3>SketchUp Pro</h3>
+                        <span class="category-tag">Modelagem 3D</span>
                     </div>
                 </div>
-                <a href="#" class="download-btn">
+                <a href="https://drive.google.com/file/d/1laUa3RE9_5vf9cRUsWdHte-sUVNgepAo/view?usp=sharing" target="_blank" class="download-btn">
                     <i data-lucide="download" size="14"></i> Obter
                 </a>
             </div>
 
             <div class="software-item">
                 <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="file-text" size="20"></i></div>
+                    <div class="icon-box"><i data-lucide="cpu"></i></div>
                     <div class="software-info">
-                        <h3>Pacote Office</h3>
-                        <span class="category-tag">Produtividade</span>
+                        <h3>V-ray</h3>
+                        <span class="category-tag">Renderização</span>
                     </div>
                 </div>
-                <a href="#" class="download-btn">
+                <a href="https://drive.google.com/file/d/1U_O_Ji572zJo0lLMwMnWmgPwbaynv0e8/view?usp=sharing" target="_blank" class="download-btn">
                     <i data-lucide="download" size="14"></i> Obter
                 </a>
             </div>
 
             <div class="software-item">
                 <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="box" size="20"></i></div>
+                    <div class="icon-box"><i data-lucide="zap"></i></div>
                     <div class="software-info">
-                        <h3>Autodesk Revit</h3>
-                        <span class="category-tag">BIM</span>
+                        <h3>Enscape 4.6</h3>
+                        <span class="category-tag">Renderização Real-time</span>
                     </div>
                 </div>
-                <a href="#" class="download-btn">
+                <a href="https://drive.google.com/file/d/1IUcmH79VDcQhV8XdA8m4zUAiKQ6gzA40/view?usp=sharing" target="_blank" class="download-btn">
                     <i data-lucide="download" size="14"></i> Obter
                 </a>
             </div>
+
         </div>
 
         <a href="index.html" class="back-btn">
@@ -243,19 +293,29 @@
     </div>
 
     <script>
-        // Inicializa os ícones Lucide
         lucide.createIcons();
 
-        // Filtro de Busca Simples
         const searchInput = document.querySelector('.search-input');
         const items = document.querySelectorAll('.software-item');
+        const noResults = document.getElementById('no-results');
 
         searchInput.addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
+            const term = e.target.value.toLowerCase().trim();
+            let hasVisibleItems = false;
+
             items.forEach(item => {
-                const text = item.querySelector('h3').textContent.toLowerCase();
-                item.style.display = text.includes(term) ? 'flex' : 'none';
+                const title = item.querySelector('h3').textContent.toLowerCase();
+                const category = item.querySelector('.category-tag').textContent.toLowerCase();
+                
+                if (title.includes(term) || category.includes(term)) {
+                    item.style.display = 'flex';
+                    hasVisibleItems = true;
+                } else {
+                    item.style.display = 'none';
+                }
             });
+
+            noResults.style.display = hasVisibleItems ? 'none' : 'block';
         });
     </script>
 </body>
