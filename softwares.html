@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atlas - Softwares</title>
-    <script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
@@ -147,7 +147,7 @@
         </header>
 
         <div class="search-container">
-            <i data-lucide="search" class="search-icon" size="18"></i>
+            <i data-lucide="search" class="search-icon"></i>
             <input type="text" class="search-input" placeholder="Buscar software ou categoria...">
         </div>
 
@@ -171,58 +171,6 @@
                 <div class="software-info-wrapper">
                     <div class="icon-box"><i data-lucide="pen-tool"></i></div>
                     <div class="software-info">
-                        <h3>Autodesk AutoCAD</h3>
-                        <span class="category-tag">CAD / Engenharia</span>
-                    </div>
-                </div>
-                <a href="https://drive.google.com/file/d/1TNuyRAEdVakMkcQKEqWwpgt7NRuU4EBP/view?usp=sharing" target="_blank" class="download-btn">
-                    <i data-lucide="download" size="14"></i> Obter
-                </a>
-            </div>
-
-            <div class="software-item">
-                <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="video"></i></div>
-                    <div class="software-info">
-                        <h3>Adobe Premiere Pro</h3>
-                        <span class="category-tag">Edição de Vídeo</span>
-                    </div>
-                </div>
-                <a href="https://drive.google.com/file/d/1NwXNdqYqfFFuBSvsl_gR2cACiYVU2Vwe/view?usp=sharing" target="_blank" class="download-btn">
-                    <i data-lucide="download" size="14"></i> Obter
-                </a>
-            </div>
-
-            <div class="software-item">
-                <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="file-text"></i></div>
-                    <div class="software-info">
-                        <h3>Adobe Acrobat Pro</h3>
-                        <span class="category-tag">Documentos PDF</span>
-                    </div>
-                </div>
-                <a href="https://drive.google.com/file/d/1SzTL6ChyVILzYEaYtttqBll0QNs31oer/view?usp=sharing" target="_blank" class="download-btn">
-                    <i data-lucide="download" size="14"></i> Obter
-                </a>
-            </div>
-
-            <div class="software-item">
-                <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="image"></i></div>
-                    <div class="software-info">
-                        <h3>Adobe Photoshop</h3>
-                        <span class="category-tag">Edição de Imagem</span>
-                    </div>
-                </div>
-                <a href="https://drive.google.com/file/d/1zwxH0yrGLjEj43xXubASVtvW6OTbxRQP/view?usp=sharing" target="_blank" class="download-btn">
-                    <i data-lucide="download" size="14"></i> Obter
-                </a>
-            </div>
-
-            <div class="software-item">
-                <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="bezier"></i></div>
-                    <div class="software-info">
                         <h3>Adobe Illustrator</h3>
                         <span class="category-tag">Vetor / Design</span>
                     </div>
@@ -240,7 +188,7 @@
                         <span class="category-tag">Design Gráfico</span>
                     </div>
                 </div>
-                <a href="https://drive.google.com/file/d/1H8FutTz5kAfQBXwgOPSgRWgM-vThrXW6/view?usp=sharing">
+                <a href="https://drive.google.com/file/d/1H8FutTz5kAfQBXwgOPSgRWgM-vThrXW6/view?usp=sharing" target="_blank" class="download-btn">
                     <i data-lucide="download" size="14"></i> Obter
                 </a>
             </div>
@@ -258,32 +206,6 @@
                 </a>
             </div>
 
-            <div class="software-item">
-                <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="cpu"></i></div>
-                    <div class="software-info">
-                        <h3>V-ray</h3>
-                        <span class="category-tag">Renderização</span>
-                    </div>
-                </div>
-                <a href="https://drive.google.com/file/d/1U_O_Ji572zJo0lLMwMnWmgPwbaynv0e8/view?usp=sharing" target="_blank" class="download-btn">
-                    <i data-lucide="download" size="14"></i> Obter
-                </a>
-            </div>
-
-            <div class="software-item">
-                <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="zap"></i></div>
-                    <div class="software-info">
-                        <h3>Enscape 4.6</h3>
-                        <span class="category-tag">Renderização Real-time</span>
-                    </div>
-                </div>
-                <a href="https://drive.google.com/file/d/1IUcmH79VDcQhV8XdA8m4zUAiKQ6gzA40/view?usp=sharing" target="_blank" class="download-btn">
-                    <i data-lucide="download" size="14"></i> Obter
-                </a>
-            </div>
-
         </div>
 
         <a href="index.html" class="back-btn">
@@ -293,6 +215,7 @@
     </div>
 
     <script>
+        // Inicializa os ícones
         lucide.createIcons();
 
         const searchInput = document.querySelector('.search-input');
