@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Athlas Imperium - Controle Interno de Montagem v5</title>
+    <title>Atlas Imperium - Controle Interno de Montagem v5</title>
     <style>
         :root {
             --bg-primary: #0b0f19;
@@ -288,7 +288,7 @@
                 letter-spacing: 0.5px;
             }
 
-            /* Esconde as linhas vazias para deixar o documento enxuto e resumido */
+            /* Oculta linhas vazias no PDF */
             .component-row.empty-row {
                 display: none !important;
             }
@@ -313,10 +313,17 @@
                 font-weight: 500 !important;
             }
             
+            /* Garante que o texto digitado apareça perfeitamente no PDF */
+            input[type="text"] {
+                display: inline-block;
+                width: 100%;
+            }
+            
             #lucroGlobal {
                 font-size: 14px !important;
                 font-weight: 700 !important;
                 color: #0f172a !important;
+                display: inline-block !important;
             }
 
             .metric-box {
@@ -366,14 +373,14 @@
         <div class="print-only-header">
             <table>
                 <tr>
-                    <td class="brand">Athlas Imperium</td>
+                    <td class="brand">Atlas Imperium</td>
                     <td class="doc-title">Orçamento & Viabilidade de Hardware<br><span id="printDate" style="font-size: 11px; font-weight: normal; color: #64748b;"></span></td>
                 </tr>
             </table>
         </div>
 
         <header>
-            <h1>🏛️ Athlas Imperium</h1>
+            <h1>🏛️ Atlas Imperium</h1>
             <p>Painel Interno de Precificação e Margem Global</p>
         </header>
 
@@ -458,11 +465,16 @@
             row.id = `row_${comp.id}`;
             row.innerHTML = `
                 <td class="component-label">${comp.name}</td>
-                <td><input type="text" id="mod_${comp.id}" placeholder="${comp.placeholder}"></td>
-                <td><input type="number" id="custo_${comp.id}" value="0" step="0.01" style="text-align: right;"></td>
+                <td><input type="text" id="mod_${comp.id}" placeholder="${comp.placeholder}" oninput="sincronizarAtributoValor(this)"></td>
+                <td><input type="number" id="custo_${comp.id}" value="0" step="0.01" style="text-align: right;" oninput="sincronizarAtributoValor(this)"></td>
             `;
             tbody.appendChild(row);
         });
+
+        // Correção crucial para o motor do navegador renderizar o texto digitado na folha de impressão PDF
+        function sincronizarAtributoValor(input) {
+            input.setAttribute('value', input.value);
+        }
 
         function calcularProjeto() {
             let totalCusto = 0;
@@ -483,7 +495,15 @@
 
             const margemGlobalPorcentagem = parseFloat(document.getElementById("lucroGlobal").value) || 0;
             
-            const totalVenda = totalCusto * (1 + (margemGlobalPorcentagem / 100));
+            // Lógica comercial real: Margem calculada sobre o preço de venda definitivo (Preço = Custo / (1 - Margem))
+            // Se a margem for 100% ou maior, o sistema usa o markup padrão para evitar divisão por zero
+            let totalVenda = 0;
+            if (margemGlobalPorcentagem < 100) {
+                totalVenda = totalCusto / (1 - (margemGlobalPorcentagem / 100));
+            } else {
+                totalVenda = totalCusto * (1 + (margemGlobalPorcentagem / 100));
+            }
+
             const totalLucro = totalVenda - totalCusto;
             const roi = totalCusto > 0 ? (totalLucro / totalCusto) * 100 : 0;
             const totalCartao = totalVenda * 1.10; 
@@ -497,6 +517,10 @@
         }
 
         function gerarPDF() {
+            // Sincroniza a margem de lucro para a folha de impressão
+            const mLucro = document.getElementById("lucroGlobal");
+            mLucro.setAttribute('value', mLucro.value);
+            
             calcularProjeto();
             document.getElementById("printDate").innerText = "Emitido em: " + new Date().toLocaleDateString('pt-BR') + " às " + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
             window.print();
