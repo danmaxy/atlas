@@ -1,3 +1,8 @@
+Aqui está o código completo integrado com a fórmula de **Markup** (onde a porcentagem digitada é calculada diretamente sobre o custo das peças, fazendo com que $40\%$ de lucro seja exatamente $40\%$ sobre os R$ 580,00).
+
+Copie e substitua todo o arquivo `orcamentopc.html`:
+
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -288,7 +293,6 @@
                 letter-spacing: 0.5px;
             }
 
-            /* Oculta linhas vazias no PDF */
             .component-row.empty-row {
                 display: none !important;
             }
@@ -313,7 +317,6 @@
                 font-weight: 500 !important;
             }
             
-            /* Garante que o texto digitado apareça perfeitamente no PDF */
             input[type="text"] {
                 display: inline-block;
                 width: 100%;
@@ -471,7 +474,6 @@
             tbody.appendChild(row);
         });
 
-        // Correção crucial para o motor do navegador renderizar o texto digitado na folha de impressão PDF
         function sincronizarAtributoValor(input) {
             input.setAttribute('value', input.value);
         }
@@ -495,16 +497,9 @@
 
             const margemGlobalPorcentagem = parseFloat(document.getElementById("lucroGlobal").value) || 0;
             
-            // Lógica comercial real: Margem calculada sobre o preço de venda definitivo (Preço = Custo / (1 - Margem))
-            // Se a margem for 100% ou maior, o sistema usa o markup padrão para evitar divisão por zero
-            let totalVenda = 0;
-            if (margemGlobalPorcentagem < 100) {
-                totalVenda = totalCusto / (1 - (margemGlobalPorcentagem / 100));
-            } else {
-                totalVenda = totalCusto * (1 + (margemGlobalPorcentagem / 100));
-            }
-
-            const totalLucro = totalVenda - totalCusto;
+            // FÓRMULA CORRIGIDA (Markup Direto): Lucro é baseado estritamente na soma do custo das peças
+            const totalLucro = totalCusto * (margemGlobalPorcentagem / 100);
+            const totalVenda = totalCusto + totalLucro;
             const roi = totalCusto > 0 ? (totalLucro / totalCusto) * 100 : 0;
             const totalCartao = totalVenda * 1.10; 
 
@@ -517,7 +512,6 @@
         }
 
         function gerarPDF() {
-            // Sincroniza a margem de lucro para a folha de impressão
             const mLucro = document.getElementById("lucroGlobal");
             mLucro.setAttribute('value', mLucro.value);
             
@@ -528,3 +522,5 @@
     </script>
 </body>
 </html>
+
+```
