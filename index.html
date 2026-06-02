@@ -9,136 +9,269 @@
     
     <style>
         :root {
-            --bg-body: #0a0f1a;
-            --card-bg: rgba(23, 32, 53, 0.8);
+            --bg-body: #060a13;
+            --bg-surface: #0a0f1a;
+            --card-bg: rgba(23, 32, 53, 0.6);
             --primary: #3b82f6;
             --primary-hover: #2563eb;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.06);
+            --max-width: 1200px;
         }
 
         * { 
             margin: 0; padding: 0; box-sizing: border-box; 
             font-family: 'Plus Jakarta Sans', sans-serif; 
+            scroll-behavior: smooth;
         }
         
         body {
             background-color: var(--bg-body);
             background-image: 
-                radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 80% 80%, rgba(37, 99, 235, 0.05) 0%, transparent 40%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(37, 99, 235, 0.05) 0%, transparent 50%);
             color: var(--text-main);
+            line-height: 1.5;
         }
 
-        /* Glassmorphism Card Elevado */
-        .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            width: 100%;
-            max-width: 400px;
-            padding: 48px 32px;
-            border-radius: 32px;
-            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7);
+        /* Header / Navbar */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            background: rgba(6, 10, 19, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+            padding: 16px 24px;
+        }
+
+        .nav-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 800;
+            font-size: 1.25rem;
+            letter-spacing: -0.03em;
+        }
+
+        .nav-logo img {
+            width: 35px;
+            height: 35px;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Container Principal */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 160px 0 80px;
             text-align: center;
-            border: 1px solid var(--border);
             position: relative;
-            overflow: hidden;
         }
 
-        /* Brilho decorativo no topo */
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 50%;
-            transform: translateX(-50%);
-            width: 80%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent);
-        }
-
-        .logo-wrapper {
-            width: 130px;
-            height: 130px;
-            margin: 0 auto 32px;
-            background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-            border-radius: 30px;
+        .logo-main-wrapper {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 24px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 28px;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            border: 1px solid var(--border);
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+            padding: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
-        .logo-wrapper img {
+        .logo-main-wrapper img {
             max-width: 100%;
             height: auto;
             filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .card:hover .logo-wrapper img {
-            transform: scale(1.1) rotate(2deg);
-        }
-
-        h1 { 
-            font-size: 1.85rem; 
+        .hero h1 {
+            font-size: 3rem;
             font-weight: 800;
-            margin-bottom: 12px; 
             letter-spacing: -0.04em;
-            background: linear-gradient(to bottom, #fff, #cbd5e1);
+            margin-bottom: 16px;
+            background: linear-gradient(to bottom, #fff, #94a3b8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        p { 
-            color: var(--text-muted); 
-            margin-bottom: 40px; 
-            font-size: 1rem; 
-            line-height: 1.6;
-            font-weight: 400;
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 32px;
         }
 
-        .btn-group { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 12px; 
+        /* Seções Gerais */
+        .section {
+            padding: 80px 0;
+            border-top: 1px solid var(--border);
         }
 
-        .btn {
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 48px;
+            font-size: 1rem;
+        }
+
+        /* Grids de Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        /* Estilo dos Cards (Glassmorphism) */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 32px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+            border-radius: 14px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 18px 24px;
-            border-radius: 18px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            flex-grow: 1;
+        }
+
+        /* Detalhes de Produtos */
+        .product-image {
+            width: 100%;
+            height: 180px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .price-tag {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+        }
+
+        .price-tag span {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Botões */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 24px;
+            border-radius: 14px;
             font-weight: 700;
             text-decoration: none;
             font-size: 0.95rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
         }
 
-        /* Botão Primário Estilo 'Glow' */
-        .btn-primary { 
-            background: var(--primary); 
+        .btn-primary {
+            background: var(--primary);
             color: white;
-            box-shadow: 0 4px 20px -5px rgba(59, 130, 246, 0.5);
+            box-shadow: 0 4px 15px -3px rgba(59, 130, 246, 0.4);
         }
 
         .btn-primary:hover {
             background: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px -5px rgba(59, 130, 246, 0.6);
+            box-shadow: 0 8px 20px -3px rgba(59, 130, 246, 0.5);
         }
 
-        /* Botão Secundário Estilo Glass */
         .btn-secondary {
             background: rgba(255, 255, 255, 0.03);
             color: #e2e8f0;
@@ -146,53 +279,154 @@
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.07);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
             color: #fff;
         }
 
-        .btn:active { transform: scale(0.97); }
+        .btn-sm {
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            border-radius: 10px;
+        }
 
-        .btn i { opacity: 0.6; transition: 0.3s; }
-        .btn:hover i { transform: translateX(4px); opacity: 1; }
+        /* Footer / Utilitários */
+        footer {
+            background: var(--bg-surface);
+            padding: 48px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
 
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .footer-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2.2rem; }
+            .grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
-    <main class="card">
-        <div class="logo-wrapper">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <img src="https://github.com/danmaxy/atlas/blob/main/IMPERIUM.png?raw=true" alt="Logo">
+                <span>ATLAS</span>
+            </a>
+            <div class="nav-links">
+                <a href="#servicos">Serviços</a>
+                <a href="#produtos">Peças e Produtos</a>
+                <a href="softwares.html">Softwares</a>
+                <a href="orcamentopc.html">Orçamento PC</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero container">
+        <div class="logo-main-wrapper">
             <img src="https://github.com/danmaxy/atlas/blob/main/IMPERIUM.png?raw=true" alt="Logotipo Atlas">
         </div>
-        
-        <header>
-            <h1>Central ATLAS</h1>
-            <p>Ecossistema de soluções integradas para o dia a dia técnico.</p>
-        </header>
+        <h1>Central ATLAS</h1>
+        <p>Ecossistema completo de soluções integradas, manutenção técnica avançada e fornecimento de hardware.</p>
+        <div style="display: flex; gap: 16px; justify-content: center;">
+            <a href="#servicos" class="btn btn-primary">Ver Serviços</a>
+            <a href="orcamentopc.html" class="btn btn-secondary">Montar PC</a>
+        </div>
+    </header>
 
-        <nav class="btn-group">
-            <a href="#servicos" class="btn btn-primary">
-                Serviços de Suporte
-                <i data-lucide="chevron-right" size="18"></i>
-            </a>
-            <a href="#pecas" class="btn btn-secondary">
-                Catálogo de Peças
-                <i data-lucide="chevron-right" size="18"></i>
-            </a>
-            <a href="softwares.html" class="btn btn-secondary">
-                Repositório Softwares
-                <i data-lucide="chevron-right" size="18"></i>
-            </a>
-            <a href="orcamentopc.html" class="btn btn-secondary">
-                Orçamento PC
-                <i data-lucide="chevron-right" size="18"></i>
-            </a>
-        </nav>
-    </main>
+    <section id="servicos" class="section container">
+        <h2 class="section-title">Serviços de Suporte & Conserto</h2>
+        <p class="section-subtitle">Assistência técnica especializada com máxima agilidade e garantia.</p>
+        
+        <div class="grid">
+            <div class="card">
+                <div class="card-icon"><i data-lucide="cpu"></i></div>
+                <h3>Manutenção de Computadores</h3>
+                <p>Diagnóstico completo, limpeza interna preventiva, troca de pasta térmica e substituição de componentes danificados.</p>
+                <a href="https://wa.me/seu-numero" class="btn btn-secondary btn-sm">Solicitar Orçamento <i data-lucide="arrow-right"></i></a>
+            </div>
+
+            <div class="card">
+                <div class="card-icon"><i data-lucide="laptop"></i></div>
+                <h3>Reparo de Notebooks</h3>
+                <p>Conserto de carcaças e dobradiças, manutenção de placas-mãe, troca de telas quebradas e baterias viciadas.</p>
+                <a href="https://wa.me/seu-numero" class="btn btn-secondary btn-sm">Solicitar Orçamento <i data-lucide="arrow-right"></i></a>
+            </div>
+
+            <div class="card">
+                <div class="card-icon"><i data-lucide="shield-alert"></i></div>
+                <h3>Remoção de Malware & Sistema</h3>
+                <p>Formatação otimizada, instalação de sistemas operacionais, remoção de vírus e recuperação de arquivos perdidos.</p>
+                <a href="https://wa.me/seu-numero" class="btn btn-secondary btn-sm">Solicitar Orçamento <i data-lucide="arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <section id="produtos" class="section container">
+        <h2 class="section-title">Catálogo de Peças</h2>
+        <p class="section-subtitle">Componentes de alta performance selecionados e testados pela nossa equipe.</p>
+        
+        <div class="grid">
+            <div class="card">
+                <div class="product-image">
+                    <i data-lucide="hard-drive" size="40"></i>
+                </div>
+                <h3>SSD NVMe M.2 - 1TB</h3>
+                <p>Armazenamento ultra rápido para carregar seu sistema operacional e jogos em segundos.</p>
+                <div class="price-tag"><span>R$</span> 349,00</div>
+                <button class="btn btn-primary btn-sm">Comprar Peça</button>
+            </div>
+
+            <div class="card">
+                <div class="product-image">
+                    <i data-lucide="circuit-board" size="40"></i>
+                </div>
+                <h3>Memória RAM DDR4 16GB</h3>
+                <p>Módulo de alta velocidade (3200MHz) para acabar com travamentos e melhorar o multitasking.</p>
+                <div class="price-tag"><span>R$</span> 289,00</div>
+                <button class="btn btn-primary btn-sm">Comprar Peça</button>
+            </div>
+
+            <div class="card">
+                <div class="product-image">
+                    <i data-lucide="fan" size="40"></i>
+                </div>
+                <h3>Water Cooler Argb 240mm</h3>
+                <p>Refrigeração líquida eficiente para manter as temperaturas do seu processador sob controle.</p>
+                <div class="price-tag"><span>R$</span> 419,00</div>
+                <button class="btn btn-primary btn-sm">Comprar Peça</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="softwares.html">Repositório Softwares</a>
+                <a href="orcamentopc.html">Orçador de PC</a>
+            </div>
+            <p>&copy; 2026 Central ATLAS. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 
     <script>
-        // Inicializa os ícones Lucide
+        // Inicializa os ícones Lucide para os novos elementos
         lucide.createIcons();
     </script>
 </body>
