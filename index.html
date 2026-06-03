@@ -33,6 +33,7 @@
                 radial-gradient(circle at 90% 80%, rgba(37, 99, 235, 0.05) 0%, transparent 50%);
             color: var(--text-main);
             line-height: 1.5;
+            overflow-x: hidden;
         }
 
         /* Header / Navbar */
@@ -94,37 +95,67 @@
             max-width: var(--max-width);
             margin: 0 auto;
             padding: 0 24px;
+            position: relative;
+            z-index: 2;
         }
 
-        /* Hero Section */
+        /* Hero Section com Dragão de Fundo */
         .hero {
-            padding: 160px 0 80px;
+            padding: 180px 0 100px;
             text-align: center;
             position: relative;
         }
 
+        /* Silhueta Mística de Dragão integrada ao fundo do site */
+        .dragon-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: url('https://github.com/danmaxy/atlas/blob/main/IMPERIUM.png?raw=true') no-repeat center;
+            background-size: contain;
+            opacity: 0.04; /* Sutil, integrado ao tema dark */
+            filter: blue;
+            pointer-events: none;
+            z-index: 1;
+            animation: pulse-dragon 8s infinite ease-in-out;
+        }
+
+        @keyframes pulse-dragon {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.03; }
+            50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.06; filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.2)); }
+        }
+
         .logo-main-wrapper {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 24px;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 28px;
             background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 28px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 32px;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 16px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4), inset 0 0 20px rgba(59, 130, 246, 0.1);
+            position: relative;
         }
 
         .logo-main-wrapper img {
             max-width: 100%;
             height: auto;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .logo-main-wrapper:hover img {
+            transform: scale(1.1) rotate(3deg);
         }
 
         .hero h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 800;
             letter-spacing: -0.04em;
             margin-bottom: 16px;
@@ -137,7 +168,7 @@
             font-size: 1.2rem;
             color: var(--text-muted);
             max-width: 600px;
-            margin: 0 auto 32px;
+            margin: 0 auto 36px;
         }
 
         /* Seções Gerais */
@@ -164,7 +195,7 @@
         /* Grids de Cards */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 24px;
         }
 
@@ -189,7 +220,16 @@
             box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
         }
 
-        .card-icon {
+        /* Card AnyDesk Destaque Vermelho Sutil */
+        .card.anydesk-card:hover {
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+        .card.anydesk-card .card-icon-anydesk {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .card-icon, .card-icon-anydesk {
             width: 48px;
             height: 48px;
             background: rgba(59, 130, 246, 0.1);
@@ -290,7 +330,7 @@
             border-radius: 10px;
         }
 
-        /* Footer / Utilitários */
+        /* Footer */
         footer {
             background: var(--bg-surface);
             padding: 48px 0;
@@ -316,13 +356,18 @@
         /* Responsividade */
         @media (max-width: 768px) {
             .nav-links { display: none; }
-            .hero h1 { font-size: 2.2rem; }
+            .hero h1 { font-size: 2.5rem; }
             .grid { grid-template-columns: 1fr; }
+            .dragon-bg { width: 350px; height: 350px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Marca d'água Animada do Dragão Imperium -->
+    <div class="dragon-bg"></div>
+
+    <!-- Navbar -->
     <nav class="navbar">
         <div class="nav-container">
             <a href="#" class="nav-logo">
@@ -338,83 +383,93 @@
         </div>
     </nav>
 
+    <!-- Hero Section -->
     <header class="hero container">
         <div class="logo-main-wrapper">
             <img src="https://github.com/danmaxy/atlas/blob/main/IMPERIUM.png?raw=true" alt="Logotipo Atlas">
         </div>
         <h1>Central ATLAS</h1>
-        <p>Ecossistema completo de soluções integradas, manutenção técnica avançada e fornecimento de hardware.</p>
-        <div style="display: flex; gap: 16px; justify-content: center;">
+        <p>Manutenção técnica avançada, suporte remoto imediato e fornecimento de hardware com a força que seu ecossistema precisa.</p>
+        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
             <a href="#servicos" class="btn btn-primary">Ver Serviços</a>
-            <a href="orcamentopc.html" class="btn btn-secondary">Montar PC</a>
+            <a href="#suporte-remoto" class="btn btn-secondary"><i data-lucide="monitor"></i> Suporte AnyDesk</a>
         </div>
     </header>
 
+    <!-- Seção de Serviços -->
     <section id="servicos" class="section container">
         <h2 class="section-title">Serviços de Suporte & Conserto</h2>
-        <p class="section-subtitle">Assistência técnica especializada com máxima agilidade e garantia.</p>
+        <p class="section-subtitle">Assistência técnica ágil, digital e presencial com alto padrão.</p>
         
         <div class="grid">
+            <!-- NOVO: Serviço AnyDesk -->
+            <div class="card anydesk-card" id="suporte-remoto">
+                <div class="card-icon-anydesk"><i data-lucide="terminal"></i></div>
+                <h3>Suporte Remoto via AnyDesk</h3>
+                <p>Resolução de problemas de software, otimização de sistema, remoção de falhas e instalação de programas sem você sair de casa.</p>
+                <a href="https://wa.me/seu-numero?text=Olá,%20preciso%20de%20suporte%20remoto%20via%20AnyDesk" class="btn btn-secondary btn-sm" style="border-color: rgba(239, 68, 68, 0.2);">Conectar Agora <i data-lucide="external-link"></i></a>
+            </div>
+
+            <!-- Serviço 2 -->
             <div class="card">
                 <div class="card-icon"><i data-lucide="cpu"></i></div>
                 <h3>Manutenção de Computadores</h3>
-                <p>Diagnóstico completo, limpeza interna preventiva, troca de pasta térmica e substituição de componentes danificados.</p>
+                <p>Diagnóstico de hardware, limpeza preventiva, troca de pasta térmica industrial e substituição de peças avariadas.</p>
                 <a href="https://wa.me/seu-numero" class="btn btn-secondary btn-sm">Solicitar Orçamento <i data-lucide="arrow-right"></i></a>
             </div>
 
+            <!-- Serviço 3 -->
             <div class="card">
                 <div class="card-icon"><i data-lucide="laptop"></i></div>
                 <h3>Reparo de Notebooks</h3>
-                <p>Conserto de carcaças e dobradiças, manutenção de placas-mãe, troca de telas quebradas e baterias viciadas.</p>
-                <a href="https://wa.me/seu-numero" class="btn btn-secondary btn-sm">Solicitar Orçamento <i data-lucide="arrow-right"></i></a>
-            </div>
-
-            <div class="card">
-                <div class="card-icon"><i data-lucide="shield-alert"></i></div>
-                <h3>Remoção de Malware & Sistema</h3>
-                <p>Formatação otimizada, instalação de sistemas operacionais, remoção de vírus e recuperação de arquivos perdidos.</p>
+                <p>Recuperação de carcaças, troca de telas LCD/OLED, baterias, reparo avançado em trilhas de placas-mãe.</p>
                 <a href="https://wa.me/seu-numero" class="btn btn-secondary btn-sm">Solicitar Orçamento <i data-lucide="arrow-right"></i></a>
             </div>
         </div>
     </section>
 
+    <!-- Seção de Produtos -->
     <section id="produtos" class="section container">
         <h2 class="section-title">Catálogo de Peças</h2>
-        <p class="section-subtitle">Componentes de alta performance selecionados e testados pela nossa equipe.</p>
+        <p class="section-subtitle">Peças e componentes originais, testados no nosso laboratório.</p>
         
         <div class="grid">
+            <!-- Produto 1 -->
             <div class="card">
                 <div class="product-image">
                     <i data-lucide="hard-drive" size="40"></i>
                 </div>
                 <h3>SSD NVMe M.2 - 1TB</h3>
-                <p>Armazenamento ultra rápido para carregar seu sistema operacional e jogos em segundos.</p>
+                <p>Armazenamento de altíssima velocidade para carregar o sistema operacional e softwares em segundos.</p>
                 <div class="price-tag"><span>R$</span> 349,00</div>
                 <button class="btn btn-primary btn-sm">Comprar Peça</button>
             </div>
 
+            <!-- Produto 2 -->
             <div class="card">
                 <div class="product-image">
                     <i data-lucide="circuit-board" size="40"></i>
                 </div>
                 <h3>Memória RAM DDR4 16GB</h3>
-                <p>Módulo de alta velocidade (3200MHz) para acabar com travamentos e melhorar o multitasking.</p>
+                <p>Módulo de alta performance (3200MHz), ideal para multitasking e softwares pesados.</p>
                 <div class="price-tag"><span>R$</span> 289,00</div>
                 <button class="btn btn-primary btn-sm">Comprar Peça</button>
             </div>
 
+            <!-- Produto 3 -->
             <div class="card">
                 <div class="product-image">
                     <i data-lucide="fan" size="40"></i>
                 </div>
-                <h3>Water Cooler Argb 240mm</h3>
-                <p>Refrigeração líquida eficiente para manter as temperaturas do seu processador sob controle.</p>
+                <h3>Water Cooler ARGB 240mm</h3>
+                <p>Dissipação líquida eficiente para manter a temperatura do processador sob controle rigoroso.</p>
                 <div class="price-tag"><span>R$</span> 419,00</div>
                 <button class="btn btn-primary btn-sm">Comprar Peça</button>
             </div>
         </div>
     </section>
 
+    <!-- Rodapé -->
     <footer>
         <div class="container">
             <div class="footer-links">
@@ -426,7 +481,6 @@
     </footer>
 
     <script>
-        // Inicializa os ícones Lucide para os novos elementos
         lucide.createIcons();
     </script>
 </body>
