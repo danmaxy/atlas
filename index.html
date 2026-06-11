@@ -1,433 +1,295 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atlas - Soluções Técnicas</title>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --bg-body: #060a13;
-            --bg-surface: #0a0f1a;
-            --card-bg: rgba(23, 32, 53, 0.6);
-            --primary: #3b82f6;
-            --primary-hover: #2563eb;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: rgba(255, 255, 255, 0.06);
-            --max-width: 1200px;
-        }
+<!DOCTYPE html> 
+<html lang="pt-br"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Atlas - Soluções Técnicas & Hardware</title> 
+    <script src="https://unpkg.com/lucide@latest"></script> 
 
-        * { 
-            margin: 0; padding: 0; box-sizing: border-box; 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            scroll-behavior: smooth;
-        }
-        
-        body {
-            background-color: var(--bg-body);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 90% 80%, rgba(37, 99, 235, 0.05) 0%, transparent 50%);
-            color: var(--text-main);
-            line-height: 1.5;
-        }
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"> 
+     
+    <style> 
+        :root { 
+            --bg-body: #060913; 
+            --card-bg: rgba(13, 20, 38, 0.6); 
+            --primary: #3b82f6; 
+            --primary-glow: rgba(59, 130, 246, 0.3); 
+            --accent: #10b981; /* Verde para destacar vendas/sucesso */
+            --text-main: #f8fafc; 
+            --text-muted: #94a3b8; 
+            --border: rgba(255, 255, 255, 0.05); 
+        } 
 
-        /* Header / Navbar */
-        .navbar {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            background: rgba(6, 10, 19, 0.8);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
-            z-index: 100;
-            padding: 16px 24px;
-        }
+        * {  
+            margin: 0; padding: 0; box-sizing: border-box;  
+            font-family: 'Plus Jakarta Sans', sans-serif;  
+        } 
+         
+        body { 
+            background-color: var(--bg-body); 
+            background-image:  
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 50%), 
+                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 50%); 
+            min-height: 100vh; 
+            padding: 40px 20px; 
+            color: var(--text-main); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        } 
 
-        .nav-container {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        /* Container Principal da Landing Page */ 
+        .container { 
+            width: 100%; 
+            max-width: 1000px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 40px; 
+        } 
 
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: var(--text-main);
-            font-weight: 800;
-            font-size: 1.25rem;
-            letter-spacing: -0.03em;
-        }
+        /* Header / Hero Section */ 
+        .hero { 
+            text-align: center; 
+            padding: 20px 0; 
+        } 
 
-        .nav-logo img {
-            width: 35px;
-            height: 35px;
-            object-fit: contain;
-        }
+        .logo-wrapper { 
+            width: 100px; 
+            height: 100px; 
+            margin: 0 auto 24px; 
+            background: linear-gradient(145deg, rgba(255,255,255,0.02), rgba(255,255,255,0.05)); 
+            border-radius: 24px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            border: 1px solid var(--border); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5); 
+        } 
 
-        .nav-links {
-            display: flex;
-            gap: 24px;
-        }
+        .logo-wrapper img { 
+            max-width: 70%; 
+            height: auto; 
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3)); 
+        } 
 
-        .nav-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: color 0.3s;
-        }
+        .hero h1 { 
+            font-size: 3rem; 
+            font-weight: 800; 
+            letter-spacing: -0.05em; 
+            margin-bottom: 16px; 
+            background: linear-gradient(135deg, #fff 30%, #94a3b8); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        } 
 
-        .nav-links a:hover {
-            color: var(--primary);
-        }
+        .hero p { 
+            font-size: 1.15rem; 
+            color: var(--text-muted); 
+            max-width: 600px; 
+            margin: 0 auto; 
+            line-height: 1.6; 
+        } 
 
-        /* Container Principal */
-        .container {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 0 24px;
-        }
+        /* Grid de Soluções/Serviços */ 
+        .grid-features { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 24px; 
+        } 
 
-        /* Hero Section */
-        .hero {
-            padding: 160px 0 80px;
-            text-align: center;
-            position: relative;
-        }
+        /* Card Estilo Glassmorphism Elevado */ 
+        .card { 
+            background: var(--card-bg); 
+            backdrop-filter: blur(24px); 
+            -webkit-backdrop-filter: blur(24px); 
+            padding: 40px 32px; 
+            border-radius: 28px; 
+            border: 1px solid var(--border); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+            position: relative; 
+            overflow: hidden; 
+        } 
 
-        .logo-main-wrapper {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 24px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 28px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 16px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
+        .card::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 100%); 
+            pointer-events: none; 
+        } 
 
-        .logo-main-wrapper img {
-            max-width: 100%;
-            height: auto;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
-        }
+        .card:hover { 
+            transform: translateY(-5px); 
+            border-color: rgba(59, 130, 246, 0.3); 
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6), 0 0 50px -10px var(--primary-glow); 
+        } 
 
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            letter-spacing: -0.04em;
-            margin-bottom: 16px;
-            background: linear-gradient(to bottom, #fff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        /* Ícones internos dos cards */ 
+        .card-icon { 
+            width: 56px; 
+            height: 56px; 
+            background: rgba(59, 130, 246, 0.1); 
+            color: var(--primary); 
+            border-radius: 16px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            margin-bottom: 24px; 
+            border: 1px solid rgba(59, 130, 246, 0.2); 
+        } 
 
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto 32px;
-        }
+        .card:nth-child(2) .card-icon { 
+            background: rgba(16, 185, 129, 0.1); 
+            color: var(--accent); 
+            border-radius: 16px; 
+            border: 1px solid rgba(16, 185, 129, 0.2); 
+        } 
 
-        /* Seções Gerais */
-        .section {
-            padding: 80px 0;
-            border-top: 1px solid var(--border);
-        }
+        .card h3 { 
+            font-size: 1.4rem; 
+            font-weight: 700; 
+            margin-bottom: 12px; 
+            letter-spacing: -0.02em; 
+        } 
 
-        .section-title {
-            font-size: 2rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            margin-bottom: 12px;
-            text-align: center;
-        }
+        .card p { 
+            color: var(--text-muted); 
+            font-size: 0.95rem; 
+            line-height: 1.6; 
+            margin-bottom: 32px; 
+            flex-grow: 1; 
+        } 
 
-        .section-subtitle {
-            color: var(--text-muted);
-            text-align: center;
-            margin-bottom: 48px;
-            font-size: 1rem;
-        }
+        /* Botões */ 
+        .btn { 
+            width: 100%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+            padding: 16px 24px; 
+            border-radius: 14px; 
+            font-weight: 700; 
+            text-decoration: none; 
+            font-size: 0.95rem; 
+            transition: all 0.3s ease; 
+        } 
 
-        /* Grids de Cards */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-        }
+        .btn-primary { 
+            background: var(--primary); 
+            color: #fff; 
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); 
+        } 
 
-        /* Estilo dos Cards (Glassmorphism) */
-        .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 32px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-        }
+        .btn-primary:hover { 
+            background: #2563eb; 
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5); 
+        } 
 
-        .card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(59, 130, 246, 0.3);
-            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
-        }
+        .btn-secondary { 
+            background: rgba(255, 255, 255, 0.03); 
+            color: #e2e8f0; 
+            border: 1px solid var(--border); 
+        } 
 
-        .card-icon {
-            width: 48px;
-            height: 48px;
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--primary);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
+        .btn-secondary:hover { 
+            background: rgba(255, 255, 255, 0.08); 
+            border-color: rgba(255, 255, 255, 0.15); 
+            color: #fff; 
+        } 
 
-        .card h3 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
+        .btn i {  
+            transition: transform 0.3s ease;  
+        } 
+        .btn:hover i {  
+            transform: translateX(3px);  
+        } 
 
-        .card p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 24px;
-            flex-grow: 1;
-        }
+        /* Footer simples */ 
+        footer { 
+            text-align: center; 
+            font-size: 0.85rem; 
+            color: rgba(148, 163, 184, 0.4); 
+            margin-top: 20px; 
+        } 
 
-        /* Detalhes de Produtos */
-        .product-image {
-            width: 100%;
-            height: 180px;
-            background: rgba(255,255,255,0.02);
-            border-radius: 16px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            border: 1px solid rgba(255,255,255,0.03);
-        }
+        /* Responsivo para telas menores (Smartphones) */ 
+        @media(max-width: 768px) { 
+            .hero h1 { font-size: 2.2rem; } 
+            body { padding: 20px 16px; } 
+            .card { padding: 32px 24px; } 
+        } 
+    </style> 
+</head> 
+<body> 
 
-        .price-tag {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: #fff;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: baseline;
-            gap: 4px;
-        }
+    <div class="container"> 
+         
+        <header class="hero"> 
+            <div class="logo-wrapper"> 
+                <img src="https://github.com/danmaxy/atlas/blob/main/IMPERIUM.png?raw=true" alt="Logotipo Atlas"> 
+            </div> 
+            <h1>Central ATLAS</h1> 
+            <p>Sua infraestrutura tecnológica completa. Da instalação de softwares essenciais à montagem do hardware dos seus sonhos.</p> 
+        </header> 
 
-        .price-tag span {
-            font-size: 0.9rem;
-            color: var(--primary);
-            font-weight: 600;
-        }
+        <main class="grid-features"> 
+             
+            <section class="card"> 
+                <div> 
+                    <div class="card-icon"> 
+                        <i data-lucide="monitor-remote" size="26"></i> 
+                    </div> 
+                    <h3>Suporte & Softwares</h3> 
+                    <p>Instalação remota de sistemas, utilitários e softwares profissionais com total segurança e praticidade sem sair de casa.</p> 
+                </div> 
+                <a href="softwares.html" class="btn btn-primary"> 
+                    Repositório Softwares 
+                    <i data-lucide="arrow-right" size="16"></i> 
+                </a> 
+            </section> 
 
-        /* Botões */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 14px 24px;
-            border-radius: 14px;
-            font-weight: 700;
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: all 0.3s;
-            cursor: pointer;
-            border: none;
-        }
+            <section class="card"> 
+                <div> 
+                    <div class="card-icon"> 
+                        <i data-lucide="cpu" size="26"></i> 
+                    </div> 
+                    <h3>Peças & Hardware</h3> 
+                    <p>Upgrade de performance com as melhores marcas do mercado. Placas de vídeo, processadores, SSDs e memórias com garantia.</p> 
+                </div> 
+                <a href="#pecas" class="btn btn-secondary"> 
+                    Catálogo de Peças 
+                    <i data-lucide="arrow-right" size="16"></i> 
+                </a> 
+            </section> 
 
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 4px 15px -3px rgba(59, 130, 246, 0.4);
-        }
+            <section class="card"> 
+                <div> 
+                    <div class="card-icon"> 
+                        <i data-lucide="shopping-cart" size="26"></i> 
+                    </div> 
+                    <h3>Computadores Completos</h3> 
+                    <p>Montagem de máquinas personalizadas para Trabalho, Estudos ou Computadores Gamers de alta performance sob medida.</p> 
+                </div> 
+                <a href="orcamentopc.html" class="btn btn-secondary"> 
+                    Orçamento Computador 
+                    <i data-lucide="arrow-right" size="16"></i> 
+                </a> 
+            </section> 
 
-        .btn-primary:hover {
-            background: var(--primary-hover);
-            box-shadow: 0 8px 20px -3px rgba(59, 130, 246, 0.5);
-        }
+        </main> 
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.03);
-            color: #e2e8f0;
-            border: 1px solid var(--border);
-        }
+        <footer> 
+            <p>&copy; 2026 Atlas Soluções Técnicas. Todos os direitos reservados.</p> 
+        </footer> 
+    </div> 
 
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.15);
-            color: #fff;
-        }
-
-        .btn-sm {
-            padding: 10px 16px;
-            font-size: 0.85rem;
-            border-radius: 10px;
-        }
-
-        /* Footer / Utilitários */
-        footer {
-            background: var(--bg-surface);
-            padding: 48px 0;
-            border-top: 1px solid var(--border);
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 24px;
-            margin-bottom: 24px;
-        }
-
-        .footer-links a {
-            color: var(--text-main);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .hero h1 { font-size: 2.2rem; }
-            .grid { grid-template-columns: 1fr; }
-        }
-    </style>
-</head>
-<body>
-
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#" class="nav-logo">
-                <img src="https://github.com/danmaxy/atlas/blob/main/IMPERIUM.png?raw=true" alt="Logo">
-                <span>ATLAS</span>
-            </a>
-            <div class="nav-links">
-                <a href="#servicos">Serviços</a>
-                <a href="#produtos">Peças e Produtos</a>
-                <a href="softwares.html">Softwares</a>
-                <a href="orcamentopc.html">Orçamento PC</a>
-            </div>
-        </div>
-    </nav>
-
-    <header class="hero container">
-        <div class="logo-main-wrapper">
-            <img src="https://github.com/danmaxy/atlas/blob/main/IMPERIUM.png?raw=true" alt="Logotipo Atlas">
-        </div>
-        <h1>Central ATLAS</h1>
-        <p>Ecossistema completo de soluções integradas, manutenção técnica avançada e fornecimento de hardware.</p>
-        <div style="display: flex; gap: 16px; justify-content: center;">
-            <a href="#servicos" class="btn btn-primary">Ver Serviços</a>
-            <a href="orcamentopc.html" class="btn btn-secondary">Montar PC</a>
-        </div>
-    </header>
-
-    <section id="servicos" class="section container">
-        <h2 class="section-title">Serviços de Suporte & Conserto</h2>
-        <p class="section-subtitle">Assistência técnica especializada com máxima agilidade e garantia.</p>
-        
-        <div class="grid">
-            <div class="card">
-                <div class="card-icon"><i data-lucide="cpu"></i></div>
-                <h3>Manutenção de Computadores</h3>
-                <p>Diagnóstico completo, limpeza interna preventiva, troca de pasta térmica e substituição de componentes danificados.</p>
-                <a href="https://wa.me/seu-numero" class="btn btn-secondary btn-sm">Solicitar Orçamento <i data-lucide="arrow-right"></i></a>
-            </div>
-
-            <div class="card">
-                <div class="card-icon"><i data-lucide="laptop"></i></div>
-                <h3>Reparo de Notebooks</h3>
-                <p>Conserto de carcaças e dobradiças, manutenção de placas-mãe, troca de telas quebradas e baterias viciadas.</p>
-                <a href="https://wa.me/seu-numero" class="btn btn-secondary btn-sm">Solicitar Orçamento <i data-lucide="arrow-right"></i></a>
-            </div>
-
-            <div class="card">
-                <div class="card-icon"><i data-lucide="shield-alert"></i></div>
-                <h3>Remoção de Malware & Sistema</h3>
-                <p>Formatação otimizada, instalação de sistemas operacionais, remoção de vírus e recuperação de arquivos perdidos.</p>
-                <a href="https://wa.me/seu-numero" class="btn btn-secondary btn-sm">Solicitar Orçamento <i data-lucide="arrow-right"></i></a>
-            </div>
-        </div>
-    </section>
-
-    <section id="produtos" class="section container">
-        <h2 class="section-title">Catálogo de Peças</h2>
-        <p class="section-subtitle">Componentes de alta performance selecionados e testados pela nossa equipe.</p>
-        
-        <div class="grid">
-            <div class="card">
-                <div class="product-image">
-                    <i data-lucide="hard-drive" size="40"></i>
-                </div>
-                <h3>SSD NVMe M.2 - 1TB</h3>
-                <p>Armazenamento ultra rápido para carregar seu sistema operacional e jogos em segundos.</p>
-                <div class="price-tag"><span>R$</span> 349,00</div>
-                <button class="btn btn-primary btn-sm">Comprar Peça</button>
-            </div>
-
-            <div class="card">
-                <div class="product-image">
-                    <i data-lucide="circuit-board" size="40"></i>
-                </div>
-                <h3>Memória RAM DDR4 16GB</h3>
-                <p>Módulo de alta velocidade (3200MHz) para acabar com travamentos e melhorar o multitasking.</p>
-                <div class="price-tag"><span>R$</span> 289,00</div>
-                <button class="btn btn-primary btn-sm">Comprar Peça</button>
-            </div>
-
-            <div class="card">
-                <div class="product-image">
-                    <i data-lucide="fan" size="40"></i>
-                </div>
-                <h3>Water Cooler Argb 240mm</h3>
-                <p>Refrigeração líquida eficiente para manter as temperaturas do seu processador sob controle.</p>
-                <div class="price-tag"><span>R$</span> 419,00</div>
-                <button class="btn btn-primary btn-sm">Comprar Peça</button>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <div class="footer-links">
-                <a href="softwares.html">Repositório Softwares</a>
-                <a href="orcamentopc.html">Orçador de PC</a>
-            </div>
-            <p>&copy; 2026 Central ATLAS. Todos os direitos reservados.</p>
-        </div>
-    </footer>
-
-    <script>
-        // Inicializa os ícones Lucide para os novos elementos
-        lucide.createIcons();
-    </script>
-</body>
+    <script> 
+        // Inicializa os ícones Lucide 
+        lucide.createIcons(); 
+    </script> 
+</body> 
 </html>
