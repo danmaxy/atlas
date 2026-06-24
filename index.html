@@ -1,202 +1,202 @@
- <!DOCTYPE html> 
- <html lang="pt-br"> 
- <head> 
-     <meta charset="UTF-8"> 
-     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-     <title>Atlas - Soluções Técnicas</title> 
-     <script src="https://unpkg.com/lucide@latest"></script> 
+<!DOCTYPE html> 
+<html lang="pt-br"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Atlas - Soluções Técnicas</title> 
+    <script src="https://unpkg.com/lucide@latest"></script> 
 
-     <link 
+    <link 
 href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
  rel="stylesheet"> 
-      
-     <style> 
-         :root { 
-             --bg-body: #0a0f1a; 
-             --card-bg: rgba(23, 32, 53, 0.8); 
-             --primary: #3b82f6; 
-             --primary-hover: #2563eb; 
-             --text-main: #f8fafc; 
-             --text-muted: #94a3b8; 
-             --border: rgba(255, 255, 255, 0.08); 
-         } 
+     
+    <style> 
+        :root { 
+            --bg-body: #0a0f1a; 
+            --card-bg: rgba(23, 32, 53, 0.8); 
+            --primary: #3b82f6; 
+            --primary-hover: #2563eb; 
+            --text-main: #f8fafc; 
+            --text-muted: #94a3b8; 
+            --border: rgba(255, 255, 255, 0.08); 
+        } 
 
-         * {  
-             margin: 0; padding: 0; box-sizing: border-box;  
-             font-family: 'Plus Jakarta Sans', sans-serif;  
-         } 
-          
-         body { 
-             background-color: var(--bg-body); 
-             background-image:  
-                 radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 40%), 
-                 radial-gradient(circle at 80% 80%, rgba(37, 99, 235, 0.05) 0%, transparent 40%); 
-             display: flex; 
-             justify-content: center; 
-             align-items: center; 
-             min-height: 100vh; 
-             padding: 20px; 
-             color: var(--text-main); 
-         } 
+        * {  
+            margin: 0; padding: 0; box-sizing: border-box;  
+            font-family: 'Plus Jakarta Sans', sans-serif;  
+        } 
+         
+        body { 
+            background-color: var(--bg-body); 
+            background-image:  
+                radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 40%),  
+                radial-gradient(circle at 80% 80%, rgba(37, 99, 235, 0.05) 0%, transparent 40%); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 20px; 
+            color: var(--text-main); 
+        } 
 
-         /* Glassmorphism Card Elevado */ 
-         .card { 
-             background: var(--card-bg); 
-             backdrop-filter: blur(20px); 
-             -webkit-backdrop-filter: blur(20px); 
-             width: 100%; 
-             max-width: 400px; 
-             padding: 48px 32px; 
-             border-radius: 32px; 
-             box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7); 
-             text-align: center; 
-             border: 1px solid var(--border); 
-             position: relative; 
-             overflow: hidden; 
-         } 
+        /* Glassmorphism Card Elevado */ 
+        .card { 
+            background: var(--card-bg); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px); 
+            width: 100%; 
+            max-width: 400px; 
+            padding: 48px 32px; 
+            border-radius: 32px; 
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7); 
+            text-align: center; 
+            border: 1px solid var(--border); 
+            position: relative; 
+            overflow: hidden; 
+        } 
 
-         /* Brilho decorativo no topo */ 
-         .card::before { 
-             content: ''; 
-             position: absolute; 
-             top: 0; left: 50%; 
-             transform: translateX(-50%); 
-             width: 80%; 
-             height: 1px; 
-             background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent); 
-         } 
+        /* Brilho decorativo no topo */ 
+        .card::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0; left: 50%; 
+            transform: translateX(-50%); 
+            width: 80%; 
+            height: 1px; 
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent); 
+        } 
 
-         .logo-wrapper { 
-             width: 130px; 
-             height: 130px; 
-             margin: 0 auto 32px; 
-             background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); 
-             border-radius: 30px; 
-             display: flex; 
-             justify-content: center; 
-             align-items: center; 
-             padding: 20px; 
-             border: 1px solid var(--border); 
-             box-shadow: inset 0 0 20px rgba(0,0,0,0.2); 
-         } 
+        .logo-wrapper { 
+            width: 130px; 
+            height: 130px; 
+            margin: 0 auto 32px; 
+            background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); 
+            border-radius: 30px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px; 
+            border: 1px solid var(--border); 
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.2); 
+        } 
 
-         .logo-wrapper img { 
-             max-width: 100%; 
-             height: auto; 
-             filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3)); 
-             transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-         } 
+        .logo-wrapper img { 
+            max-width: 100%; 
+            height: auto; 
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3)); 
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        } 
 
-         .card:hover .logo-wrapper img { 
-             transform: scale(1.1) rotate(2deg); 
-         } 
+        .card:hover .logo-wrapper img { 
+            transform: scale(1.1) rotate(2deg); 
+        } 
 
-         h1 {  
-             font-size: 1.85rem;  
-             font-weight: 800; 
-             margin-bottom: 12px;  
-             letter-spacing: -0.04em; 
-             background: linear-gradient(to bottom, #fff, #cbd5e1); 
-             -webkit-background-clip: text; 
-             -webkit-text-fill-color: transparent; 
-         } 
+        h1 {  
+            font-size: 1.85rem;  
+            font-weight: 800; 
+            margin-bottom: 12px;  
+            letter-spacing: -0.04em; 
+            background: linear-gradient(to bottom, #fff, #cbd5e1); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        } 
 
-         p {  
-             color: var(--text-muted);  
-             margin-bottom: 40px;  
-             font-size: 1rem;  
-             line-height: 1.6; 
-             font-weight: 400; 
-         } 
+        p {  
+            color: var(--text-muted);  
+            margin-bottom: 40px;  
+            font-size: 1rem;  
+            line-height: 1.6;  
+            font-weight: 400; 
+        } 
 
-         .btn-group {  
-             display: flex;  
-             flex-direction: column;  
-             gap: 12px;  
-         } 
+        .btn-group {  
+            display: flex;  
+            flex-direction: column;  
+            gap: 12px;  
+        } 
 
-         .btn { 
-             display: flex; 
-             align-items: center; 
-             justify-content: space-between; 
-             padding: 18px 24px; 
-             border-radius: 18px; 
-             font-weight: 700; 
-             text-decoration: none; 
-             font-size: 0.95rem; 
-             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-             position: relative; 
-         } 
+        .btn { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 18px 24px; 
+            border-radius: 18px; 
+            font-weight: 700; 
+            text-decoration: none; 
+            font-size: 0.95rem; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            position: relative; 
+        } 
 
-         /* Botão Primário Estilo 'Glow' */ 
-         .btn-primary {  
-             background: var(--primary);  
-             color: white; 
-             box-shadow: 0 4px 20px -5px rgba(59, 130, 246, 0.5); 
-         } 
+        /* Botão Primário Estilo 'Glow' */ 
+        .btn-primary {  
+            background: var(--primary);  
+            color: white; 
+            box-shadow: 0 4px 20px -5px rgba(59, 130, 246, 0.5); 
+        } 
 
-         .btn-primary:hover { 
-             background: var(--primary-hover); 
-             transform: translateY(-2px); 
-             box-shadow: 0 8px 25px -5px rgba(59, 130, 246, 0.6); 
-         } 
+        .btn-primary:hover { 
+            background: var(--primary-hover); 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 25px -5px rgba(59, 130, 246, 0.6); 
+        } 
 
-         /* Botão Secundário Estilo Glass */ 
-         .btn-secondary { 
-             background: rgba(255, 255, 255, 0.03); 
-             color: #e2e8f0; 
-             border: 1px solid var(--border); 
-         } 
+        /* Botão Secundário Estilo Glass */ 
+        .btn-secondary { 
+            background: rgba(255, 255, 255, 0.03); 
+            color: #e2e8f0; 
+            border: 1px solid var(--border); 
+        } 
 
-         .btn-secondary:hover { 
-             background: rgba(255, 255, 255, 0.07); 
-             border-color: rgba(255, 255, 255, 0.2); 
-             transform: translateY(-2px); 
-             color: #fff; 
-         } 
+        .btn-secondary:hover { 
+            background: rgba(255, 255, 255, 0.07); 
+            border-color: rgba(255, 255, 255, 0.2); 
+            transform: translateY(-2px); 
+            color: #fff; 
+        } 
 
-         .btn:active { transform: scale(0.97); } 
+        .btn:active { transform: scale(0.97); } 
 
-         .btn i { opacity: 0.6; transition: 0.3s; } 
-         .btn:hover i { transform: translateX(4px); opacity: 1; } 
+        .btn i { opacity: 0.6; transition: 0.3s; } 
+        .btn:hover i { transform: translateX(4px); opacity: 1; } 
 
-     </style> 
- </head> 
- <body> 
+    </style> 
+</head> 
+<body> 
 
-     <main class="card"> 
-         <div class="logo-wrapper"> 
-             <img src="https://github.com/danmaxy/atlas/blob/main/IMPERIUM.png?raw=true" alt="Logotipo Atlas"> 
-         </div> 
-          
-         <header> 
-             <h1>Central ATLAS</h1> 
-             <p>Ecossistema de soluções integradas para o dia a dia técnico.</p> 
-         </header> 
+    <main class="card"> 
+        <div class="logo-wrapper"> 
+            <img src="https://github.com/danmaxy/atlas/blob/main/IMPERIUM.png?raw=true" alt="Logotipo Atlas"> 
+        </div> 
+         
+        <header> 
+            <h1>Central ATLAS</h1> 
+            <p>Ecossistema de soluções integradas para o dia a dia técnico.</p> 
+        </header> 
 
-         <nav class="btn-group"> 
-             <a href="#servicos" class="btn btn-primary"> 
-                 Serviços de Suporte 
-                 <i data-lucide="chevron-right" size="18"></i> 
-             </a> 
-             <a href="#pecas" class="btn btn-secondary"> 
-                 Catálogo de Peças 
-                 <i data-lucide="chevron-right" size="18"></i> 
-             </a> 
-             <a href="softwares.html" class="btn btn-secondary"> 
-                 Repositório Softwares 
-                 <i data-lucide="chevron-right" size="18"></i> 
-             </a> 
-             <a href="orcamentopc.html" class="btn btn-secondary"> 
-                 Orçamento PC 
-                 <i data-lucide="chevron-right" size="18"></i> 
-             </a> 
-         </nav> 
-     </main> 
+        <nav class="btn-group"> 
+            <a href="#servicos" class="btn btn-primary"> 
+                Serviços de Suporte 
+                <i data-lucide="chevron-right" size="18"></i> 
+            </a> 
+            <a href="#pecas" class="btn btn-secondary"> 
+                Catálogo de Peças 
+                <i data-lucide="chevron-right" size="18"></i> 
+            </a> 
+            <a href="softwares.html" class="btn btn-secondary"> 
+                Repositório Softwares 
+                <i data-lucide="chevron-right" size="18"></i> 
+            </a> 
+            <a href="orcamentopc.html" class="btn btn-secondary"> 
+                Orçamento PC 
+                <i data-lucide="chevron-right" size="18"></i> 
+            </a> 
+        </nav> 
+    </main> 
 
-     <script> 
-         // Inicializa os ícones Lucide 
-         lucide.createIcons(); 
-     </script> 
- </body> 
- </html> 
+    <script> 
+        // Inicializa os ícones Lucide 
+        lucide.createIcons(); 
+    </script> 
+</body> 
+</html>
