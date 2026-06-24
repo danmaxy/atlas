@@ -1,530 +1,202 @@
-<!DOCTYPE html> 
-<html lang="pt-br"> 
-<head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>Atlas - Soluções Técnicas & Hardware</title> 
-    <script src="https://unpkg.com/lucide@latest"></script> 
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"> 
-     
-    <style> 
-        :root { 
-            --bg-body: #030712; 
-            --card-bg: rgba(17, 24, 39, 0.4); 
-            --primary: #2563eb; 
-            --primary-glow: rgba(37, 99, 235, 0.15); 
-            --accent: #10b981; 
-            --accent-glow: rgba(16, 185, 129, 0.15);
-            --text-main: #f9fafb; 
-            --text-muted: #9ca3af; 
-            --border: rgba(255, 255, 255, 0.06); 
-            --border-hover: rgba(255, 255, 255, 0.12);
-        } 
+ <!DOCTYPE html> 
+ <html lang="pt-br"> 
+ <head> 
+     <meta charset="UTF-8"> 
+     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+     <title>Atlas - Soluções Técnicas</title> 
+     <script src="https://unpkg.com/lucide@latest"></script> 
 
-        * {  
-            margin: 0; padding: 0; box-sizing: border-box;  
-            font-family: 'Plus Jakarta Sans', sans-serif;  
-        } 
-         
-        body { 
-            background-color: var(--bg-body); 
-            background-image:  
-                radial-gradient(circle at 0% 0%, rgba(37, 99, 235, 0.1) 0%, transparent 40%), 
-                radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.06) 0%, transparent 40%); 
-            min-height: 100vh; 
-            padding: 60px 20px; 
-            color: var(--text-main); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-        } 
+     <link 
+href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
+ rel="stylesheet"> 
+      
+     <style> 
+         :root { 
+             --bg-body: #0a0f1a; 
+             --card-bg: rgba(23, 32, 53, 0.8); 
+             --primary: #3b82f6; 
+             --primary-hover: #2563eb; 
+             --text-main: #f8fafc; 
+             --text-muted: #94a3b8; 
+             --border: rgba(255, 255, 255, 0.08); 
+         } 
 
-        .container { 
-            width: 100%; 
-            max-width: 1200px; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 50px; 
-        } 
+         * {  
+             margin: 0; padding: 0; box-sizing: border-box;  
+             font-family: 'Plus Jakarta Sans', sans-serif;  
+         } 
+          
+         body { 
+             background-color: var(--bg-body); 
+             background-image:  
+                 radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 40%), 
+                 radial-gradient(circle at 80% 80%, rgba(37, 99, 235, 0.05) 0%, transparent 40%); 
+             display: flex; 
+             justify-content: center; 
+             align-items: center; 
+             min-height: 100vh; 
+             padding: 20px; 
+             color: var(--text-main); 
+         } 
 
-        /* Header / Hero Section */ 
-        .hero { 
-            text-align: center; 
-            padding-bottom: 20px; 
-        } 
+         /* Glassmorphism Card Elevado */ 
+         .card { 
+             background: var(--card-bg); 
+             backdrop-filter: blur(20px); 
+             -webkit-backdrop-filter: blur(20px); 
+             width: 100%; 
+             max-width: 400px; 
+             padding: 48px 32px; 
+             border-radius: 32px; 
+             box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7); 
+             text-align: center; 
+             border: 1px solid var(--border); 
+             position: relative; 
+             overflow: hidden; 
+         } 
 
-        .logo-wrapper { 
-            width: 88px; 
-            height: 88px; 
-            margin: 0 auto 20px; 
-            background: linear-gradient(145deg, rgba(255,255,255,0.01), rgba(255,255,255,0.03)); 
-            border-radius: 20px; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            border: 1px solid var(--border); 
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4); 
-        } 
+         /* Brilho decorativo no topo */ 
+         .card::before { 
+             content: ''; 
+             position: absolute; 
+             top: 0; left: 50%; 
+             transform: translateX(-50%); 
+             width: 80%; 
+             height: 1px; 
+             background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent); 
+         } 
 
-        .logo-wrapper img { 
-            max-width: 65%; 
-            height: auto; 
-        } 
+         .logo-wrapper { 
+             width: 130px; 
+             height: 130px; 
+             margin: 0 auto 32px; 
+             background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); 
+             border-radius: 30px; 
+             display: flex; 
+             justify-content: center; 
+             align-items: center; 
+             padding: 20px; 
+             border: 1px solid var(--border); 
+             box-shadow: inset 0 0 20px rgba(0,0,0,0.2); 
+         } 
 
-        .hero h1 { 
-            font-size: 2.75rem; 
-            font-weight: 800; 
-            letter-spacing: -0.04em; 
-            margin-bottom: 12px; 
-            background: linear-gradient(135deg, #ffffff 40%, #9ca3af); 
-            -webkit-background-clip: text; 
-            -webkit-text-color: transparent;
-            -webkit-text-fill-color: transparent; 
-        } 
+         .logo-wrapper img { 
+             max-width: 100%; 
+             height: auto; 
+             filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3)); 
+             transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+         } 
 
-        .hero p { 
-            font-size: 1.1rem; 
-            color: var(--text-muted); 
-            max-width: 580px; 
-            margin: 0 auto; 
-            line-height: 1.6; 
-        } 
+         .card:hover .logo-wrapper img { 
+             transform: scale(1.1) rotate(2deg); 
+         } 
 
-        /* Seções da Página */
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            color: var(--text-main);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            opacity: 0.9;
-        }
+         h1 {  
+             font-size: 1.85rem;  
+             font-weight: 800; 
+             margin-bottom: 12px;  
+             letter-spacing: -0.04em; 
+             background: linear-gradient(to bottom, #fff, #cbd5e1); 
+             -webkit-background-clip: text; 
+             -webkit-text-fill-color: transparent; 
+         } 
 
-        /* Grid de Serviços Principais */ 
-        .grid-features { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-            gap: 20px; 
-        } 
+         p {  
+             color: var(--text-muted);  
+             margin-bottom: 40px;  
+             font-size: 1rem;  
+             line-height: 1.6; 
+             font-weight: 400; 
+         } 
 
-        /* Card Corporativo */ 
-        .card { 
-            background: var(--card-bg); 
-            backdrop-filter: blur(16px); 
-            -webkit-backdrop-filter: blur(16px); 
-            padding: 32px; 
-            border-radius: 20px; 
-            border: 1px solid var(--border); 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: space-between; 
-            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); 
-        } 
+         .btn-group {  
+             display: flex;  
+             flex-direction: column;  
+             gap: 12px;  
+         } 
 
-        .card:hover { 
-            transform: translateY(-4px); 
-            border-color: var(--border-hover); 
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); 
-        } 
+         .btn { 
+             display: flex; 
+             align-items: center; 
+             justify-content: space-between; 
+             padding: 18px 24px; 
+             border-radius: 18px; 
+             font-weight: 700; 
+             text-decoration: none; 
+             font-size: 0.95rem; 
+             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+             position: relative; 
+         } 
 
-        .card-icon { 
-            width: 48px; 
-            height: 48px; 
-            background: rgba(37, 99, 235, 0.06); 
-            color: var(--primary); 
-            border-radius: 12px; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            margin-bottom: 20px; 
-            border: 1px solid rgba(37, 99, 235, 0.15); 
-        } 
+         /* Botão Primário Estilo 'Glow' */ 
+         .btn-primary {  
+             background: var(--primary);  
+             color: white; 
+             box-shadow: 0 4px 20px -5px rgba(59, 130, 246, 0.5); 
+         } 
 
-        /* Variação de cor para o ícone de automação/parcerias */
-        .card.accent-style .card-icon { 
-            background: rgba(16, 185, 129, 0.06); 
-            color: var(--accent); 
-            border: 1px solid rgba(16, 185, 129, 0.15); 
-        } 
+         .btn-primary:hover { 
+             background: var(--primary-hover); 
+             transform: translateY(-2px); 
+             box-shadow: 0 8px 25px -5px rgba(59, 130, 246, 0.6); 
+         } 
 
-        .card h3 { 
-            font-size: 1.25rem; 
-            font-weight: 700; 
-            margin-bottom: 8px; 
-            letter-spacing: -0.01em; 
-        } 
+         /* Botão Secundário Estilo Glass */ 
+         .btn-secondary { 
+             background: rgba(255, 255, 255, 0.03); 
+             color: #e2e8f0; 
+             border: 1px solid var(--border); 
+         } 
 
-        .card p { 
-            color: var(--text-muted); 
-            font-size: 0.95rem; 
-            line-height: 1.5; 
-            margin-bottom: 24px; 
-            flex-grow: 1; 
-        } 
+         .btn-secondary:hover { 
+             background: rgba(255, 255, 255, 0.07); 
+             border-color: rgba(255, 255, 255, 0.2); 
+             transform: translateY(-2px); 
+             color: #fff; 
+         } 
 
-        /* Botões */ 
-        .btn { 
-            width: 100%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 8px; 
-            padding: 14px 20px; 
-            border-radius: 12px; 
-            font-weight: 600; 
-            text-decoration: none; 
-            font-size: 0.9rem; 
-            transition: all 0.2s ease; 
-            cursor: pointer;
-        } 
+         .btn:active { transform: scale(0.97); } 
 
-        .btn-primary { 
-            background: var(--primary); 
-            color: #fff; 
-            border: none;
-        } 
+         .btn i { opacity: 0.6; transition: 0.3s; } 
+         .btn:hover i { transform: translateX(4px); opacity: 1; } 
 
-        .btn-primary:hover { 
-            background: #1d4ed8; 
-        } 
+     </style> 
+ </head> 
+ <body> 
 
-        .btn-secondary { 
-            background: rgba(255, 255, 255, 0.02); 
-            color: #f3f4f6; 
-            border: 1px solid var(--border); 
-        } 
+     <main class="card"> 
+         <div class="logo-wrapper"> 
+             <img src="https://github.com/danmaxy/atlas/blob/main/IMPERIUM.png?raw=true" alt="Logotipo Atlas"> 
+         </div> 
+          
+         <header> 
+             <h1>Central ATLAS</h1> 
+             <p>Ecossistema de soluções integradas para o dia a dia técnico.</p> 
+         </header> 
 
-        .btn-secondary:hover { 
-            background: rgba(255, 255, 255, 0.06); 
-            border-color: rgba(255, 255, 255, 0.12); 
-        } 
+         <nav class="btn-group"> 
+             <a href="#servicos" class="btn btn-primary"> 
+                 Serviços de Suporte 
+                 <i data-lucide="chevron-right" size="18"></i> 
+             </a> 
+             <a href="#pecas" class="btn btn-secondary"> 
+                 Catálogo de Peças 
+                 <i data-lucide="chevron-right" size="18"></i> 
+             </a> 
+             <a href="softwares.html" class="btn btn-secondary"> 
+                 Repositório Softwares 
+                 <i data-lucide="chevron-right" size="18"></i> 
+             </a> 
+             <a href="orcamentopc.html" class="btn btn-secondary"> 
+                 Orçamento PC 
+                 <i data-lucide="chevron-right" size="18"></i> 
+             </a> 
+         </nav> 
+     </main> 
 
-        .btn i {  
-            transition: transform 0.2s ease;  
-        } 
-        .btn:hover i {  
-            transform: translateX(2px);  
-        } 
-
-        /* Bloco de Ferramentas Operacionais (Ordem de Serviço) */
-        .operational-block {
-            background: rgba(10, 15, 30, 0.4);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 40px;
-        }
-
-        .os-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-        }
-
-        @media(max-width: 900px) {
-            .os-grid { grid-template-columns: 1fr; gap: 30px; }
-        }
-
-        .os-form {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .form-group label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .form-group input, .form-group textarea, .form-group select {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border);
-            padding: 12px 16px;
-            border-radius: 10px;
-            color: #fff;
-            font-size: 0.95rem;
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-            border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        /* Preview Documento OS */
-        .os-preview-container {
-            background: #fff;
-            color: #1c1917;
-            border-radius: 16px;
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            min-height: 400px;
-        }
-
-        .os-header {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 2px solid #e7e5e4;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-        }
-
-        .os-header h2 { font-size: 1.25rem; font-weight: 800; color: #0c0a09; }
-        .os-header p { font-size: 0.85rem; color: #57534e; }
-
-        .os-body {
-            flex-grow: 1;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .os-data-line {
-            display: flex;
-            border-bottom: 1px dashed #e7e5e4;
-            padding-bottom: 4px;
-        }
-        .os-data-line span:first-child { font-weight: 700; width: 120px; color: #44403c; }
-
-        .os-footer {
-            margin-top: 30px;
-            border-top: 1px solid #e7e5e4;
-            padding-top: 15px;
-            text-align: center;
-            font-size: 0.8rem;
-            color: #78716c;
-        }
-
-        /* Footer simples */ 
-        footer { 
-            text-align: center; 
-            font-size: 0.85rem; 
-            color: rgba(148, 163, 184, 0.3); 
-            margin-top: 10px; 
-        } 
-
-        @media(max-width: 768px) { 
-            .hero h1 { font-size: 2.2rem; } 
-            body { padding: 40px 16px; } 
-            .card { padding: 28px 24px; } 
-            .operational-block { padding: 24px; }
-            .form-row { grid-template-columns: 1fr; }
-        } 
-    </style> 
-</head> 
-<body> 
-
-    <div class="container"> 
-         
-        <header class="hero"> 
-            <div class="logo-wrapper"> 
-                <img src="https://github.com/danmaxy/atlas/blob/main/IMPERIUM.png?raw=true" alt="Logotipo Atlas"> 
-            </div> 
-            <h1>Central ATLAS</h1> 
-            <p>Infraestrutura ágil, suporte corporativo e gestão técnica integrados em uma única plataforma operacional.</p> 
-        </header> 
-
-        <main>
-            <h2 class="section-title"><i data-lucide="layers" size="18"></i> Hub de Soluções</h2>
-            <div class="grid-features"> 
-                 
-                <section class="card"> 
-                    <div> 
-                        <div class="card-icon"> 
-                            <i data-lucide="folder-git" size="22"></i> 
-                        </div> 
-                        <h3>Central de Softwares</h3> 
-                        <p>Repositório homologado com utilitários essenciais, sistemas operacionais e ferramentas profissionais prontas para implantação.</p> 
-                    </div> 
-                    <a href="softwares.html" class="btn btn-primary"> 
-                        Acessar Repositório 
-                        <i data-lucide="arrow-right" size="15"></i> 
-                    </a> 
-                </section> 
-
-                <section class="card accent-style"> 
-                    <div> 
-                        <div class="card-icon"> 
-                            <i data-lucide="zap" size="22"></i> 
-                        </div> 
-                        <h3>Automações & Parcerias</h3> 
-                        <p>Integração de fluxos e parcerias estratégicas para fornecimento de licenças, APIs e automação de rotinas técnicas de TI.</p> 
-                    </div> 
-                    <a href="#automacao" class="btn btn-secondary"> 
-                        Ver Integrações 
-                        <i data-lucide="arrow-right" size="15"></i> 
-                    </a> 
-                </section> 
-
-                <section class="card"> 
-                    <div> 
-                        <div class="card-icon"> 
-                            <i data-lucide="cpu" size="22"></i> 
-                        </div> 
-                        <h3>Peças & Equipamentos</h3> 
-                        <p>Dimensionamento de hardware, orçamentos personalizados e cotação de ativos de rede e desktops sob medida.</p> 
-                    </div> 
-                    <a href="orcamentopc.html" class="btn btn-secondary"> 
-                        Cotar Equipamento 
-                        <i data-lucide="arrow-right" size="15"></i> 
-                    </a> 
-                </section> 
-
-            </div>
-        </main>
-
-        <section class="operational-block">
-            <h2 class="section-title"><i data-lucide="file-spreadsheet" size="18"></i> Painel Operacional: Emitir O.S.</h2>
-            <div class="os-grid">
-                
-                <div class="os-form">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="os-client">Cliente / Razão Social</label>
-                            <input type="text" id="os-client" placeholder="Ex: Empresa X Ltda" oninput="updateOS()">
-                        </div>
-                        <div class="form-group">
-                            <label for="os-id">Nº da Ordem</label>
-                            <input type="text" id="os-id" value="#1001" oninput="updateOS()">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="os-date">Data de Abertura</label>
-                            <input type="date" id="os-date" onchange="updateOS()">
-                        </div>
-                        <div class="form-group">
-                            <label for="os-type">Tipo de Serviço</label>
-                            <select id="os-type" onchange="updateOS()">
-                                <option value="Manutenção Preventiva">Manutenção Preventiva</option>
-                                <option value="Infraestrutura / Rede">Infraestrutura / Rede</option>
-                                <option value="Instalação de Software">Instalação de Software</option>
-                                <option value="Montagem de Hardware">Montagem de Hardware</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="os-desc">Descrição do Problema / Diagnóstico</label>
-                        <textarea id="os-desc" rows="4" placeholder="Detalhes técnicos da solicitação do cliente..." oninput="updateOS()"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="os-val">Valor do Serviço (R$)</label>
-                        <input type="number" id="os-val" placeholder="0,00" oninput="updateOS()">
-                    </div>
-
-                    <button class="btn btn-primary" onclick="window.print()" style="margin-top: 10px;">
-                        <i data-lucide="printer" size="16"></i> Imprimir Ordem de Serviço
-                    </button>
-                </div>
-
-                <div class="os-preview-container" id="os-print-area">
-                    <div>
-                        <div class="os-header">
-                            <div>
-                                <h2>ATLAS SOLUÇÕES TÉCNICAS</h2>
-                                <p>Infraestrutura e Suporte de Hardware</p>
-                            </div>
-                            <div style="text-align: right;">
-                                <h2>ORDEM DE SERVIÇO</h2>
-                                <p id="view-os-id">#1001</p>
-                            </div>
-                        </div>
-
-                        <div class="os-body">
-                            <div class="os-data-line">
-                                <span>Cliente:</span>
-                                <span id="view-os-client">---</span>
-                            </div>
-                            <div class="os-data-line">
-                                <span>Data:</span>
-                                <span id="view-os-date">---</span>
-                            </div>
-                            <div class="os-data-line">
-                                <span>Categoria:</span>
-                                <span id="view-os-type">Manutenção Preventiva</span>
-                            </div>
-                            <div class="os-data-line" style="flex-direction: column; border-bottom: none; gap: 8px; margin-top: 10px;">
-                                <span>Descrição Técnica / Laudo:</span>
-                                <p id="view-os-desc" style="color: #44403c; font-style: italic;">Nenhuma descrição informada.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div style="text-align: right; font-size: 1.15rem; font-weight: 800; border-top: 2px solid #e7e5e4; padding-top: 10px;">
-                            Total: R$ <span id="view-os-val">0,00</span>
-                        </div>
-                        <div class="os-footer">
-                            Documento gerado via Central ATLAS. Assinatura do Técnico Responsável.
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <footer> 
-            <p>&copy; 2026 Atlas Soluções Técnicas. Todos os direitos reservados. Gestão de TI de Alta Performance.</p> 
-        </footer> 
-    </div> 
-
-    <script> 
-        // Inicializa os ícones Lucide 
-        lucide.createIcons(); 
-
-        // Setar data atual padrão no formulário
-        document.getElementById('os-date').valueAsDate = new Date();
-
-        // Função de atualização em tempo real da Ordem de Serviço
-        function updateOS() {
-            const client = document.getElementById('os-client').value || '---';
-            const osId = document.getElementById('os-id').value || '#0000';
-            const date = document.getElementById('os-date').value;
-            const type = document.getElementById('os-type').value;
-            const desc = document.getElementById('os-desc').value || 'Nenhuma descrição informada.';
-            const val = document.getElementById('os-val').value || '0,00';
-
-            // Formatando data para padrão BR
-            let dateFormatted = '---';
-            if(date) {
-                const [year, month, day] = date.split('-');
-                dateFormatted = `${day}/${month}/${year}`;
-            }
-
-            document.getElementById('view-os-client').innerText = client;
-            document.getElementById('view-os-id').innerText = osId;
-            document.getElementById('view-os-date').innerText = dateFormatted;
-            document.getElementById('view-os-type').innerText = type;
-            document.getElementById('view-os-desc').innerText = desc;
-            document.getElementById('view-os-val').innerText = parseFloat(val).toLocaleString('pt-BR', {minimumFractionDigits: 2});
-        }
-
-        // Executa uma vez no início para popular campos padrão
-        updateOS();
-    </script> 
-</body> 
-</html>
+     <script> 
+         // Inicializa os ícones Lucide 
+         lucide.createIcons(); 
+     </script> 
+ </body> 
+ </html> 
