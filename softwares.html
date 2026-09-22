@@ -5,60 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atlas - Softwares</title>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        :root { 
+            --bg-body: #050505; 
+            --card-bg: #0a0a0a; 
+            --text-main: #ffffff; 
+            --text-muted: #a1a1aa; 
+            --border: rgba(255, 255, 255, 0.08); 
+            --border-hover: rgba(255, 255, 255, 0.2);
+            --item-bg: rgba(255, 255, 255, 0.02);
+        } 
+
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            -webkit-font-smoothing: antialiased;
+        }
         
         body { 
-            background-color: #0f172a; 
-            background-image: 
-                radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 35%),
-                radial-gradient(circle at 100% 100%, rgba(37, 99, 235, 0.1) 0%, transparent 35%);
+            background-color: var(--bg-body); 
             display: flex; 
             justify-content: center; 
             align-items: center; 
             min-height: 100vh; 
-            padding: 20px; 
-            color: #f8fafc; 
+            padding: 24px; 
+            color: var(--text-main); 
         }
         
         .card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: var(--card-bg);
             width: 100%;
             max-width: 550px;
-            padding: 32px;
+            padding: 40px 32px;
             border-radius: 24px;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border);
         }
 
-        header { margin-bottom: 24px; text-align: center; }
-        h1 { font-size: 1.75rem; color: #fff; font-weight: 800; letter-spacing: -0.025em; }
-        .subtitle { color: #94a3b8; font-size: 0.95rem; margin-top: 4px; }
+        header { margin-bottom: 32px; text-align: center; }
+        
+        h1 { 
+            font-size: 1.5rem; 
+            color: var(--text-main); 
+            font-weight: 700; 
+            letter-spacing: -0.02em; 
+        }
+        
+        .subtitle { 
+            color: var(--text-muted); 
+            font-size: 0.9rem; 
+            margin-top: 6px; 
+        }
 
-        .search-container { position: relative; margin-bottom: 20px; }
+        /* Barra de Busca Minimalista */
+        .search-container { position: relative; margin-bottom: 24px; }
+        
         .search-input {
             width: 100%;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px 16px 12px 44px;
-            border-radius: 12px;
-            color: white;
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            padding: 14px 16px 14px 44px;
+            border-radius: 14px;
+            color: var(--text-main);
+            font-size: 0.9rem;
             outline: none;
-            transition: all 0.2s;
+            transition: border-color 0.2s ease;
         }
-        .search-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); }
+        
+        .search-input:focus { 
+            border-color: var(--border-hover); 
+        }
+        
         .search-icon {
             position: absolute;
-            left: 14px;
+            left: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: #64748b;
+            color: var(--text-muted);
         }
 
+        /* Lista de Softwares */
         .software-list {
             display: flex;
             flex-direction: column;
@@ -68,73 +96,98 @@
             padding-right: 8px;
         }
 
-        .software-list::-webkit-scrollbar { width: 5px; }
-        .software-list::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        /* Scrollbar Discreta */
+        .software-list::-webkit-scrollbar { width: 4px; }
+        .software-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .software-list::-webkit-scrollbar-track { background: transparent; }
 
         .software-item {
-            background: rgba(51, 65, 85, 0.3);
-            padding: 14px 16px;
-            border-radius: 14px;
+            background: var(--item-bg);
+            padding: 16px;
+            border-radius: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border: 1px solid var(--border);
             transition: all 0.2s ease;
-            border: 1px solid transparent;
         }
 
         .software-item:hover {
-            background: rgba(51, 65, 85, 0.6);
-            border-color: rgba(59, 130, 246, 0.4);
-            transform: translateX(4px);
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
         }
 
-        .software-info-wrapper { display: flex; align-items: center; gap: 12px; }
+        .software-info-wrapper { display: flex; align-items: center; gap: 16px; }
+        
         .icon-box {
-            width: 40px;
-            height: 40px;
-            background: rgba(59, 130, 246, 0.1);
-            border-radius: 10px;
+            width: 44px;
+            height: 44px;
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #60a5fa;
+            color: var(--text-main);
         }
 
-        .software-info h3 { font-size: 0.95rem; color: #f1f5f9; margin-bottom: 2px; }
-        .category-tag { 
-            font-size: 0.65rem; 
-            color: #94a3b8; 
-            text-transform: uppercase;
+        .software-info h3 { 
+            font-size: 0.95rem; 
             font-weight: 600;
+            color: var(--text-main); 
+            margin-bottom: 4px; 
+        }
+        
+        .category-tag { 
+            font-size: 0.7rem; 
+            color: var(--text-muted); 
+            font-weight: 500;
         }
 
+        /* Botão de Download Alto Contraste */
         .download-btn {
-            background: #3b82f6;
-            color: white !important;
+            background: var(--text-main);
+            color: var(--bg-body) !important;
             text-decoration: none;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 0.75rem;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 0.8rem;
             font-weight: 600;
             transition: all 0.2s;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
-        .download-btn:hover { background: #2563eb; }
+        .download-btn:hover { 
+            background: #e4e4e7; 
+            transform: scale(0.98);
+        }
 
-        #no-results { text-align: center; padding: 20px; color: #64748b; display: none; }
+        #no-results { 
+            text-align: center; 
+            padding: 32px 20px; 
+            color: var(--text-muted); 
+            display: none; 
+            font-size: 0.9rem;
+        }
 
+        /* Botão Voltar */
         .back-btn {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            margin-top: 24px;
-            color: #64748b;
+            margin-top: 32px;
+            color: var(--text-muted);
             text-decoration: none;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .back-btn:hover {
+            color: var(--text-main);
         }
     </style>
 </head>
@@ -147,7 +200,7 @@
         </header>
 
         <div class="search-container">
-            <i data-lucide="search" class="search-icon"></i>
+            <i data-lucide="search" class="search-icon" size="18"></i>
             <input type="text" class="search-input" placeholder="Buscar software ou categoria...">
         </div>
 
@@ -156,7 +209,7 @@
 
             <div class="software-item">
                 <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="layers"></i></div>
+                    <div class="icon-box"><i data-lucide="layers" size="20"></i></div>
                     <div class="software-info">
                         <h3>Autodesk Revit</h3>
                         <span class="category-tag">BIM / Arquitetura</span>
@@ -169,7 +222,7 @@
 
             <div class="software-item">
                 <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="pen-tool"></i></div>
+                    <div class="icon-box"><i data-lucide="pen-tool" size="20"></i></div>
                     <div class="software-info">
                         <h3>Autodesk AutoCAD</h3>
                         <span class="category-tag">CAD / Engenharia</span>
@@ -182,7 +235,7 @@
 
             <div class="software-item">
                 <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="video"></i></div>
+                    <div class="icon-box"><i data-lucide="video" size="20"></i></div>
                     <div class="software-info">
                         <h3>Adobe Premiere Pro</h3>
                         <span class="category-tag">Edição de Vídeo</span>
@@ -195,7 +248,7 @@
 
             <div class="software-item">
                 <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="file-text"></i></div>
+                    <div class="icon-box"><i data-lucide="file-text" size="20"></i></div>
                     <div class="software-info">
                         <h3>Adobe Acrobat Pro</h3>
                         <span class="category-tag">Documentos PDF</span>
@@ -208,7 +261,7 @@
 
             <div class="software-item">
                 <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="image"></i></div>
+                    <div class="icon-box"><i data-lucide="image" size="20"></i></div>
                     <div class="software-info">
                         <h3>Adobe Photoshop</h3>
                         <span class="category-tag">Edição de Imagem</span>
@@ -221,7 +274,7 @@
 
             <div class="software-item">
                 <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="bezier"></i></div>
+                    <div class="icon-box"><i data-lucide="bezier" size="20"></i></div>
                     <div class="software-info">
                         <h3>Adobe Illustrator</h3>
                         <span class="category-tag">Vetor / Design</span>
@@ -234,7 +287,7 @@
 
             <div class="software-item">
                 <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="palette"></i></div>
+                    <div class="icon-box"><i data-lucide="palette" size="20"></i></div>
                     <div class="software-info">
                         <h3>CorelDRAW</h3>
                         <span class="category-tag">Design Gráfico</span>
@@ -247,7 +300,7 @@
 
             <div class="software-item">
                 <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="box"></i></div>
+                    <div class="icon-box"><i data-lucide="box" size="20"></i></div>
                     <div class="software-info">
                         <h3>SketchUp Pro</h3>
                         <span class="category-tag">Modelagem 3D</span>
@@ -260,7 +313,7 @@
 
             <div class="software-item">
                 <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="cpu"></i></div>
+                    <div class="icon-box"><i data-lucide="cpu" size="20"></i></div>
                     <div class="software-info">
                         <h3>V-ray</h3>
                         <span class="category-tag">Renderização</span>
@@ -273,7 +326,7 @@
 
             <div class="software-item">
                 <div class="software-info-wrapper">
-                    <div class="icon-box"><i data-lucide="zap"></i></div>
+                    <div class="icon-box"><i data-lucide="zap" size="20"></i></div>
                     <div class="software-info">
                         <h3>Enscape 4.6</h3>
                         <span class="category-tag">Renderização Real-time</span>
