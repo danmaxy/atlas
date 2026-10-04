@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ATLAS - Configurador Dell OptiPlex 7010</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Suavização de scroll para mobile */
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-full flex flex-col justify-between selection:bg-blue-500 selection:text-white pb-32 sm:pb-0">
+
+    <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40 py-3 px-4 shadow-xl">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-gradient-to-tr from-blue-600 to-indigo-600 p-2.5 rounded-xl shadow-lg shadow-blue-500/20 text-white font-black text-lg tracking-wider flex items-center justify-center">
+                    ATLAS
+                </div>
+                <div>
+                    <h1 class="text-sm font-bold text-white tracking-wide">Dell OptiPlex 7010</h1>
+                    <p class="text-[11px] text-slate-400">Monte sua máquina personalizada</p>
+                </div>
+            </div>
+            <div class="hidden">
+                <!-- Número fixo oculto para lógica interna -->
+                <input type="text" id="whatsappNumber" value="5586988815862">
+            </div>
+            <div class="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1.5 rounded-full">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-[11px] font-semibold text-emerald-400">Online no Zap</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto w-full p-3 sm:p-6 space-y-5 flex-grow">
+        
+        <!-- Alerta de Facilidade Mobile -->
+        <div class="bg-blue-600/10 border border-blue-500/20 rounded-2xl p-4 text-center sm:hidden">
+            <p class="text-xs text-blue-300 font-medium">Toque nas opções abaixo para montar seu setup de forma rápida e prática!</p>
+        </div>
+
+        <!-- Bloco 1: CPU -->
+        <section class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl backdrop-blur-sm">
+            <div class="flex items-center justify-between mb-3 pb-2.5 border-b border-slate-800">
+                <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center text-xs font-bold border border-blue-500/20">1</span>
+                    Processador (CPU)
+                </h2>
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">Obrigatório</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <label class="relative flex items-center justify-between sm:flex-col sm:items-start p-3.5 sm:p-4 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer transition-all has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                    <div class="flex items-center gap-3 sm:block">
+                        <span class="text-sm font-semibold text-slate-200 block">Sem CPU</span>
+                        <span class="text-xs text-slate-400 sm:mt-1 block">R$ 0,00</span>
+                    </div>
+                    <input type="radio" name="cpu" value="sem" data-price="0" class="peer w-5 h-5 text-blue-600 bg-slate-900 border-slate-700 focus:ring-blue-500" checked>
+                </label>
+
+                <label class="relative flex items-center justify-between sm:flex-col sm:items-start p-3.5 sm:p-4 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer transition-all has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                    <div class="flex items-center gap-3 sm:block">
+                        <span class="text-sm font-semibold text-slate-200 block">Intel Core i3</span>
+                        <span class="text-xs text-blue-400 font-medium sm:mt-1 block">+ R$ 30,00</span>
+                    </div>
+                    <input type="radio" name="cpu" value="i3" data-price="30" class="peer w-5 h-5 text-blue-600 bg-slate-900 border-slate-700 focus:ring-blue-500">
+                </label>
+
+                <label class="relative flex items-center justify-between sm:flex-col sm:items-start p-3.5 sm:p-4 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer transition-all has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                    <div class="flex items-center gap-3 sm:block">
+                        <span class="text-sm font-semibold text-slate-200 block">Intel Core i5</span>
+                        <span class="text-xs text-blue-400 font-medium sm:mt-1 block">+ R$ 80,00</span>
+                    </div>
+                    <input type="radio" name="cpu" value="i5" data-price="80" class="peer w-5 h-5 text-blue-600 bg-slate-900 border-slate-700 focus:ring-blue-500">
+                </label>
+            </div>
+        </section>
+
+        <!-- Bloco 2: Memória RAM -->
+        <section class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl backdrop-blur-sm">
+            <div class="flex items-center justify-between mb-3 pb-2.5 border-b border-slate-800">
+                <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center text-xs font-bold border border-blue-500/20">2</span>
+                    Memória RAM
+                </h2>
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">Obrigatório</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <label class="relative flex items-center justify-between sm:flex-col sm:items-start p-3.5 sm:p-4 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer transition-all has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                    <div class="flex items-center gap-3 sm:block">
+                        <span class="text-sm font-semibold text-slate-200 block">Sem RAM</span>
+                        <span class="text-xs text-slate-400 sm:mt-1 block">R$ 0,00</span>
+                    </div>
+                    <input type="radio" name="ram" value="sem" data-price="0" class="peer w-5 h-5 text-blue-600 bg-slate-900 border-slate-700 focus:ring-blue-500" checked>
+                </label>
+
+                <label class="relative flex items-center justify-between sm:flex-col sm:items-start p-3.5 sm:p-4 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer transition-all has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                    <div class="flex items-center gap-3 sm:block">
+                        <span class="text-sm font-semibold text-slate-200 block">4GB RAM</span>
+                        <span class="text-xs text-blue-400 font-medium sm:mt-1 block">+ R$ 30,00</span>
+                    </div>
+                    <input type="radio" name="ram" value="4gb" data-price="30" class="peer w-5 h-5 text-blue-600 bg-slate-900 border-slate-700 focus:ring-blue-500">
+                </label>
+
+                <label class="relative flex items-center justify-between sm:flex-col sm:items-start p-3.5 sm:p-4 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer transition-all has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                    <div class="flex items-center gap-3 sm:block">
+                        <span class="text-sm font-semibold text-slate-200 block">8GB RAM</span>
+                        <span class="text-xs text-blue-400 font-medium sm:mt-1 block">+ R$ 70,00</span>
+                    </div>
+                    <input type="radio" name="ram" value="8gb" data-price="70" class="peer w-5 h-5 text-blue-600 bg-slate-900 border-slate-700 focus:ring-blue-500">
+                </label>
+            </div>
+        </section>
+
+        <!-- Bloco 3: Armazenamento (HD & SSD) -->
+        <section class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl backdrop-blur-sm">
+            <div class="flex items-center justify-between mb-3 pb-2.5 border-b border-slate-800">
+                <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center text-xs font-bold border border-blue-500/20">3</span>
+                    Armazenamento (HD / SSD)
+                </h2>
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">Flexível</span>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">Disco Rígido (HD)</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <label class="relative flex items-center justify-between p-3 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer transition-all has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                            <div>
+                                <span class="text-sm font-semibold text-slate-200 block">Sem HD</span>
+                                <span class="text-xs text-slate-400">R$ 0,00</span>
+                            </div>
+                            <input type="radio" name="hd" value="sem" data-price="0" class="peer w-5 h-5 text-blue-600 bg-slate-900 border-slate-700 focus:ring-blue-500" checked>
+                        </label>
+                        <label class="relative flex items-center justify-between p-3 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer transition-all has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                            <div>
+                                <span class="text-sm font-semibold text-slate-200 block">HD 500GB</span>
+                                <span class="text-xs text-blue-400 font-medium">+ R$ 30,00</span>
+                            </div>
+                            <input type="radio" name="hd" value="500gb" data-price="30" class="peer w-5 h-5 text-blue-600 bg-slate-900 border-slate-700 focus:ring-blue-500">
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">Unidade SSD</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        <label class="relative flex items-center justify-between sm:flex-col sm:items-start p-3 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer transition-all has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                            <div class="sm:block">
+                                <span class="text-sm font-semibold text-slate-200 block">Sem SSD</span>
+                                <span class="text-xs text-slate-400 sm:mt-0.5 block">R$ 0,00</span>
+                            </div>
+                            <input type="radio" name="ssd" value="sem" data-price="0" class="peer w-5 h-5 text-blue-600 bg-slate-900 border-slate-700 focus:ring-blue-500" checked>
+                        </label>
+                        <label class="relative flex items-center justify-between sm:flex-col sm:items-start p-3 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer transition-all has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                            <div class="sm:block">
+                                <span class="text-sm font-semibold text-slate-200 block">SSD 128GB</span>
+                                <span class="text-xs text-blue-400 font-medium sm:mt-0.5 block">+ R$ 165,00</span>
+                            </div>
+                            <input type="radio" name="ssd" value="128gb" data-price="165" class="peer w-5 h-5 text-blue-600 bg-slate-900 border-slate-700 focus:ring-blue-500">
+                        </label>
+                        <label class="relative flex items-center justify-between sm:flex-col sm:items-start p-3 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer transition-all has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                            <div class="sm:block">
+                                <span class="text-sm font-semibold text-slate-200 block">SSD 256GB</span>
+                                <span class="text-xs text-blue-400 font-medium sm:mt-0.5 block">+ R$ 275,00</span>
+                            </div>
+                            <input type="radio" name="ssd" value="256gb" data-price="275" class="peer w-5 h-5 text-blue-600 bg-slate-900 border-slate-700 focus:ring-blue-500">
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bloco 4: Periféricos -->
+        <section class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl backdrop-blur-sm">
+            <div class="flex items-center justify-between mb-3 pb-2.5 border-b border-slate-800">
+                <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center text-xs font-bold border border-blue-500/20">4</span>
+                    Periféricos
+                </h2>
+                <span class="text-[10px] text-slate-400">Múltipla escolha</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <label class="relative flex items-center justify-between p-3.5 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer transition-all has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                    <div>
+                        <span class="text-sm font-semibold text-slate-200 block">Sem Periférico</span>
+                        <span class="text-xs text-slate-400">R$ 0,00</span>
+                    </div>
+                    <input type="checkbox" id="semPeriferico" value="sem" class="peer w-5 h-5 rounded text-blue-600 bg-slate-900 border-slate-700 focus:ring-blue-500" checked>
+                </label>
+
+                <label class="relative flex items-center justify-between p-3.5 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer transition-all has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                    <div>
+                        <span class="text-sm font-semibold text-slate-200 block">Mouse e Teclado</span>
+                        <span class="text-xs text-blue-400 font-medium">+ R$ 50,00</span>
+                    </div>
+                    <input type="checkbox" name="periferico" value="mouse_teclado" data-price="50" class="peer w-5 h-5 rounded text-blue-600 bg-slate-900 border-slate-700 focus:ring-blue-500 periferico-item">
+                </label>
+
+                <label class="relative flex items-center justify-between p-3.5 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer transition-all has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                    <div>
+                        <span class="text-sm font-semibold text-slate-200 block">Monitor 20" TCN</span>
+                        <span class="text-xs text-blue-400 font-medium">+ R$ 280,00</span>
+                    </div>
+                    <input type="checkbox" name="periferico" value="monitor_20" data-price="280" class="peer w-5 h-5 rounded text-blue-600 bg-slate-900 border-slate-700 focus:ring-blue-500 periferico-item">
+                </label>
+            </div>
+        </section>
+
+        <!-- Bloco 5: Cabos -->
+        <section class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl backdrop-blur-sm">
+            <div class="flex items-center justify-between mb-3 pb-2.5 border-b border-slate-800">
+                <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center text-xs font-bold border border-blue-500/20">5</span>
+                    Cabos e Conexões
+                </h2>
+                <span class="text-[10px] text-slate-400">Múltipla escolha</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <label class="relative flex items-center justify-between p-3.5 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer transition-all has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                    <div>
+                        <span class="text-sm font-semibold text-slate-200 block">Sem Cabos</span>
+                        <span class="text-xs text-slate-400">R$ 0,00</span>
+                    </div>
+                    <input type="checkbox" id="semCabo" value="sem" class="peer w-5 h-5 rounded text-blue-600 bg-slate-900 border-slate-700 focus:ring-blue-500" checked>
+                </label>
+
+                <label class="relative flex items-center justify-between p-3.5 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer transition-all has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                    <div>
+                        <span class="text-sm font-semibold text-slate-200 block">Cabo VGA</span>
+                        <span class="text-xs text-blue-400 font-medium">+ R$ 10,00</span>
+                    </div>
+                    <input type="checkbox" name="cabo" value="vga" data-price="10" class="peer w-5 h-5 rounded text-blue-600 bg-slate-900 border-slate-700 focus:ring-blue-500 cabo-item">
+                </label>
+
+                <label class="relative flex items-center justify-between p-3.5 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/60 active:scale-[0.99] cursor-pointer transition-all has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                    <div>
+                        <span class="text-sm font-semibold text-slate-200 block">Cabo ATX / Força</span>
+                        <span class="text-xs text-blue-400 font-medium">+ R$ 10,00</span>
+                    </div>
+                    <input type="checkbox" name="cabo" value="atx" data-price="10" class="peer w-5 h-5 rounded text-blue-600 bg-slate-900 border-slate-700 focus:ring-blue-500 cabo-item">
+                </label>
+            </div>
+        </section>
+
+        <!-- Detalhes do Resumo Desktop (visível apenas em telas maiores) -->
+        <div class="hidden sm:block bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl">
+            <h3 class="text-base font-bold text-white mb-3">Resumo da Configuração</h3>
+            <div class="space-y-2 text-sm text-slate-300 mb-4" id="desktop-summary-items">
+                <!-- Preenchido via JS -->
+            </div>
+        </div>
+
+    </main>
+
+    <div class="fixed bottom-0 left-0 right-0 bg-slate-950/95 backdrop-blur-lg border-t border-slate-800 p-4 z-50 shadow-2xl">
+        <div class="max-w-4xl mx-auto flex items-center justify-between gap-4">
+            <div>
+                <span class="text-[10px] uppercase tracking-wider text-slate-400 font-bold block">Valor Total</span>
+                <span class="text-xl sm:text-2xl font-black text-emerald-400" id="total-price">R$ 200,00</span>
+            </div>
+            <button onclick="enviarWhatsApp()" class="flex-1 max-w-xs bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 transition-all cursor-pointer text-sm">
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                </svg>
+                <span>Pedir no WhatsApp</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const BASE_PRICE = 200.00;
+
+        const semPerifericoCheckbox = document.getElementById('semPeriferico');
+        const perifericosItems = document.querySelectorAll('.periferico-item');
+        
+        const semCaboCheckbox = document.getElementById('semCabo');
+        const caboItems = document.querySelectorAll('.cabo-item');
+
+        // Lógica de exclusividade para Periféricos
+        semPerifericoCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                perifericosItems.forEach(item => item.checked = false);
+            }
+            calcularTotal();
+        });
+
+        perifericosItems.forEach(item => {
+            item.addEventListener('change', function() {
+                if (this.checked) {
+                    semPerifericoCheckbox.checked = false;
+                }
+                calcularTotal();
+            });
+        });
+
+        // Lógica de exclusividade para Cabos
+        semCaboCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                caboItems.forEach(item => item.checked = false);
+            }
+            calcularTotal();
+        });
+
+        caboItems.forEach(item => {
+            item.addEventListener('change', function() {
+                if (this.checked) {
+                    semCaboCheckbox.checked = false;
+                }
+                calcularTotal();
+            });
+        });
+
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('change', calcularTotal);
+        });
+
+        function calcularTotal() {
+            let total = BASE_PRICE;
+            let summaryHTML = `<div class="flex justify-between border-b border-slate-800 pb-2"><span>OptiPlex Base</span><span class="font-medium text-slate-200">R$ 200,00</span></div>`;
+
+            // CPU
+            const cpuSelected = document.querySelector('input[name="cpu"]:checked');
+            if (cpuSelected && cpuSelected.value !== 'sem') {
+                const price = parseFloat(cpuSelected.dataset.price);
+                total += price;
+                let label = cpuSelected.value === 'i3' ? 'Processador Intel Core i3' : 'Processador Intel Core i5';
+                summaryHTML += `<div class="flex justify-between border-b border-slate-800 pb-2"><span>${label}</span><span class="font-medium text-blue-400">+ R$ ${price.toFixed(2).replace('.', ',')}</span></div>`;
+            }
+
+            // RAM
+            const ramSelected = document.querySelector('input[name="ram"]:checked');
+            if (ramSelected && ramSelected.value !== 'sem') {
+                const price = parseFloat(ramSelected.dataset.price);
+                total += price;
+                let label = ramSelected.value === '4gb' ? 'Memória 4GB RAM' : 'Memória 8GB RAM';
+                summaryHTML += `<div class="flex justify-between border-b border-slate-800 pb-2"><span>${label}</span><span class="font-medium text-blue-400">+ R$ ${price.toFixed(2).replace('.', ',')}</span></div>`;
+            }
+
+            // HD
+            const hdSelected = document.querySelector('input[name="hd"]:checked');
+            if (hdSelected && hdSelected.value !== 'sem') {
+                const price = parseFloat(hdSelected.dataset.price);
+                total += price;
+                summaryHTML += `<div class="flex justify-between border-b border-slate-800 pb-2"><span>HD 500GB</span><span class="font-medium text-blue-400">+ R$ ${price.toFixed(2).replace('.', ',')}</span></div>`;
+            }
+
+            // SSD
+            const ssdSelected = document.querySelector('input[name="ssd"]:checked');
+            if (ssdSelected && ssdSelected.value !== 'sem') {
+                const price = parseFloat(ssdSelected.dataset.price);
+                total += price;
+                let label = ssdSelected.value === '128gb' ? 'SSD 128GB' : 'SSD 256GB';
+                summaryHTML += `<div class="flex justify-between border-b border-slate-800 pb-2"><span>${label}</span><span class="font-medium text-blue-400">+ R$ ${price.toFixed(2).replace('.', ',')}</span></div>`;
+            }
+
+            // Periféricos
+            perifericosItems.forEach(item => {
+                if (item.checked) {
+                    const price = parseFloat(item.dataset.price);
+                    total += price;
+                    let label = item.value === 'mouse_teclado' ? 'Mouse e Teclado' : 'Monitor 20" TCN';
+                    summaryHTML += `<div class="flex justify-between border-b border-slate-800 pb-2"><span>${label}</span><span class="font-medium text-blue-400">+ R$ ${price.toFixed(2).replace('.', ',')}</span></div>`;
+                }
+            });
+
+            // Cabos
+            caboItems.forEach(item => {
+                if (item.checked) {
+                    const price = parseFloat(item.dataset.price);
+                    total += price;
+                    let label = item.value === 'vga' ? 'Cabo VGA' : 'Cabo ATX / Força';
+                    summaryHTML += `<div class="flex justify-between border-b border-slate-800 pb-2"><span>${label}</span><span class="font-medium text-blue-400">+ R$ ${price.toFixed(2).replace('.', ',')}</span></div>`;
+                }
+            });
+
+            const desktopSummary = document.getElementById('desktop-summary-items');
+            if (desktopSummary) desktopSummary.innerHTML = summaryHTML;
+            document.getElementById('total-price').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        function enviarWhatsApp() {
+            const numero = document.getElementById('whatsappNumber').value.trim();
+
+            let mensagem = "Olá! Gostaria de encomendar um *Dell OptiPlex 7010* (*ATLAS*) com a seguinte configuração:%0A%0A";
+            mensagem += "• *Modelo Base:* OptiPlex sem nada (R$ 200,00)%0A";
+
+            const cpuSelected = document.querySelector('input[name="cpu"]:checked');
+            if (cpuSelected && cpuSelected.value !== 'sem') {
+                let label = cpuSelected.value === 'i3' ? 'Intel Core i3 (+R$ 30,00)' : 'Intel Core i5 (+R$ 80,00)';
+                mensagem += `• *Processador:* ${label}%0A`;
+            } else {
+                mensagem += "• *Processador:* Sem CPU%0A";
+            }
+
+            const ramSelected = document.querySelector('input[name="ram"]:checked');
+            if (ramSelected && ramSelected.value !== 'sem') {
+                let label = ramSelected.value === '4gb' ? '4GB RAM (+R$ 30,00)' : '8GB RAM (+R$ 70,00)';
+                mensagem += `• *Memória RAM:* ${label}%0A`;
+            } else {
+                mensagem += "• *Memória RAM:* Sem RAM%0A";
+            }
+
+            const hdSelected = document.querySelector('input[name="hd"]:checked');
+            if (hdSelected && hdSelected.value !== 'sem') {
+                mensagem += "• *Armazenamento HD:* HD 500GB (+R$ 30,00)%0A";
+            }
+
+            const ssdSelected = document.querySelector('input[name="ssd"]:checked');
+            if (ssdSelected && ssdSelected.value !== 'sem') {
+                let label = ssdSelected.value === '128gb' ? 'SSD 128GB (+R$ 165,00)' : 'SSD 256GB (+R$ 275,00)';
+                mensagem += `• *Armazenamento SSD:* ${label}%0A`;
+            }
+
+            let perifericosText = [];
+            perifericosItems.forEach(item => {
+                if (item.checked) {
+                    if (item.value === 'mouse_teclado') perifericosText.push('Mouse e Teclado (+R$ 50,00)');
+                    if (item.value === 'monitor_20') perifericosText.push('Monitor 20" TCN (+R$ 280,00)');
+                }
+            });
+            if (perifericosText.length > 0) {
+                mensagem += `• *Periféricos:* ${perifericosText.join(', ')}%0A`;
+            } else {
+                mensagem += "• *Periféricos:* Nenhum%0A";
+            }
+
+            let cabosText = [];
+            caboItems.forEach(item => {
+                if (item.checked) {
+                    if (item.value === 'vga') cabosText.push('Cabo VGA (+R$ 10,00)');
+                    if (item.value === 'atx') cabosText.push('Cabo ATX (+R$ 10,00)');
+                }
+            });
+            if (cabosText.length > 0) {
+                mensagem += `• *Cabos:* ${cabosText.join(', ')}%0A`;
+            } else {
+                mensagem += "• *Cabos:* Sem cabos%0A";
+            }
+
+            const totalText = document.getElementById('total-price').textContent;
+            mensagem += `%0A*VALOR TOTAL:* *${totalText}*`;
+
+            const url = `https://wa.me/${numero}?text=${mensagem}`;
+            window.open(url, '_blank');
+        }
+
+        calcularTotal();
+    </script>
+</body>
+</html>
