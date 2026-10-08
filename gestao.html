@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlas - Painel de Gestão (Local)</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --sidebar-bg: #ffffff;
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --text-main: #333333;
+            --border-color: #e0e0e0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { background-color: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+
+        header { 
+            position: absolute; top: 0; left: 0; right: 0; height: 60px; 
+            background-color: var(--primary-color); color: white; 
+            display: flex; align-items: center; justify-content: space-between; padding: 0 20px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 10;
+        }
+        header h1 { font-size: 22px; letter-spacing: 2px; text-transform: uppercase; }
+        .logo-text { font-weight: bold; font-style: italic; }
+
+        .dashboard { display: flex; width: 100%; margin-top: 60px; height: calc(100vh - 60px); }
+
+        .sidebar { 
+            width: 320px; background-color: var(--sidebar-bg); padding: 20px; 
+            border-right: 1px solid var(--border-color); overflow-y: auto; display: flex; flex-direction: column;
+        }
+        
+        .sidebar h2 { font-size: 18px; margin-bottom: 20px; color: var(--secondary-color); border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #555; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+        
+        button { border: none; border-radius: 4px; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.3s; padding: 10px; color: white; width: 100%; margin-bottom: 10px;}
+        .btn-save { background-color: var(--accent-color); padding: 12px; font-size: 15px; }
+        .btn-save:hover { background-color: #2980b9; }
+        .btn-export { background-color: var(--success-color); margin-top: 20px;}
+        .btn-import { background-color: var(--secondary-color); }
+        .btn-delete { background-color: var(--danger-color); width: auto; padding: 6px 10px; font-size: 12px;}
+
+        .main-content { flex: 1; padding: 20px; overflow-y: auto; }
+        .main-content h2 { font-size: 20px; margin-bottom: 20px; color: var(--secondary-color); }
+
+        .table-container { background: white; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        thead { background-color: var(--secondary-color); color: white; }
+        th, td { padding: 12px 15px; border-bottom: 1px solid var(--border-color); }
+        th { font-size: 14px; font-weight: 600; text-transform: uppercase; }
+        td { font-size: 14px; vertical-align: middle; }
+        tr:hover { background-color: #f9f9f9; }
+
+        .sell-action { display: flex; gap: 10px; align-items: center; }
+        .sell-action input { width: 60px; padding: 6px; border: 1px solid #ccc; border-radius: 4px; }
+        .sell-action button { background-color: var(--success-color); width: auto; padding: 6px 12px; margin: 0; }
+        
+        .estoque-baixo { color: #e74c3c; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><span class="logo-text">ATLAS</span> | Painel de Gestão</h1>
+    </header>
+
+    <div class="dashboard">
+        <aside class="sidebar">
+            <h2>Cadastrar Produto</h2>
+            <div class="form-group">
+                <label>Nome do Produto / Peça</label>
+                <input type="text" id="nome" placeholder="Ex: Tela iPhone 11" required>
+            </div>
+            <div class="form-group">
+                <label>Preço de Compra (R$)</label>
+                <input type="number" id="preco_compra" placeholder="0.00" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label>Preço de Venda (R$)</label>
+                <input type="number" id="preco_venda" placeholder="0.00" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label>Quantidade em Estoque</label>
+                <input type="number" id="estoque" placeholder="0" required>
+            </div>
+            <button class="btn-save" onclick="cadastrarProduto()">Salvar no Estoque</button>
+
+            <div style="margin-top: auto;">
+                <h2 style="font-size: 14px; margin-bottom: 10px; margin-top: 20px;">Backup de Dados</h2>
+                <button class="btn-export" onclick="exportarDados()">📥 Baixar Backup (JSON)</button>
+                <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importarDados(event)">
+                <button class="btn-import" onclick="document.getElementById('importFile').click()">📤 Carregar Backup</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <h2>Estoque Atual e Vendas</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Compra</th>
+                            <th>Venda</th>
+                            <th>Lucro Bruto</th>
+                            <th>Estoque</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-produtos">
+                        <!-- Itens renderizados via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Inicializa a lista de produtos puxando do navegador ou cria uma lista vazia
+        let produtos = JSON.parse(localStorage.getItem('atlas_produtos')) || [];
+
+        function salvarNoNavegador() {
+            localStorage.setItem('atlas_produtos', JSON.stringify(produtos));
+        }
+
+        function carregarProdutos() {
+            const tbody = document.getElementById('tabela-produtos');
+            tbody.innerHTML = '';
+            
+            produtos.forEach(p => {
+                const lucro = p.preco_venda - p.preco_compra;
+                const classEstoque = p.estoque <= 2 ? 'estoque-baixo' : '';
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${p.nome}</strong></td>
+                        <td>R$ ${parseFloat(p.preco_compra).toFixed(2)}</td>
+                        <td>R$ ${parseFloat(p.preco_venda).toFixed(2)}</td>
+                        <td style="color: #27ae60; font-weight: bold;">R$ ${lucro.toFixed(2)}</td>
+                        <td class="${classEstoque}">${p.estoque} un.</td>
+                        <td>
+                            <div class="sell-action">
+                                <input type="number" id="qtd-${p.id}" value="1" min="1" max="${p.estoque}">
+                                <button onclick="venderProduto(${p.id})">Baixa</button>
+                                <button class="btn-delete" onclick="excluirProduto(${p.id})">Excluir</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function cadastrarProduto() {
+            const nome = document.getElementById('nome').value;
+            const preco_compra = document.getElementById('preco_compra').value;
+            const preco_venda = document.getElementById('preco_venda').value;
+            const estoque = document.getElementById('estoque').value;
+
+            if(!nome || !preco_compra || !preco_venda || !estoque) return alert("Preencha todos os campos!");
+
+            const novoProduto = {
+                id: Date.now(), // Gera um ID único baseado na data/hora
+                nome,
+                preco_compra: parseFloat(preco_compra),
+                preco_venda: parseFloat(preco_venda),
+                estoque: parseInt(estoque)
+            };
+
+            produtos.push(novoProduto);
+            salvarNoNavegador();
+            
+            document.getElementById('nome').value = '';
+            document.getElementById('preco_compra').value = '';
+            document.getElementById('preco_venda').value = '';
+            document.getElementById('estoque').value = '';
+            
+            carregarProdutos();
+        }
+
+        function venderProduto(id) {
+            const quantidade = parseInt(document.getElementById(`qtd-${id}`).value);
+            const index = produtos.findIndex(p => p.id === id);
+            
+            if (produtos[index].estoque < quantidade) {
+                return alert("Estoque insuficiente para esta venda!");
+            }
+
+            produtos[index].estoque -= quantidade;
+            salvarNoNavegador();
+            carregarProdutos();
+        }
+
+        function excluirProduto(id) {
+            if(confirm("Tem certeza que deseja excluir esta peça do sistema?")) {
+                produtos = produtos.filter(p => p.id !== id);
+                salvarNoNavegador();
+                carregarProdutos();
+            }
+        }
+
+        // --- FUNÇÕES DE BACKUP ---
+        function exportarDados() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(produtos));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "atlas_backup_" + new Date().toLocaleDateString('pt-BR').replace(/\//g, '-') + ".json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        function importarDados(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const dadosImportados = JSON.parse(e.target.result);
+                    if(Array.isArray(dadosImportados)) {
+                        produtos = dadosImportados;
+                        salvarNoNavegador();
+                        carregarProdutos();
+                        alert("Backup carregado com sucesso!");
+                    } else {
+                        alert("Arquivo inválido.");
+                    }
+                } catch (error) {
+                    alert("Erro ao ler o arquivo de backup.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Inicia a tela
+        carregarProdutos();
+    </script>
+</body>
+</html>
