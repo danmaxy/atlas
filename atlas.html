@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ATLAS · Estoque e Vendas</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23223240'/><path d='M50 18 80 82H68L50 42 32 82H20z' fill='%23E8A317'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDEFF1; --panel:#FFFFFF; --ink:#1E262D; --muted:#5E6B76; --line:#D5DADF;
+  --steel:#223240; --steel-ink:#E9EEF2; --accent:#E8A317; --accent-ink:#1E262D;
+  --ok:#2E7D4F; --bad:#B3392F; --warn:#B7791F; --focus:#2F6FA3;
+  --radius:6px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#151B21; --panel:#1E262D; --ink:#E6EAED; --muted:#98A5B0; --line:#33404B;
+    --steel:#0F151A; --steel-ink:#E9EEF2; --ok:#5CBF86; --bad:#E57A70; --warn:#E8B04A; --focus:#6AAEE0;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#151B21; --panel:#1E262D; --ink:#E6EAED; --muted:#98A5B0; --line:#33404B;
+  --steel:#0F151A; --steel-ink:#E9EEF2; --ok:#5CBF86; --bad:#E57A70; --warn:#E8B04A; --focus:#6AAEE0;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Barlow',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.45}
+h1,h2,h3{font-family:'Barlow Condensed','Arial Narrow',Arial,sans-serif;margin:0;letter-spacing:.2px}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+/* Topo */
+header{background:var(--steel);color:var(--steel-ink);padding:14px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;margin-right:auto}
+.brand svg{width:38px;height:38px;flex:none}
+.brand h1{font-size:30px;line-height:1;font-weight:700;letter-spacing:3px}
+.brand small{display:block;font-size:13px;opacity:.75;letter-spacing:.3px}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav button{background:transparent;border:0;color:var(--steel-ink);padding:9px 14px;border-radius:var(--radius);cursor:pointer;font-weight:500;opacity:.8}
+nav button:hover{background:rgba(255,255,255,.08);opacity:1}
+nav button[aria-current="page"]{background:var(--accent);color:var(--accent-ink);opacity:1;font-weight:600}
+main{max-width:1180px;margin:0 auto;padding:22px 16px 60px}
+section.view{display:none}
+section.view.on{display:block}
+.head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.head h2{font-size:30px}
+
+/* Componentes */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.btn{background:var(--steel);color:var(--steel-ink);border:1px solid var(--steel);padding:9px 16px;border-radius:var(--radius);cursor:pointer;font-weight:600}
+.btn:hover{filter:brightness(1.15)}
+.btn.accent{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.danger{background:transparent;color:var(--bad);border-color:var(--bad)}
+.btn.sm{padding:5px 10px;font-size:14px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+label{display:block;font-size:14px;font-weight:500;margin-bottom:4px;color:var(--muted)}
+input,select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel)}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media (max-width:820px){.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.g4,.g3,.g2{grid-template-columns:1fr}}
+
+.stat{border-left:5px solid var(--accent)}
+.stat span{display:block;color:var(--muted);font-size:14px}
+.stat b{font-family:'Barlow Condensed',Arial,sans-serif;font-size:34px;line-height:1.15;font-weight:700}
+
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:14px;color:var(--muted);font-weight:600;background:color-mix(in srgb,var(--bg) 60%,var(--panel))}
+td.n,th.n{text-align:right;white-space:nowrap}
+tr:hover td{background:color-mix(in srgb,var(--bg) 40%,transparent)}
+.tag{display:inline-block;padding:2px 9px;border-radius:99px;font-size:13px;font-weight:600}
+.tag.ok{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.tag.low{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.tag.out{background:color-mix(in srgb,var(--bad) 16%,transparent);color:var(--bad)}
+.actions{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
+.empty{padding:34px 12px;text-align:center;color:var(--muted)}
+.pos{color:var(--ok);font-weight:600}
+.neg{color:var(--bad);font-weight:600}
+
+/* Venda */
+.sale{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;align-items:start}
+@media (max-width:900px){.sale{grid-template-columns:1fr}}
+.results{max-height:420px;overflow:auto;margin-top:10px;border:1px solid var(--line);border-radius:var(--radius)}
+.result{display:flex;justify-content:space-between;gap:10px;width:100%;text-align:left;background:var(--panel);border:0;border-bottom:1px solid var(--line);padding:10px 12px;cursor:pointer}
+.result:last-child{border-bottom:0}
+.result:hover{background:color-mix(in srgb,var(--accent) 14%,var(--panel))}
+.result small{color:var(--muted);display:block}
+.cart-row{display:grid;grid-template-columns:1fr 78px 92px 30px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.cart-row input{padding:6px 8px}
+.cart-row button{background:none;border:0;color:var(--bad);cursor:pointer;font-size:20px;line-height:1}
+.totals{margin-top:14px;display:grid;gap:6px}
+.totals div{display:flex;justify-content:space-between}
+.totals .grand{font-family:'Barlow Condensed',Arial,sans-serif;font-size:34px;font-weight:700;border-top:2px solid var(--ink);padding-top:8px;margin-top:4px}
+
+/* Dialog */
+dialog{border:1px solid var(--line);border-radius:10px;padding:0;background:var(--panel);color:var(--ink);width:min(560px,94vw)}
+dialog::backdrop{background:rgba(10,16,22,.55)}
+dialog form,dialog .box{padding:22px}
+dialog h3{font-size:26px;margin-bottom:14px}
+.foot{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+.hint{font-size:13px;color:var(--muted);margin-top:4px}
+
+/* Toast */
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--steel);color:var(--steel-ink);padding:11px 18px;border-radius:var(--radius);opacity:0;pointer-events:none;transition:.2s;z-index:50;max-width:90vw}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+
+/* Login */
+[hidden]{display:none!important}
+body.locked header,body.locked main{display:none}
+body:not(.locked) #auth{display:none}
+#auth{position:fixed;inset:0;background:var(--steel);display:grid;place-items:center;padding:16px;z-index:100;overflow:auto}
+.auth-card{background:var(--panel);width:min(410px,100%);border-radius:10px;padding:28px;border-top:6px solid var(--accent)}
+.auth-brand{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.auth-brand svg{width:44px;height:44px;flex:none}
+.auth-brand h1{font-size:32px;line-height:1;letter-spacing:3px}
+.auth-brand small{display:block;color:var(--muted);font-size:13px}
+.auth-card h2{font-size:26px;margin-bottom:6px}
+.auth-card p.sub{margin:0 0 16px;color:var(--muted);font-size:15px}
+.auth-card .field{margin-bottom:12px}
+.auth-card .btn{width:100%;padding:11px 16px;margin-top:6px}
+.auth-msg{min-height:22px;margin:10px 0 0;font-size:14px;color:var(--bad)}
+.linkbtn{background:none;border:0;color:var(--focus);cursor:pointer;padding:0;text-decoration:underline;font-size:14px}
+.code{font-family:'Courier New',monospace;font-size:22px;letter-spacing:2px;background:var(--bg);border:1px dashed var(--muted);padding:14px;text-align:center;border-radius:var(--radius);user-select:all;margin:12px 0}
+
+/* iPhones */
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.chip{border:1px solid var(--line);background:var(--panel);padding:7px 14px;border-radius:99px;cursor:pointer;font-weight:500}
+.chip[aria-pressed="true"]{background:var(--steel);color:var(--steel-ink);border-color:var(--steel)}
+.chip b{margin-left:6px;color:var(--accent)}
+select.st{width:auto;padding:6px 8px;font-weight:600;border-left-width:5px}
+select.st-correios{border-left-color:var(--focus)}
+select.st-estoque{border-left-color:var(--ok)}
+select.st-anunciado{border-left-color:var(--accent)}
+select.st-vendido{border-left-color:var(--muted)}
+.stat small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.sec-title{font-size:24px;margin:26px 0 10px}
+dialog{max-height:94vh;overflow:auto}
+
+/* Recibo */
+.receipt{font-family:'Courier New',monospace;font-size:14px}
+.receipt hr{border:0;border-top:1px dashed var(--muted);margin:10px 0}
+.receipt .r{display:flex;justify-content:space-between;gap:10px}
+.receipt h4{text-align:center;margin:0;font-size:20px;letter-spacing:3px}
+.receipt p{text-align:center;margin:2px 0;font-size:12px}
+@media print{
+  body>*:not(#dlgReceipt){display:none!important}
+  #dlgReceipt{display:block!important;position:static;border:0;width:100%;color:#000;background:#fff}
+  #dlgReceipt .foot{display:none}
+  #dlgReceipt::backdrop{display:none}
+}
+</style>
+</head>
+<body class="locked">
+
+<!-- LOGIN -->
+<div id="auth">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="16" fill="#E8A317"/><path d="M50 18 80 82H68L50 42 32 82H20z" fill="#223240"/><rect x="36" y="64" width="28" height="9" fill="#223240"/></svg>
+      <div><h1>ATLAS</h1><small>Manutenção e Comercialização</small></div>
+    </div>
+
+    <form id="fSetup" hidden autocomplete="on">
+      <h2>Crie seu acesso</h2>
+      <p class="sub">Primeiro acesso. Escolha um usuário e uma senha para proteger o sistema.</p>
+      <div class="field"><label for="sUser">Usuário</label><input id="sUser" autocomplete="username" required maxlength="40"></div>
+      <div class="field"><label for="sPass">Senha (mínimo 6 caracteres)</label><input id="sPass" type="password" autocomplete="new-password" required minlength="6"></div>
+      <div class="field"><label for="sPass2">Repita a senha</label><input id="sPass2" type="password" autocomplete="new-password" required minlength="6"></div>
+      <button class="btn accent" type="submit">Criar acesso</button>
+    </form>
+
+    <form id="fLogin" hidden autocomplete="on">
+      <h2>Entrar</h2>
+      <p class="sub">Acesse o sistema de estoque e vendas.</p>
+      <div class="field"><label for="lUser">Usuário</label><input id="lUser" autocomplete="username" required></div>
+      <div class="field"><label for="lPass">Senha</label><input id="lPass" type="password" autocomplete="current-password" required></div>
+      <button class="btn accent" type="submit">Entrar</button>
+      <p style="margin:14px 0 0;text-align:center"><button type="button" class="linkbtn" id="goRecover">Esqueci minha senha</button></p>
+    </form>
+
+    <form id="fRecover" hidden>
+      <h2>Recuperar acesso</h2>
+      <p class="sub">Digite o código de recuperação que apareceu quando você criou o acesso.</p>
+      <div class="field"><label for="rCode">Código de recuperação</label><input id="rCode" autocomplete="off" placeholder="XXXX-XXXX-XXXX-XXXX" required></div>
+      <div class="field"><label for="rPass">Nova senha (mínimo 6 caracteres)</label><input id="rPass" type="password" autocomplete="new-password" required minlength="6"></div>
+      <div class="field"><label for="rPass2">Repita a nova senha</label><input id="rPass2" type="password" autocomplete="new-password" required minlength="6"></div>
+      <button class="btn accent" type="submit">Redefinir senha</button>
+      <p style="margin:14px 0 0;text-align:center"><button type="button" class="linkbtn" id="goLogin">Voltar para o login</button></p>
+    </form>
+
+    <p class="auth-msg" id="authMsg" role="alert"></p>
+  </div>
+</div>
+
+<header>
+  <div class="brand">
+    <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="16" fill="#E8A317"/><path d="M50 18 80 82H68L50 42 32 82H20z" fill="#223240"/><rect x="36" y="64" width="28" height="9" fill="#223240"/></svg>
+    <div><h1>ATLAS</h1><small>Manutenção e Comercialização</small></div>
+  </div>
+  <nav id="nav" aria-label="Menu principal">
+    <button data-view="painel">Painel</button>
+    <button data-view="produtos">Produtos</button>
+    <button data-view="venda">Nova venda</button>
+    <button data-view="vendas">Vendas</button>
+    <button data-view="iphones">iPhones</button>
+    <button data-view="backup">Backup e conta</button>
+  </nav>
+  <button class="btn ghost" id="btnSair" style="color:var(--steel-ink);border-color:rgba(255,255,255,.35)">Sair</button>
+</header>
+
+<main>
+
+<!-- PAINEL -->
+<section class="view" id="v-painel">
+  <div class="head"><h2>Painel</h2></div>
+  <div class="grid g4">
+    <div class="panel stat"><span>Produtos cadastrados</span><b id="stProd">0</b></div>
+    <div class="panel stat"><span>Estoque a preço de compra</span><b id="stEstoque">R$ 0,00</b></div>
+    <div class="panel stat"><span>Vendido hoje</span><b id="stHoje">R$ 0,00</b></div>
+    <div class="panel stat"><span>Lucro de produtos no mês</span><b id="stLucro">R$ 0,00</b></div>
+  </div>
+
+  <h3 class="sec-title">Revenda de iPhone</h3>
+  <div class="grid g4">
+    <div class="panel stat"><span>Investido em iPhones</span><b id="ipInvest">R$ 0,00</b><small>aparelhos ainda não vendidos</small></div>
+    <div class="panel stat"><span>Lucro de iPhones no mês</span><b id="ipLucroMes">R$ 0,00</b><small id="ipVendidosMes"></small></div>
+    <div class="panel stat"><span>Lucro previsto</span><b id="ipPrevisto">R$ 0,00</b><small>se vender tudo pelo preço anunciado</small></div>
+    <div class="panel stat"><span>Aparelhos em aberto</span><b id="ipAberto">0</b><small id="ipAbertoDet"></small></div>
+  </div>
+
+  <div class="grid g2" style="margin-top:16px">
+    <div class="panel">
+      <h3 style="font-size:22px;margin-bottom:8px">Estoque baixo</h3>
+      <div id="lowList"></div>
+    </div>
+    <div class="panel">
+      <h3 style="font-size:22px;margin-bottom:8px">Últimas vendas</h3>
+      <div id="lastSales"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUTOS -->
+<section class="view" id="v-produtos">
+  <div class="head">
+    <h2>Produtos</h2>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <input id="qProd" type="search" placeholder="Buscar por nome, código ou categoria" style="width:290px" aria-label="Buscar produto">
+      <button class="btn accent" id="btnNovoProd">Cadastrar produto</button>
+    </div>
+  </div>
+  <div class="panel tablewrap" style="padding:0">
+    <table>
+      <thead><tr><th>Código</th><th>Produto</th><th>Categoria</th><th class="n">Preço de compra</th><th class="n">Preço de venda</th><th class="n">Margem</th><th class="n">Estoque</th><th></th></tr></thead>
+      <tbody id="tbProd"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- NOVA VENDA -->
+<section class="view" id="v-venda">
+  <div class="head"><h2>Nova venda</h2></div>
+  <div class="sale">
+    <div class="panel">
+      <label for="qSale">Buscar produto</label>
+      <input id="qSale" type="search" placeholder="Digite o nome ou o código" autocomplete="off">
+      <div class="results" id="saleResults"></div>
+    </div>
+    <div class="panel">
+      <h3 style="font-size:22px;margin-bottom:6px">Itens da venda</h3>
+      <div id="cart"></div>
+      <div class="grid g2" style="margin-top:14px">
+        <div><label for="cliente">Cliente (opcional)</label><input id="cliente" type="text" placeholder="Nome do cliente"></div>
+        <div><label for="pagto">Forma de pagamento</label>
+          <select id="pagto"><option>Pix</option><option>Dinheiro</option><option>Cartão de débito</option><option>Cartão de crédito</option><option>Boleto</option><option>Fiado</option></select>
+        </div>
+        <div><label for="desc">Desconto (R$)</label><input id="desc" type="number" min="0" step="0.01" value="0"></div>
+      </div>
+      <div class="totals">
+        <div><span>Subtotal</span><span id="tSub">R$ 0,00</span></div>
+        <div><span>Desconto</span><span id="tDesc">R$ 0,00</span></div>
+        <div class="grand"><span>Total</span><span id="tTotal">R$ 0,00</span></div>
+      </div>
+      <div class="foot" style="justify-content:space-between">
+        <button class="btn ghost" id="btnLimpar">Limpar</button>
+        <button class="btn accent" id="btnFinalizar" disabled>Finalizar venda</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HISTÓRICO -->
+<section class="view" id="v-vendas">
+  <div class="head">
+    <h2>Vendas realizadas</h2>
+    <div style="display:flex;gap:10px;align-items:end;flex-wrap:wrap">
+      <div><label for="fDe">De</label><input id="fDe" type="date"></div>
+      <div><label for="fAte">Até</label><input id="fAte" type="date"></div>
+    </div>
+  </div>
+  <div class="panel tablewrap" style="padding:0">
+    <table>
+      <thead><tr><th>Data</th><th>Cliente</th><th>Itens</th><th>Pagamento</th><th class="n">Total</th><th class="n">Lucro</th><th></th></tr></thead>
+      <tbody id="tbVendas"></tbody>
+    </table>
+  </div>
+  <p class="hint" id="somaVendas" style="margin-top:10px"></p>
+</section>
+
+<!-- IPHONES -->
+<section class="view" id="v-iphones">
+  <div class="head">
+    <h2>Revenda de iPhone</h2>
+    <div style="display:flex;gap:10px;align-items:end;flex-wrap:wrap">
+      <div style="width:130px"><label for="ipMargem">Lucro padrão (%)</label><input id="ipMargem" type="number" min="0" step="1" value="30"></div>
+      <input id="qIp" type="search" placeholder="Buscar modelo, cor ou IMEI" style="width:250px" aria-label="Buscar iPhone">
+      <button class="btn accent" id="btnNovoIp">Cadastrar iPhone</button>
+    </div>
+  </div>
+  <div class="chips" id="ipChips"></div>
+  <div class="panel tablewrap" style="padding:0">
+    <table>
+      <thead><tr><th>Aparelho</th><th>Situação</th><th class="n">Valor investido</th><th class="n">Preço de venda</th><th class="n">Lucro</th><th>Compra</th><th></th></tr></thead>
+      <tbody id="tbIp"></tbody>
+    </table>
+  </div>
+  <p class="hint" id="ipResumo" style="margin-top:10px"></p>
+</section>
+
+<!-- BACKUP -->
+<section class="view" id="v-backup">
+  <div class="head"><h2>Backup e conta</h2></div>
+  <div class="panel" style="max-width:680px">
+    <p style="margin-top:0">Os dados ficam salvos <b>neste navegador</b>, neste aparelho. Baixe um backup com frequência, principalmente antes de limpar o histórico do navegador ou trocar de computador.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin:16px 0">
+      <button class="btn accent" id="btnExport">Baixar backup (.json)</button>
+      <button class="btn" id="btnImport">Restaurar backup</button>
+      <button class="btn ghost" id="btnCsv">Exportar produtos (.csv)</button>
+      <input type="file" id="fileImport" accept=".json,application/json" hidden>
+    </div>
+    <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+    <button class="btn danger" id="btnReset">Apagar todos os dados</button>
+    <p class="hint">O backup guarda produtos, vendas e iPhones. Ele não inclui a sua senha.</p>
+  </div>
+
+  <div class="panel" style="max-width:680px;margin-top:16px">
+    <h3 style="font-size:22px;margin-bottom:10px">Alterar senha</h3>
+    <form id="fSenha" class="grid g3" autocomplete="off">
+      <div><label for="cPass">Senha atual</label><input id="cPass" type="password" autocomplete="current-password" required></div>
+      <div><label for="cNova">Nova senha</label><input id="cNova" type="password" autocomplete="new-password" required minlength="6"></div>
+      <div><label for="cNova2">Repita a nova senha</label><input id="cNova2" type="password" autocomplete="new-password" required minlength="6"></div>
+      <div><button class="btn" type="submit">Salvar nova senha</button></div>
+    </form>
+    <p class="hint">Por segurança, o sistema sai sozinho após 30 minutos sem uso.</p>
+  </div>
+</section>
+
+</main>
+
+<!-- Dialog: produto -->
+<dialog id="dlgProd">
+  <form id="formProd" method="dialog">
+    <h3 id="dlgProdTitle">Cadastrar produto</h3>
+    <input type="hidden" id="pId">
+    <div class="grid g2">
+      <div style="grid-column:1/-1"><label for="pNome">Nome do produto</label><input id="pNome" required maxlength="80"></div>
+      <div><label for="pSku">Código</label><input id="pSku" maxlength="30" placeholder="Ex.: ATL-001"></div>
+      <div><label for="pCat">Categoria</label><input id="pCat" maxlength="40" placeholder="Ex.: Peças, Serviços"></div>
+      <div><label for="pCusto">Preço de compra (R$)</label><input id="pCusto" type="number" min="0" step="0.01" required></div>
+      <div><label for="pPreco">Preço de venda (R$)</label><input id="pPreco" type="number" min="0" step="0.01" required></div>
+      <div><label for="pEstoque">Quantidade em estoque</label><input id="pEstoque" type="number" min="0" step="1" required value="0"></div>
+      <div><label for="pMin">Estoque mínimo</label><input id="pMin" type="number" min="0" step="1" value="1"></div>
+    </div>
+    <p class="hint" id="pMargem"></p>
+    <div class="foot">
+      <button type="button" class="btn ghost" data-close>Cancelar</button>
+      <button type="submit" class="btn accent">Salvar produto</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Dialog: entrada de estoque -->
+<dialog id="dlgEntrada">
+  <form id="formEntrada" method="dialog">
+    <h3>Entrada de estoque</h3>
+    <p id="eNome" style="margin-top:0"></p>
+    <input type="hidden" id="eId">
+    <div class="grid g2">
+      <div><label for="eQtd">Quantidade que chegou</label><input id="eQtd" type="number" min="1" step="1" required></div>
+      <div><label for="eCusto">Novo preço de compra (R$)</label><input id="eCusto" type="number" min="0" step="0.01"></div>
+    </div>
+    <p class="hint">Se informar um novo preço de compra, o sistema calcula o custo médio entre o estoque atual e a nova compra.</p>
+    <div class="foot">
+      <button type="button" class="btn ghost" data-close>Cancelar</button>
+      <button type="submit" class="btn accent">Adicionar ao estoque</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Dialog: recibo -->
+<dialog id="dlgReceipt">
+  <div class="box">
+    <div class="receipt" id="receiptBody"></div>
+    <div class="foot">
+      <button class="btn ghost" data-close>Fechar</button>
+      <button class="btn accent" id="btnPrint">Imprimir recibo</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- Dialog: iPhone -->
+<dialog id="dlgIp">
+  <form id="formIp" method="dialog">
+    <h3 id="dlgIpTitle">Cadastrar iPhone</h3>
+    <input type="hidden" id="iId">
+    <div class="grid g2">
+      <div><label for="iModel">Modelo</label><input id="iModel" required maxlength="40" placeholder="Ex.: iPhone 14 Pro Max"></div>
+      <div><label for="iStorage">Capacidade</label>
+        <select id="iStorage"><option>64 GB</option><option>128 GB</option><option selected>256 GB</option><option>512 GB</option><option>1 TB</option></select></div>
+      <div><label for="iColor">Cor</label><input id="iColor" maxlength="30"></div>
+      <div><label for="iCond">Condição</label>
+        <select id="iCond"><option>Seminovo</option><option>Novo lacrado</option><option>Usado</option></select></div>
+      <div><label for="iImei">IMEI ou número de série (opcional)</label><input id="iImei" maxlength="40"></div>
+      <div><label for="iBat">Saúde da bateria % (opcional)</label><input id="iBat" type="number" min="0" max="100" step="1"></div>
+      <div><label for="iSupplier">Comprado de (opcional)</label><input id="iSupplier" maxlength="60"></div>
+      <div><label for="iBuyDate">Data da compra</label><input id="iBuyDate" type="date"></div>
+      <div><label for="iCost">Valor de compra (R$)</label><input id="iCost" type="number" min="0" step="0.01" required></div>
+      <div><label for="iExtra">Frete e reparos (R$)</label><input id="iExtra" type="number" min="0" step="0.01" value="0"></div>
+      <div><label for="iMargin">Lucro desejado (%)</label><input id="iMargin" type="number" min="0" step="1" required></div>
+      <div><label for="iPrice">Preço de venda (R$)</label><input id="iPrice" type="number" min="0" step="0.01" required></div>
+      <div style="grid-column:1/-1"><label for="iStatus">Situação</label>
+        <select id="iStatus">
+          <option value="correios">Correios (a caminho)</option>
+          <option value="estoque" selected>Em estoque</option>
+          <option value="anunciado">Anunciado</option>
+          <option value="vendido">Vendido</option>
+        </select></div>
+      <div id="iSoldBox" class="grid g2" style="grid-column:1/-1" hidden>
+        <div><label for="iSoldPrice">Valor da venda (R$)</label><input id="iSoldPrice" type="number" min="0" step="0.01"></div>
+        <div><label for="iSoldDate">Data da venda</label><input id="iSoldDate" type="date"></div>
+      </div>
+      <div style="grid-column:1/-1"><label for="iNotes">Observações (opcional)</label><input id="iNotes" maxlength="160"></div>
+    </div>
+    <p class="hint" id="iHint"></p>
+    <div class="foot">
+      <button type="button" class="btn ghost" data-close>Cancelar</button>
+      <button type="submit" class="btn accent">Salvar iPhone</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Dialog: marcar iPhone como vendido -->
+<dialog id="dlgIpVenda">
+  <form id="formIpVenda" method="dialog">
+    <h3>Marcar como vendido</h3>
+    <p id="sNome" style="margin-top:0"></p>
+    <input type="hidden" id="sId">
+    <div class="grid g2">
+      <div><label for="sPreco">Valor da venda (R$)</label><input id="sPreco" type="number" min="0" step="0.01" required></div>
+      <div><label for="sData">Data da venda</label><input id="sData" type="date" required></div>
+    </div>
+    <p class="hint" id="sLucroHint"></p>
+    <div class="foot">
+      <button type="button" class="btn ghost" data-close>Cancelar</button>
+      <button type="submit" class="btn accent">Confirmar venda</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Dialog: código de recuperação -->
+<dialog id="dlgCode">
+  <div class="box">
+    <h3>Guarde seu código de recuperação</h3>
+    <p style="margin-top:0">Se esquecer a senha, este código é a única forma de voltar a acessar o sistema. Anote em um lugar seguro. Ele só aparece agora.</p>
+    <div class="code" id="codeText"></div>
+    <div class="foot">
+      <button class="btn ghost" id="btnCopyCode">Copiar código</button>
+      <button class="btn accent" id="btnCodeOk">Anotei, continuar</button>
+    </div>
+  </div>
+</dialog>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ===== Dados ===== */
+const KEY = 'atlas_v1';
+let db = load();
+let cart = []; // {id, qty}
+
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw){
+      const d = JSON.parse(raw);
+      return {products:d.products||[], sales:d.sales||[], iphones:d.iphones||[], settings:{margin:30, ...(d.settings||{})}};
+    }
+  }catch(e){}
+  return {products:[], sales:[], iphones:[], settings:{margin:30}};
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(db)); }
+  catch(e){ toast('Não foi possível salvar. Verifique se o navegador permite armazenamento.'); }
+}
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+
+/* ===== Utilidades ===== */
+const $ = s => document.querySelector(s);
+const brl = v => new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v||0);
+const esc = s => String(s??'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num = v => { const n = parseFloat(v); return isNaN(n) ? 0 : n; };
+const fdate = iso => new Date(iso).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});
+const dayKey = iso => { const d = new Date(iso); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+let toastTimer;
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove('show'), 2800);
+}
+const prod = id => db.products.find(p => p.id === id);
+
+/* ===== Navegação ===== */
+function go(view){
+  document.querySelectorAll('section.view').forEach(s => s.classList.toggle('on', s.id === 'v-'+view));
+  document.querySelectorAll('#nav button').forEach(b => {
+    if(b.dataset.view === view) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
+  });
+  history.replaceState(null,'','#'+view);
+  render();
+  window.scrollTo(0,0);
+}
+$('#nav').addEventListener('click', e => { const b = e.target.closest('button'); if(b) go(b.dataset.view); });
+
+/* ===== Render ===== */
+function render(){
+  renderPainel(); renderProdutos(); renderBusca(); renderCart(); renderVendas(); renderIphones();
+}
+
+function stockTag(p){
+  if(p.stock <= 0) return '<span class="tag out">Sem estoque</span>';
+  if(p.stock <= p.min) return '<span class="tag low">'+p.stock+' · baixo</span>';
+  return '<span class="tag ok">'+p.stock+'</span>';
+}
+
+function renderPainel(){
+  const hoje = dayKey(new Date().toISOString());
+  const mes = hoje.slice(0,7);
+  const ativas = db.sales.filter(s => !s.canceled);
+  $('#stProd').textContent = db.products.length;
+  $('#stEstoque').textContent = brl(db.products.reduce((a,p)=>a+p.cost*p.stock,0));
+  $('#stHoje').textContent = brl(ativas.filter(s=>dayKey(s.date)===hoje).reduce((a,s)=>a+s.total,0));
+  $('#stLucro').textContent = brl(ativas.filter(s=>dayKey(s.date).startsWith(mes)).reduce((a,s)=>a+s.profit,0));
+
+  renderIphoneStats();
+  const low = db.products.filter(p => p.stock <= p.min).sort((a,b)=>a.stock-b.stock).slice(0,8);
+  $('#lowList').innerHTML = low.length
+    ? low.map(p => `<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line)"><span>${esc(p.name)}</span>${stockTag(p)}</div>`).join('')
+    : '<div class="empty">Nenhum produto com estoque baixo.</div>';
+
+  const last = ativas.slice(-5).reverse();
+  $('#lastSales').innerHTML = last.length
+    ? last.map(s => `<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line)"><span>${fdate(s.date)}${s.customer?' · '+esc(s.customer):''}</span><b>${brl(s.total)}</b></div>`).join('')
+    : '<div class="empty">Nenhuma venda registrada ainda.</div>';
+}
+
+function renderProdutos(){
+  const q = $('#qProd').value.trim().toLowerCase();
+  const list = db.products
+    .filter(p => !q || [p.name,p.sku,p.cat].join(' ').toLowerCase().includes(q))
+    .sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
+  $('#tbProd').innerHTML = list.length ? list.map(p => {
+    const margem = p.cost > 0 ? ((p.price-p.cost)/p.cost*100) : 0;
+    return `<tr>
+      <td>${esc(p.sku)||'—'}</td>
+      <td><b>${esc(p.name)}</b></td>
+      <td>${esc(p.cat)||'—'}</td>
+      <td class="n">${brl(p.cost)}</td>
+      <td class="n">${brl(p.price)}</td>
+      <td class="n ${margem>=0?'pos':'neg'}">${margem.toFixed(0)}%</td>
+      <td class="n">${stockTag(p)}</td>
+      <td><div class="actions">
+        <button class="btn sm ghost" data-act="entrada" data-id="${p.id}">+ Estoque</button>
+        <button class="btn sm ghost" data-act="editar" data-id="${p.id}">Editar</button>
+        <button class="btn sm danger" data-act="excluir" data-id="${p.id}">Excluir</button>
+      </div></td></tr>`;
+  }).join('') : `<tr><td colspan="8" class="empty">${db.products.length ? 'Nenhum produto encontrado para essa busca.' : 'Você ainda não cadastrou produtos. Clique em “Cadastrar produto” para começar.'}</td></tr>`;
+}
+
+function renderBusca(){
+  const q = $('#qSale').value.trim().toLowerCase();
+  const list = db.products
+    .filter(p => !q || [p.name,p.sku,p.cat].join(' ').toLowerCase().includes(q))
+    .sort((a,b)=>a.name.localeCompare(b.name,'pt-BR')).slice(0,60);
+  $('#saleResults').innerHTML = list.length ? list.map(p => `
+    <button class="result" data-add="${p.id}" ${p.stock<=0?'disabled style="opacity:.5;cursor:not-allowed"':''}>
+      <span><b>${esc(p.name)}</b><small>${esc(p.sku)||'Sem código'} · ${p.stock} em estoque</small></span>
+      <b>${brl(p.price)}</b>
+    </button>`).join('') : '<div class="empty">Nenhum produto encontrado.</div>';
+}
+
+function cartTotals(){
+  const sub = cart.reduce((a,i)=>{ const p=prod(i.id); return a + (p? p.price*i.qty : 0); },0);
+  const desc = Math.min(Math.max(num($('#desc').value),0), sub);
+  return {sub, desc, total: sub-desc};
+}
+
+function renderCart(){
+  cart = cart.filter(i => prod(i.id));
+  $('#cart').innerHTML = cart.length ? cart.map(i => {
+    const p = prod(i.id);
+    return `<div class="cart-row">
+      <span><b>${esc(p.name)}</b><br><small style="color:var(--muted)">${brl(p.price)} cada</small></span>
+      <input type="number" min="1" max="${p.stock}" step="1" value="${i.qty}" data-qty="${p.id}" aria-label="Quantidade de ${esc(p.name)}">
+      <b style="text-align:right">${brl(p.price*i.qty)}</b>
+      <button data-rm="${p.id}" aria-label="Remover ${esc(p.name)}">×</button>
+    </div>`;
+  }).join('') : '<div class="empty">Clique em um produto da lista para adicionar à venda.</div>';
+  updateTotals();
+}
+function updateTotals(){
+  const t = cartTotals();
+  $('#tSub').textContent = brl(t.sub);
+  $('#tDesc').textContent = '− ' + brl(t.desc);
+  $('#tTotal').textContent = brl(t.total);
+  $('#btnFinalizar').disabled = cart.length === 0;
+}
+
+function renderVendas(){
+  const de = $('#fDe').value, ate = $('#fAte').value;
+  const list = db.sales.filter(s => {
+    const k = dayKey(s.date);
+    return (!de || k >= de) && (!ate || k <= ate);
+  }).slice().reverse();
+  $('#tbVendas').innerHTML = list.length ? list.map(s => `<tr style="${s.canceled?'opacity:.5':''}">
+      <td>${fdate(s.date)}</td>
+      <td>${esc(s.customer)||'—'}</td>
+      <td>${s.items.map(i => i.qty+'× '+esc(i.name)).join(', ')}</td>
+      <td>${esc(s.payment)}</td>
+      <td class="n"><b>${brl(s.total)}</b></td>
+      <td class="n ${s.profit>=0?'pos':'neg'}">${s.canceled?'Cancelada':brl(s.profit)}</td>
+      <td><div class="actions">
+        <button class="btn sm ghost" data-recibo="${s.id}">Recibo</button>
+        ${s.canceled?'':`<button class="btn sm danger" data-cancel="${s.id}">Cancelar</button>`}
+      </div></td></tr>`).join('')
+    : '<tr><td colspan="7" class="empty">Nenhuma venda neste período.</td></tr>';
+  const ativas = list.filter(s=>!s.canceled);
+  $('#somaVendas').textContent = ativas.length
+    ? `${ativas.length} venda(s) · Total ${brl(ativas.reduce((a,s)=>a+s.total,0))} · Lucro ${brl(ativas.reduce((a,s)=>a+s.profit,0))}`
+    : '';
+}
+
+/* ===== Produtos ===== */
+const dlgProd = $('#dlgProd');
+function abrirProduto(p){
+  $('#dlgProdTitle').textContent = p ? 'Editar produto' : 'Cadastrar produto';
+  $('#pId').value = p?.id || '';
+  $('#pNome').value = p?.name || '';
+  $('#pSku').value = p?.sku || '';
+  $('#pCat').value = p?.cat || '';
+  $('#pCusto').value = p ? p.cost : '';
+  $('#pPreco').value = p ? p.price : '';
+  $('#pEstoque').value = p ? p.stock : 0;
+  $('#pMin').value = p ? p.min : 1;
+  margemHint();
+  dlgProd.showModal();
+  $('#pNome').focus();
+}
+function margemHint(){
+  const c = num($('#pCusto').value), v = num($('#pPreco').value);
+  $('#pMargem').textContent = c > 0 && v > 0
+    ? `Lucro de ${brl(v-c)} por unidade (margem de ${((v-c)/c*100).toFixed(0)}% sobre o custo).` : '';
+}
+['#pCusto','#pPreco'].forEach(s => $(s).addEventListener('input', margemHint));
+$('#btnNovoProd').addEventListener('click', () => abrirProduto(null));
+$('#qProd').addEventListener('input', renderProdutos);
+
+$('#formProd').addEventListener('submit', e => {
+  const id = $('#pId').value;
+  const data = {
+    name: $('#pNome').value.trim(),
+    sku: $('#pSku').value.trim(),
+    cat: $('#pCat').value.trim(),
+    cost: num($('#pCusto').value),
+    price: num($('#pPreco').value),
+    stock: Math.max(0, Math.floor(num($('#pEstoque').value))),
+    min: Math.max(0, Math.floor(num($('#pMin').value)))
+  };
+  if(!data.name){ e.preventDefault(); return; }
+  if(data.sku && db.products.some(p => p.sku.toLowerCase() === data.sku.toLowerCase() && p.id !== id)){
+    e.preventDefault(); toast('Já existe um produto com esse código.'); return;
+  }
+  if(id){ Object.assign(prod(id), data); toast('Produto atualizado.'); }
+  else { db.products.push({id: uid(), ...data}); toast('Produto cadastrado.'); }
+  save(); render();
+});
+
+$('#tbProd').addEventListener('click', e => {
+  const b = e.target.closest('button[data-act]'); if(!b) return;
+  const p = prod(b.dataset.id);
+  if(b.dataset.act === 'editar') abrirProduto(p);
+  if(b.dataset.act === 'entrada'){
+    $('#eId').value = p.id; $('#eNome').textContent = p.name + ' · estoque atual: ' + p.stock;
+    $('#eQtd').value = ''; $('#eCusto').value = '';
+    $('#dlgEntrada').showModal(); $('#eQtd').focus();
+  }
+  if(b.dataset.act === 'excluir'){
+    if(confirm(`Excluir "${p.name}"? As vendas já feitas continuam no histórico.`)){
+      db.products = db.products.filter(x => x.id !== p.id); save(); render(); toast('Produto excluído.');
+    }
+  }
+});
+
+$('#formEntrada').addEventListener('submit', () => {
+  const p = prod($('#eId').value);
+  const qtd = Math.floor(num($('#eQtd').value));
+  const novo = $('#eCusto').value !== '' ? num($('#eCusto').value) : null;
+  if(!p || qtd < 1) return;
+  if(novo !== null){
+    const totalQtd = p.stock + qtd;
+    p.cost = totalQtd > 0 ? ((p.cost*p.stock) + (novo*qtd)) / totalQtd : novo;
+    p.cost = Math.round(p.cost*100)/100;
+  }
+  p.stock += qtd;
+  save(); render(); toast('Estoque atualizado.');
+});
+
+/* ===== Venda ===== */
+$('#qSale').addEventListener('input', renderBusca);
+$('#saleResults').addEventListener('click', e => {
+  const b = e.target.closest('[data-add]'); if(!b) return;
+  const p = prod(b.dataset.add);
+  const item = cart.find(i => i.id === p.id);
+  if(item){
+    if(item.qty >= p.stock){ toast('Estoque insuficiente: restam só '+p.stock+'.'); return; }
+    item.qty++;
+  } else cart.push({id:p.id, qty:1});
+  renderCart();
+});
+$('#cart').addEventListener('input', e => {
+  const q = e.target.closest('[data-qty]'); if(!q) return;
+  const p = prod(q.dataset.qty), item = cart.find(i => i.id === p.id);
+  let v = Math.floor(num(q.value));
+  if(v > p.stock){ v = p.stock; toast('Estoque insuficiente: restam só '+p.stock+'.'); q.value = v; }
+  if(v < 1) return;
+  item.qty = v;
+  q.closest('.cart-row').querySelector('b').textContent = brl(p.price*v);
+  updateTotals();
+});
+$('#cart').addEventListener('click', e => {
+  const b = e.target.closest('[data-rm]'); if(!b) return;
+  cart = cart.filter(i => i.id !== b.dataset.rm); renderCart();
+});
+$('#desc').addEventListener('input', updateTotals);
+$('#btnLimpar').addEventListener('click', () => { cart = []; $('#desc').value = 0; $('#cliente').value = ''; renderCart(); });
+
+$('#btnFinalizar').addEventListener('click', () => {
+  if(!cart.length) return;
+  for(const i of cart){
+    const p = prod(i.id);
+    if(!p || i.qty > p.stock){ toast('Estoque insuficiente para '+(p?p.name:'um item')+'.'); return; }
+  }
+  const t = cartTotals();
+  const items = cart.map(i => { const p = prod(i.id); return {id:p.id, name:p.name, qty:i.qty, price:p.price, cost:p.cost}; });
+  const custo = items.reduce((a,i)=>a+i.cost*i.qty,0);
+  const sale = {
+    id: uid(), date: new Date().toISOString(), items,
+    customer: $('#cliente').value.trim(), payment: $('#pagto').value,
+    subtotal: t.sub, discount: t.desc, total: t.total,
+    profit: Math.round((t.total - custo)*100)/100, canceled: false
+  };
+  items.forEach(i => { prod(i.id).stock -= i.qty; });
+  db.sales.push(sale);
+  save();
+  cart = []; $('#desc').value = 0; $('#cliente').value = '';
+  render(); toast('Venda registrada e estoque atualizado.');
+  mostrarRecibo(sale);
+});
+
+/* ===== Histórico ===== */
+['#fDe','#fAte'].forEach(s => $(s).addEventListener('change', renderVendas));
+$('#tbVendas').addEventListener('click', e => {
+  const r = e.target.closest('[data-recibo]');
+  if(r) mostrarRecibo(db.sales.find(s => s.id === r.dataset.recibo));
+  const c = e.target.closest('[data-cancel]');
+  if(c){
+    const s = db.sales.find(x => x.id === c.dataset.cancel);
+    if(confirm('Cancelar esta venda? Os itens voltam para o estoque.')){
+      s.items.forEach(i => { const p = prod(i.id); if(p) p.stock += i.qty; });
+      s.canceled = true; save(); render(); toast('Venda cancelada e estoque devolvido.');
+    }
+  }
+});
+
+function mostrarRecibo(s){
+  const linhas = s.items.map(i => `<div class="r"><span>${i.qty}× ${esc(i.name)}</span><span>${brl(i.price*i.qty)}</span></div>`).join('');
+  $('#receiptBody').innerHTML = `
+    <h4>ATLAS</h4><p>Manutenção e Comercialização</p><hr>
+    <p style="text-align:left">${fdate(s.date)}${s.customer?'<br>Cliente: '+esc(s.customer):''}</p><hr>
+    ${linhas}<hr>
+    <div class="r"><span>Subtotal</span><span>${brl(s.subtotal)}</span></div>
+    <div class="r"><span>Desconto</span><span>− ${brl(s.discount)}</span></div>
+    <div class="r"><b>TOTAL</b><b>${brl(s.total)}</b></div>
+    <div class="r"><span>Pagamento</span><span>${esc(s.payment)}</span></div><hr>
+    <p>Obrigado pela preferência!</p>
+    <p>Documento sem valor fiscal</p>`;
+  $('#dlgReceipt').showModal();
+}
+$('#btnPrint').addEventListener('click', () => window.print());
+
+/* ===== Backup ===== */
+function baixar(nome, conteudo, tipo){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([conteudo],{type:tipo}));
+  a.download = nome; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+}
+$('#btnExport').addEventListener('click', () => {
+  baixar('atlas-backup-'+dayKey(new Date().toISOString())+'.json', JSON.stringify(db,null,2), 'application/json');
+  toast('Backup baixado.');
+});
+$('#btnImport').addEventListener('click', () => $('#fileImport').click());
+$('#fileImport').addEventListener('change', e => {
+  const f = e.target.files[0]; if(!f) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    try{
+      const d = JSON.parse(rd.result);
+      if(!Array.isArray(d.products) || !Array.isArray(d.sales)) throw new Error();
+      if(confirm('Restaurar este backup? Os dados atuais serão substituídos.')){
+        db = {products:d.products, sales:d.sales, iphones:d.iphones||[], settings:{margin:30, ...(d.settings||{})}};
+        save(); render(); toast('Backup restaurado.');
+      }
+    }catch(err){ toast('Arquivo inválido. Use um backup gerado pelo ATLAS.'); }
+    e.target.value = '';
+  };
+  rd.readAsText(f);
+});
+$('#btnCsv').addEventListener('click', () => {
+  const cab = ['Código','Produto','Categoria','Preço de compra','Preço de venda','Estoque','Estoque mínimo'];
+  const cel = v => '"' + String(v).replace(/"/g,'""') + '"';
+  const linhas = db.products.map(p => [p.sku,p.name,p.cat,p.cost.toFixed(2).replace('.',','),p.price.toFixed(2).replace('.',','),p.stock,p.min].map(cel).join(';'));
+  baixar('atlas-produtos.csv', '\uFEFF' + [cab.map(cel).join(';'), ...linhas].join('\r\n'), 'text/csv;charset=utf-8');
+});
+$('#btnReset').addEventListener('click', () => {
+  if(confirm('Apagar TODOS os produtos e vendas? Isso não pode ser desfeito.') && confirm('Tem certeza? Baixe um backup antes se tiver dúvida.')){
+    db = {products:[], sales:[], iphones:[], settings:{margin:30}}; cart = []; save(); render(); toast('Dados apagados.');
+  }
+});
+
+/* ===== Dialogs ===== */
+document.addEventListener('click', e => {
+  if(e.target.closest('[data-close]')) e.target.closest('dialog').close();
+});
+document.querySelectorAll('dialog').forEach(d => d.addEventListener('click', e => { if(e.target === d && d.id !== 'dlgCode') d.close(); }));
+
+/* ===== iPhones ===== */
+const ST = {correios:'Correios (a caminho)', estoque:'Em estoque', anunciado:'Anunciado', vendido:'Vendido'};
+const ST_SHORT = {correios:'Correios', estoque:'Estoque', anunciado:'Anunciado', vendido:'Vendido'};
+let ipFilter = 'todos';
+const ipCost = i => (i.cost||0) + (i.extra||0);
+const ipValor = i => i.status === 'vendido' ? (i.soldPrice||0) : (i.price||0);
+const ipProfit = i => ipValor(i) - ipCost(i);
+const hojeStr = () => dayKey(new Date().toISOString());
+const dstr = s => s ? s.split('-').reverse().join('/') : '—';
+const arred = v => Math.round(v*100)/100;
+
+function renderIphoneStats(){
+  const abertos = db.iphones.filter(i => i.status !== 'vendido');
+  const mes = hojeStr().slice(0,7);
+  const vendMes = db.iphones.filter(i => i.status === 'vendido' && (i.soldDate||'').startsWith(mes));
+  $('#ipInvest').textContent = brl(abertos.reduce((a,i)=>a+ipCost(i),0));
+  $('#ipLucroMes').textContent = brl(vendMes.reduce((a,i)=>a+ipProfit(i),0));
+  $('#ipVendidosMes').textContent = vendMes.length + (vendMes.length === 1 ? ' aparelho vendido no mês' : ' aparelhos vendidos no mês');
+  $('#ipPrevisto').textContent = brl(abertos.reduce((a,i)=>a+ipProfit(i),0));
+  $('#ipAberto').textContent = abertos.length;
+  const c = s => abertos.filter(i => i.status === s).length;
+  $('#ipAbertoDet').textContent = `Correios ${c('correios')} · Estoque ${c('estoque')} · Anunciado ${c('anunciado')}`;
+}
+
+function renderIphones(){
+  if(document.activeElement !== $('#ipMargem')) $('#ipMargem').value = db.settings.margin;
+  const counts = {todos: db.iphones.length};
+  Object.keys(ST).forEach(k => counts[k] = db.iphones.filter(i => i.status === k).length);
+  $('#ipChips').innerHTML = [['todos','Todos'], ...Object.entries(ST_SHORT)].map(([k,l]) =>
+    `<button class="chip" data-st="${k}" aria-pressed="${ipFilter===k}">${l}<b>${counts[k]}</b></button>`).join('');
+
+  const q = $('#qIp').value.trim().toLowerCase();
+  const list = db.iphones
+    .filter(i => (ipFilter === 'todos' || i.status === ipFilter) &&
+      (!q || [i.model,i.color,i.imei,i.storage,i.supplier].join(' ').toLowerCase().includes(q)))
+    .sort((a,b) => (b.buyDate||'').localeCompare(a.buyDate||''));
+
+  $('#tbIp').innerHTML = list.length ? list.map(i => {
+    const lucro = ipProfit(i);
+    const opts = Object.entries(ST).map(([k,l]) => `<option value="${k}" ${i.status===k?'selected':''}>${l}</option>`).join('');
+    return `<tr>
+      <td><b>${esc(i.model)}</b> ${esc(i.storage)}<br><small style="color:var(--muted)">${esc(i.color)}${i.condition?' · '+esc(i.condition):''}${i.battery!==''&&i.battery!=null?' · bateria '+esc(i.battery)+'%':''}${i.imei?'<br>IMEI '+esc(i.imei):''}</small></td>
+      <td><select class="st st-${i.status}" data-status="${i.id}" aria-label="Situação de ${esc(i.model)}">${opts}</select>${i.status==='vendido'?'<br><small style="color:var(--muted)">em '+dstr(i.soldDate)+'</small>':''}</td>
+      <td class="n">${brl(ipCost(i))}</td>
+      <td class="n">${brl(ipValor(i))}</td>
+      <td class="n ${lucro>=0?'pos':'neg'}">${brl(lucro)}${i.status==='vendido'?'':'<br><small style="color:var(--muted);font-weight:400">previsto</small>'}</td>
+      <td>${dstr(i.buyDate)}</td>
+      <td><div class="actions">
+        <button class="btn sm ghost" data-ipact="editar" data-id="${i.id}">Editar</button>
+        <button class="btn sm danger" data-ipact="excluir" data-id="${i.id}">Excluir</button>
+      </div></td></tr>`;
+  }).join('') : `<tr><td colspan="7" class="empty">${db.iphones.length ? 'Nenhum iPhone nesse filtro.' : 'Nenhum iPhone cadastrado. Clique em “Cadastrar iPhone” para começar.'}</td></tr>`;
+
+  const inv = list.reduce((a,i)=>a+ipCost(i),0), luc = list.reduce((a,i)=>a+ipProfit(i),0);
+  $('#ipResumo').textContent = list.length ? `${list.length} aparelho(s) · Investido ${brl(inv)} · Lucro (realizado ou previsto) ${brl(luc)}` : '';
+}
+
+let priceManual = false;
+const sugerido = () => arred((num($('#iCost').value) + num($('#iExtra').value)) * (1 + num($('#iMargin').value)/100));
+function ipHint(){
+  const base = num($('#iCost').value) + num($('#iExtra').value), preco = num($('#iPrice').value);
+  $('#iHint').textContent = base > 0
+    ? `Investimento total ${brl(base)} · preço sugerido ${brl(sugerido())} · lucro com o preço informado ${brl(preco-base)} (${((preco-base)/base*100).toFixed(0)}%).` : '';
+}
+function autoPreco(){ if(!priceManual) $('#iPrice').value = sugerido() || ''; ipHint(); }
+['#iCost','#iExtra','#iMargin'].forEach(s => $(s).addEventListener('input', () => {
+  if(s === '#iMargin') priceManual = false;
+  autoPreco();
+}));
+$('#iPrice').addEventListener('input', () => { priceManual = true; ipHint(); });
+function toggleSold(){
+  const v = $('#iStatus').value === 'vendido';
+  $('#iSoldBox').hidden = !v;
+  if(v){
+    if(!$('#iSoldPrice').value) $('#iSoldPrice').value = $('#iPrice').value;
+    if(!$('#iSoldDate').value) $('#iSoldDate').value = hojeStr();
+  }
+}
+$('#iStatus').addEventListener('change', toggleSold);
+
+function abrirIphone(i){
+  $('#dlgIpTitle').textContent = i ? 'Editar iPhone' : 'Cadastrar iPhone';
+  $('#iId').value = i?.id || '';
+  $('#iModel').value = i?.model || '';
+  $('#iStorage').value = i?.storage || '256 GB';
+  $('#iColor').value = i?.color || '';
+  $('#iCond').value = i?.condition || 'Seminovo';
+  $('#iImei').value = i?.imei || '';
+  $('#iBat').value = i?.battery ?? '';
+  $('#iSupplier').value = i?.supplier || '';
+  $('#iBuyDate').value = i?.buyDate || hojeStr();
+  $('#iCost').value = i ? i.cost : '';
+  $('#iExtra').value = i ? i.extra : 0;
+  $('#iMargin').value = i ? i.margin : db.settings.margin;
+  $('#iPrice').value = i ? i.price : '';
+  $('#iStatus').value = i?.status || 'estoque';
+  $('#iSoldPrice').value = i?.soldPrice || '';
+  $('#iSoldDate').value = i?.soldDate || '';
+  $('#iNotes').value = i?.notes || '';
+  priceManual = !!i;
+  toggleSold(); ipHint();
+  $('#dlgIp').showModal();
+  $('#iModel').focus();
+}
+
+$('#formIp').addEventListener('submit', e => {
+  const id = $('#iId').value;
+  const data = {
+    model: $('#iModel').value.trim(), storage: $('#iStorage').value, color: $('#iColor').value.trim(),
+    condition: $('#iCond').value, imei: $('#iImei').value.trim(),
+    battery: $('#iBat').value === '' ? '' : num($('#iBat').value),
+    supplier: $('#iSupplier').value.trim(), buyDate: $('#iBuyDate').value || hojeStr(),
+    cost: num($('#iCost').value), extra: num($('#iExtra').value), margin: num($('#iMargin').value),
+    price: num($('#iPrice').value), status: $('#iStatus').value, soldPrice: 0, soldDate: '',
+    notes: $('#iNotes').value.trim()
+  };
+  if(!data.model){ e.preventDefault(); return; }
+  if(data.imei && db.iphones.some(x => x.id !== id && x.imei && x.imei.toLowerCase() === data.imei.toLowerCase())){
+    e.preventDefault(); toast('Já existe um iPhone com esse IMEI.'); return;
+  }
+  if(data.status === 'vendido'){
+    data.soldPrice = num($('#iSoldPrice').value);
+    data.soldDate = $('#iSoldDate').value || hojeStr();
+    if(data.soldPrice <= 0){ e.preventDefault(); toast('Informe o valor da venda.'); return; }
+  }
+  if(id) Object.assign(db.iphones.find(x => x.id === id), data);
+  else db.iphones.push({id: uid(), ...data});
+  save(); render(); toast('iPhone salvo.');
+});
+
+$('#btnNovoIp').addEventListener('click', () => abrirIphone(null));
+$('#qIp').addEventListener('input', renderIphones);
+$('#ipChips').addEventListener('click', e => {
+  const b = e.target.closest('[data-st]'); if(!b) return;
+  ipFilter = b.dataset.st; renderIphones();
+});
+$('#ipMargem').addEventListener('change', () => {
+  const v = Math.max(0, num($('#ipMargem').value));
+  db.settings.margin = v; save();
+  toast('Lucro padrão de ' + v + '% para os próximos cadastros.');
+});
+
+$('#tbIp').addEventListener('click', e => {
+  const b = e.target.closest('[data-ipact]'); if(!b) return;
+  const it = db.iphones.find(x => x.id === b.dataset.id);
+  if(b.dataset.ipact === 'editar') abrirIphone(it);
+  if(b.dataset.ipact === 'excluir' && confirm(`Excluir ${it.model} ${it.storage}?`)){
+    db.iphones = db.iphones.filter(x => x.id !== it.id); save(); render(); toast('iPhone excluído.');
+  }
+});
+$('#tbIp').addEventListener('change', e => {
+  const s = e.target.closest('[data-status]'); if(!s) return;
+  const it = db.iphones.find(x => x.id === s.dataset.status);
+  if(s.value === 'vendido'){ s.value = it.status; abrirVendaIp(it); return; }
+  it.status = s.value; it.soldPrice = 0; it.soldDate = '';
+  save(); render(); toast('Situação atualizada: ' + ST[it.status] + '.');
+});
+
+function abrirVendaIp(i){
+  $('#sId').value = i.id;
+  $('#sNome').textContent = `${i.model} ${i.storage} · investido ${brl(ipCost(i))}`;
+  $('#sPreco').value = i.price || '';
+  $('#sData').value = hojeStr();
+  sHint();
+  $('#dlgIpVenda').showModal();
+  $('#sPreco').focus();
+}
+function sHint(){
+  const i = db.iphones.find(x => x.id === $('#sId').value); if(!i) return;
+  const v = num($('#sPreco').value);
+  $('#sLucroHint').textContent = v > 0 ? 'Lucro desta venda: ' + brl(v - ipCost(i)) : '';
+}
+$('#sPreco').addEventListener('input', sHint);
+$('#formIpVenda').addEventListener('submit', e => {
+  const i = db.iphones.find(x => x.id === $('#sId').value);
+  const v = num($('#sPreco').value);
+  if(!i || v <= 0 || !$('#sData').value){ e.preventDefault(); return; }
+  i.status = 'vendido'; i.soldPrice = v; i.soldDate = $('#sData').value;
+  save(); render(); toast('iPhone vendido. Lucro de ' + brl(v - ipCost(i)) + '.');
+});
+
+/* ===== Login ===== */
+const AUTH_KEY = 'atlas_auth', LOCK_KEY = 'atlas_lock', SESS_KEY = 'atlas_sess', IDLE_MS = 30*60*1000;
+const getAuth = () => { try{ return JSON.parse(localStorage.getItem(AUTH_KEY)); }catch(e){ return null; } };
+const setAuth = a => { try{ localStorage.setItem(AUTH_KEY, JSON.stringify(a)); }catch(e){ toast('Não foi possível salvar o acesso.'); } };
+const toHex = buf => [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,'0')).join('');
+const rand = n => { const a = new Uint8Array(n); crypto.getRandomValues(a); return toHex(a); };
+const normCode = c => c.toUpperCase().replace(/[^A-Z0-9]/g,'');
+
+async function hashPw(text, salt){
+  try{
+    if(window.crypto && crypto.subtle){
+      const enc = new TextEncoder();
+      const key = await crypto.subtle.importKey('raw', enc.encode(text), 'PBKDF2', false, ['deriveBits']);
+      const bits = await crypto.subtle.deriveBits({name:'PBKDF2', salt:enc.encode(salt), iterations:150000, hash:'SHA-256'}, key, 256);
+      return 'p:' + toHex(bits);
+    }
+  }catch(e){}
+  // Alternativa mais simples, usada só se o navegador não tiver suporte a criptografia
+  let h1 = 5381, h2 = 52711; const s = salt + '|' + text;
+  for(let r = 0; r < 2000; r++) for(let i = 0; i < s.length; i++){
+    const c = s.charCodeAt(i); h1 = ((h1 << 5) + h1) ^ c; h2 = ((h2 << 5) + h2) ^ (c + r);
+  }
+  return 'f:' + (h1>>>0).toString(16) + (h2>>>0).toString(16);
+}
+function genCode(){
+  const al = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const a = new Uint8Array(16); crypto.getRandomValues(a);
+  return [...a].map(b => al[b % 32]).join('').match(/.{4}/g).join('-');
+}
+async function novoAcesso(user, pw){
+  const salt = rand(16), rsalt = rand(16), code = genCode();
+  setAuth({user, salt, hash: await hashPw(pw, salt), rsalt, rhash: await hashPw(normCode(code), rsalt)});
+  return code;
+}
+
+/* Bloqueio após várias tentativas erradas */
+const getLock = () => { try{ return JSON.parse(localStorage.getItem(LOCK_KEY)) || {n:0, until:0}; }catch(e){ return {n:0, until:0}; } };
+const setLock = l => { try{ localStorage.setItem(LOCK_KEY, JSON.stringify(l)); }catch(e){} };
+const lockedFor = () => Math.max(0, Math.ceil((getLock().until - Date.now())/1000));
+function falhou(){
+  const l = getLock(); l.n++;
+  if(l.n >= 5) l.until = Date.now() + Math.min(30 * 2 ** (l.n - 5), 900) * 1000;
+  setLock(l);
+}
+function msg(t, ok){ const m = $('#authMsg'); m.textContent = t || ''; m.style.color = ok ? 'var(--ok)' : 'var(--bad)'; }
+
+function showAuth(mode){
+  document.body.classList.add('locked');
+  ['Setup','Login','Recover'].forEach(m => $('#f'+m).hidden = (m.toLowerCase() !== mode));
+  msg('');
+  if(mode === 'login'){ $('#lUser').value = getAuth()?.user || ''; }
+  setTimeout(() => $({setup:'#sUser', login:($('#lUser').value ? '#lPass' : '#lUser'), recover:'#rCode'}[mode]).focus(), 50);
+}
+
+let codeCb = null;
+function mostrarCodigo(code, cb){
+  $('#codeText').textContent = code; codeCb = cb;
+  $('#dlgCode').showModal();
+}
+$('#dlgCode').addEventListener('cancel', e => e.preventDefault());
+$('#btnCodeOk').addEventListener('click', () => {
+  $('#dlgCode').close(); $('#codeText').textContent = '';
+  const cb = codeCb; codeCb = null; if(cb) cb();
+});
+$('#btnCopyCode').addEventListener('click', async () => {
+  try{ await navigator.clipboard.writeText($('#codeText').textContent); toast('Código copiado.'); }
+  catch(e){ toast('Não foi possível copiar. Anote o código manualmente.'); }
+});
+
+$('#goRecover').addEventListener('click', () => showAuth('recover'));
+$('#goLogin').addEventListener('click', () => showAuth('login'));
+
+$('#fSetup').addEventListener('submit', async e => {
+  e.preventDefault();
+  if(getAuth()) return showAuth('login');
+  const u = $('#sUser').value.trim(), p = $('#sPass').value;
+  if(!u) return msg('Informe um usuário.');
+  if(p.length < 6) return msg('A senha precisa ter pelo menos 6 caracteres.');
+  if(p !== $('#sPass2').value) return msg('As senhas não são iguais.');
+  const code = await novoAcesso(u, p);
+  $('#fSetup').reset();
+  mostrarCodigo(code, abrirApp);
+});
+
+$('#fLogin').addEventListener('submit', async e => {
+  e.preventDefault();
+  const w = lockedFor(); if(w > 0) return msg(`Muitas tentativas. Aguarde ${w} segundos.`);
+  const a = getAuth(); if(!a) return showAuth('setup');
+  const okUser = $('#lUser').value.trim().toLowerCase() === a.user.toLowerCase();
+  const h = await hashPw($('#lPass').value, a.salt);
+  if(okUser && h === a.hash){ setLock({n:0, until:0}); $('#lPass').value = ''; abrirApp(); }
+  else{
+    falhou(); $('#lPass').value = '';
+    const w2 = lockedFor();
+    msg(w2 > 0 ? `Muitas tentativas. Aguarde ${w2} segundos.` : 'Usuário ou senha incorretos.');
+  }
+});
+
+$('#fRecover').addEventListener('submit', async e => {
+  e.preventDefault();
+  const w = lockedFor(); if(w > 0) return msg(`Muitas tentativas. Aguarde ${w} segundos.`);
+  const a = getAuth(); if(!a) return showAuth('setup');
+  const np = $('#rPass').value;
+  if(np.length < 6) return msg('A nova senha precisa ter pelo menos 6 caracteres.');
+  if(np !== $('#rPass2').value) return msg('As senhas não são iguais.');
+  const h = await hashPw(normCode($('#rCode').value), a.rsalt);
+  if(h !== a.rhash){ falhou(); return msg('Código de recuperação incorreto.'); }
+  const code = genCode(), salt = rand(16), rsalt = rand(16);
+  setAuth({user: a.user, salt, hash: await hashPw(np, salt), rsalt, rhash: await hashPw(normCode(code), rsalt)});
+  setLock({n:0, until:0}); $('#fRecover').reset();
+  mostrarCodigo(code, () => { showAuth('login'); msg('Senha redefinida. Entre com a nova senha.', true); });
+});
+
+$('#fSenha').addEventListener('submit', async e => {
+  e.preventDefault();
+  const a = getAuth(); if(!a) return;
+  if(await hashPw($('#cPass').value, a.salt) !== a.hash) return toast('Senha atual incorreta.');
+  const n = $('#cNova').value;
+  if(n.length < 6) return toast('A nova senha precisa ter pelo menos 6 caracteres.');
+  if(n !== $('#cNova2').value) return toast('As senhas novas não são iguais.');
+  a.salt = rand(16); a.hash = await hashPw(n, a.salt); setAuth(a);
+  $('#fSenha').reset(); toast('Senha alterada.');
+});
+
+/* Sessão e saída automática */
+let idleTimer;
+function resetIdle(){ clearTimeout(idleTimer); idleTimer = setTimeout(() => sair(true), IDLE_MS); }
+['click','keydown','mousemove','touchstart'].forEach(ev =>
+  document.addEventListener(ev, () => { if(!document.body.classList.contains('locked')) resetIdle(); }, {passive:true}));
+
+const VIEWS = ['painel','produtos','venda','vendas','iphones','backup'];
+function abrirApp(){
+  try{ sessionStorage.setItem(SESS_KEY, '1'); }catch(e){}
+  document.body.classList.remove('locked');
+  resetIdle();
+  const ini = location.hash.replace('#','');
+  go(VIEWS.includes(ini) ? ini : 'painel');
+}
+function sair(auto){
+  clearTimeout(idleTimer);
+  try{ sessionStorage.removeItem(SESS_KEY); }catch(e){}
+  document.querySelectorAll('dialog[open]').forEach(d => d.close());
+  cart = [];
+  showAuth('login');
+  if(auto) msg('Você saiu por inatividade. Entre novamente.', true);
+}
+$('#btnSair').addEventListener('click', () => sair(false));
+
+/* ===== Início ===== */
+(function boot(){
+  let logado = false;
+  try{ logado = sessionStorage.getItem(SESS_KEY) === '1'; }catch(e){}
+  if(!getAuth()) showAuth('setup');
+  else if(logado) abrirApp();
+  else showAuth('login');
+})();
+</script>
+</body>
+</html>
