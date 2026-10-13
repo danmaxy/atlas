@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Orçamentos - ATLAS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        atlas: {
+                            50: '#f0f4f8',
+                            100: '#d9e2ec',
+                            600: '#102a43',
+                            700: '#0b2239',
+                            800: '#081b2d',
+                            900: '#040d16',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @media print {
+            body {
+                background-color: white !important;
+                color: black !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-shadow {
+                box-shadow: none !important;
+                border: none !important;
+            }
+            input, select, textarea {
+                border: none !important;
+                background: transparent !important;
+                padding: 0 !important;
+                resize: none !important;
+            }
+            .print-full-width {
+                width: 100% !important;
+            }
+        }
+
+        /* Custom scrollbar for table container */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans h-full antialiased flex flex-col justify-between">
+
+    <div id="toast" class="fixed top-5 right-5 z-50 transform translate-x-full transition-transform duration-300 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center space-x-3 text-sm font-medium">
+        <i id="toast-icon" class="text-emerald-400 text-lg"></i>
+        <span id="toast-message"></span>
+    </div>
+
+    <header class="bg-atlas-800 text-white shadow-md no-print">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white text-atlas-800 p-2.5 rounded-xl font-bold tracking-wider text-xl shadow">
+                    ATLAS
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">Gerador de Orçamentos</h1>
+                    <p class="text-xs text-slate-300">Assistência Técnica e Serviços</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap justify-center">
+                <button onclick="window.print()" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition flex items-center space-x-2 shadow-sm">
+                    <i class="fa-solid fa-print"></i>
+                    <span>Imprimir / PDF</span>
+                </button>
+                <button onclick="copiarOrcamentoTexto()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition flex items-center space-x-2 shadow-sm">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span>Copiar para WhatsApp</span>
+                </button>
+                <button onclick="resetarFormulario()" class="bg-rose-900/50 hover:bg-rose-900 text-rose-200 px-3 py-2 rounded-xl text-sm transition" title="Limpar formulário">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl w-full mx-auto p-4 sm:p-6 my-auto flex-grow">
+        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 print-shadow overflow-hidden p-6 sm:p-10">
+            
+            <div class="border-b border-slate-200 pb-6 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <div class="text-3xl font-extrabold text-atlas-800 tracking-tight">ATLAS</div>
+                    <div class="text-xs text-slate-500 font-medium tracking-wide mt-0.5">CNPJ: 60.883.284/0001-33</div>
+                </div>
+                <div class="text-left sm:text-right text-xs text-slate-600 space-y-1 bg-slate-50 sm:bg-transparent p-3 sm:p-0 rounded-xl w-full sm:w-auto">
+                    <div><i class="fa-solid fa-phone text-atlas-600 mr-1.5"></i> (86) 98881-5862</div>
+                    <div><i class="fa-solid fa-envelope text-atlas-600 mr-1.5"></i> atlasfixthe@gmail.com</div>
+                    <div><i class="fa-solid fa-globe text-atlas-600 mr-1.5"></i> atlasthe.com</div>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 pb-4 border-b border-slate-100 gap-4">
+                <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-file-invoice-dollar text-atlas-600"></i>
+                    <span>ORÇAMENTO DE SERVIÇOS</span>
+                </h2>
+                <div class="flex items-center gap-3 w-full sm:w-auto">
+                    <div class="flex flex-col">
+                        <label class="text-[10px] uppercase font-bold text-slate-400">Nº do Orçamento</label>
+                        <input type="text" id="orcamento-id" value="001/2026" class="border border-slate-200 rounded-lg px-2.5 py-1 text-sm font-semibold text-slate-700 w-28 focus:outline-none focus:border-atlas-600 bg-slate-50">
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 p-4 sm:p-5 rounded-xl border border-slate-200/80 mb-6">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 flex items-center gap-1.5">
+                    <i class="fa-solid fa-user text-atlas-600"></i> Dados do Cliente
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-medium text-slate-600 mb-1">Nome do Cliente *</label>
+                        <input type="text" id="cliente-nome" placeholder="Ex: João da Silva" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-atlas-600/20 focus:border-atlas-600 transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1">Telefone / WhatsApp</label>
+                        <input type="text" id="cliente-telefone" placeholder="(86) 99999-9999" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-atlas-600/20 focus:border-atlas-600 transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1">E-mail</label>
+                        <input type="email" id="cliente-email" placeholder="cliente@email.com" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-atlas-600/20 focus:border-atlas-600 transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1">Data de Emissão</label>
+                        <input type="date" id="data-emissao" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-atlas-600/20 focus:border-atlas-600 transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1">Validade (Dias)</label>
+                        <input type="number" id="validade-dias" value="10" min="1" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-atlas-600/20 focus:border-atlas-600 transition">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                        <i class="fa-solid fa-list-check text-atlas-600"></i> Itens ou Serviços
+                    </h3>
+                    <button onclick="adicionarItem()" class="no-print bg-atlas-600 hover:bg-atlas-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-plus"></i> Adicionar Item
+                    </button>
+                </div>
+                
+                <div class="overflow-x-auto rounded-xl border border-slate-200">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 font-semibold text-xs border-b border-slate-200">
+                                <th class="p-3 w-12 text-center">#</th>
+                                <th class="p-3">Descrição do Item / Serviço</th>
+                                <th class="p-3 w-24 text-center">Qtd</th>
+                                <th class="p-3 w-32 text-right">Valor Unit. (R$)</th>
+                                <th class="p-3 w-32 text-right">Subtotal (R$)</th>
+                                <th class="p-3 w-12 text-center no-print"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabela-itens" class="divide-y divide-slate-100 bg-white">
+                            <!-- Dynamic rows appended here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Observações / Garantia</label>
+                    <textarea id="observacoes" rows="4" placeholder="Ex: Garantia de 90 dias para os serviços executados. Forma de pagamento: 50% de entrada e restante na entrega." class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-atlas-600/20 focus:border-atlas-600 transition resize-none"></textarea>
+                </div>
+
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-3">
+                    <div class="flex justify-between items-center text-sm text-slate-600">
+                        <span>Subtotal dos Itens:</span>
+                        <span id="subtotal-geral" class="font-semibold text-slate-800">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm text-slate-600 border-b border-slate-200 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span>Desconto:</span>
+                            <div class="relative w-20">
+                                <input type="number" id="desconto-valor" value="0" min="0" step="0.01" oninput="calcularTotais()" class="w-full bg-white border border-slate-300 rounded-lg px-2 py-1 text-right text-xs focus:outline-none focus:border-atlas-600">
+                            </div>
+                            <span class="text-xs">R$</span>
+                        </div>
+                        <span id="desconto-exibicao" class="text-rose-600 font-medium">- R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center text-lg font-bold text-atlas-800 pt-1">
+                        <span>Valor Total:</span>
+                        <span id="valor-total" class="text-xl">R$ 0,00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 pt-8 border-t border-slate-200 hidden print:flex justify-between text-xs text-slate-500">
+                <div class="text-center w-64 border-t border-slate-400 pt-2">
+                    Assinatura do Técnico / Responsável
+                </div>
+                <div class="text-center w-64 border-t border-slate-400 pt-2">
+                    De acordo do Cliente
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="text-center py-4 text-xs text-slate-400 no-print">
+        ATLAS Assistência Técnica &bull; CNPJ 60.883.284/0001-33 &bull; atlasthe.com
+    </footer>
+
+    <script>
+        // Initialize current date on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('data-emissao').value = hoje;
+            
+            // Add initial sample item
+            adicionarItemComValores("Serviço de Diagnóstico / Manutenção Técnica", 1, 150.00);
+        });
+
+        // Toast notification helper
+        function mostrarToast(mensagem, icone = 'fa-circle-check') {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-message');
+            const iconEl = document.getElementById('toast-icon');
+
+            msgEl.textContent = mensagem;
+            iconEl.className = `fa-solid ${icone} text-emerald-400 text-lg`;
+
+            toast.classList.remove('translate-x-full');
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+            }, 3500);
+        }
+
+        // Add blank item row
+        function adicionarItem() {
+            adicionarItemComValores('', 1, 0.00);
+        }
+
+        // Add item with predefined values
+        function adicionarItemComValores(descricao, qtd, valorUnit) {
+            const tbody = document.getElementById('tabela-itens');
+            const rowCount = tbody.rows.length + 1;
+
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-slate-50/80 transition group';
+            tr.innerHTML = `
+                <td class="p-3 text-center text-xs text-slate-400 item-index font-medium">${rowCount}</td>
+                <td class="p-3">
+                    <input type="text" value="${descricao}" placeholder="Descreva o item ou serviço..." class="w-full bg-transparent border border-transparent hover:border-slate-300 focus:border-atlas-600 rounded px-2 py-1 text-sm focus:outline-none focus:bg-white transition item-desc">
+                </td>
+                <td class="p-3">
+                    <input type="number" value="${qtd}" min="1" oninput="calcularTotais()" class="w-full bg-transparent border border-transparent hover:border-slate-300 focus:border-atlas-600 rounded px-2 py-1 text-sm text-center focus:outline-none focus:bg-white transition item-qtd">
+                </td>
+                <td class="p-3">
+                    <input type="number" value="${valorUnit.toFixed(2)}" min="0" step="0.01" oninput="calcularTotais()" class="w-full bg-transparent border border-transparent hover:border-slate-300 focus:border-atlas-600 rounded px-2 py-1 text-sm text-right focus:outline-none focus:bg-white transition item-valor">
+                </td>
+                <td class="p-3 text-right font-semibold text-slate-700 item-subtotal">
+                    R$ 0,00
+                </td>
+                <td class="p-3 text-center no-print">
+                    <button onclick="removerItem(this)" class="text-slate-400 hover:text-rose-600 transition p-1" title="Remover item">
+                        <i class="fa-solid fa-trash-can text-xs"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+            atualizarIndices();
+            calcularTotais();
+        }
+
+        // Remove item row
+        function removerItem(btn) {
+            const tbody = document.getElementById('tabela-itens');
+            if (tbody.rows.length <= 1) {
+                mostrarToast('O orçamento deve conter pelo menos um item.', 'fa-triangle-exclamation');
+                return;
+            }
+            btn.closest('tr').remove();
+            atualizarIndices();
+            calcularTotais();
+        }
+
+        // Update row numbers
+        function atualizarIndices() {
+            const rows = document.querySelectorAll('#tabela-itens tr');
+            rows.forEach((row, index) => {
+                row.querySelector('.item-index').textContent = index + 1;
+            });
+        }
+
+        // Calculate totals dynamically
+        function calcularTotais() {
+            const rows = document.querySelectorAll('#tabela-itens tr');
+            let subtotalGeral = 0;
+
+            rows.forEach(row => {
+                const qtd = parseFloat(row.querySelector('.item-qtd').value) || 0;
+                const valor = parseFloat(row.querySelector('.item-valor').value) || 0;
+                const subtotal = qtd * valor;
+
+                subtotalGeral += subtotal;
+                row.querySelector('.item-subtotal').textContent = `R$ ${subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            });
+
+            const desconto = parseFloat(document.getElementById('desconto-valor').value) || 0;
+            const valorTotalFinal = Math.max(0, subtotalGeral - desconto);
+
+            document.getElementById('subtotal-geral').textContent = `R$ ${subtotalGeral.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            document.getElementById('desconto-exibicao').textContent = `- R$ ${desconto.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            document.getElementById('valor-total').textContent = `R$ ${valorTotalFinal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+
+        // Reset form data
+        function resetarFormulario() {
+            if (confirm('Deseja realmente limpar todos os campos do orçamento?')) {
+                document.getElementById('cliente-nome').value = '';
+                document.getElementById('cliente-telefone').value = '';
+                document.getElementById('cliente-email').value = '';
+                document.getElementById('desconto-valor').value = '0';
+                document.getElementById('observacoes').value = '';
+                
+                const tbody = document.getElementById('tabela-itens');
+                tbody.innerHTML = '';
+                adicionarItemComValores('', 1, 0);
+                mostrarToast('Formulário limpo com sucesso!');
+            }
+        }
+
+        // Copy quote text formatted for WhatsApp
+        function copiarOrcamentoTexto() {
+            const nomeCliente = document.getElementById('cliente-nome').value.trim() || 'Cliente';
+            const orcamentoId = document.getElementById('orcamento-id').value;
+            const dataEmissao = document.getElementById('data-emissao').value;
+            const validadeDias = document.getElementById('validade-dias').value;
+            const obs = document.getElementById('observacoes').value.trim();
+            const valorTotal = document.getElementById('valor-total').textContent;
+
+            let texto = `*ORÇAMENTO - ATLAS*\n`;
+            texto += `📋 *Nº:* ${orcamentoId}\n`;
+            texto += `👤 *Cliente:* ${nomeCliente}\n`;
+            texto += `📅 *Data:* ${dataEmissao.split('-').reverse().join('/')} (Validade: ${validadeDias} dias)\n\n`;
+            texto += `*Itens/Serviços:* \n`;
+
+            const rows = document.querySelectorAll('#tabela-itens tr');
+            rows.forEach((row, idx) => {
+                const desc = row.querySelector('.item-desc').value.trim() || 'Item sem descrição';
+                const qtd = row.querySelector('.item-qtd').value;
+                const sub = row.querySelector('.item-subtotal').textContent;
+                texto += `${idx + 1}. ${desc} (${qtd}x) - ${sub}\n`;
+            });
+
+            texto += `\n💰 *VALOR TOTAL: ${valorTotal}*\n`;
+
+            if (obs) {
+                texto += `\n📝 *Observações:* ${obs}\n`;
+            }
+
+            texto += `\n*ATLAS* | CNPJ: 60.883.284/0001-33\n📞 Tel: (86) 98881-5862\n🌐 atlasthe.com`;
+
+            // Copy using textarea fallback
+            const textarea = document.createElement('textarea');
+            textarea.value = texto;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                mostrarToast('Orçamento copiado para a área de transferência!');
+            } catch (err) {
+                mostrarToast('Erro ao copiar orçamento.', 'fa-triangle-exclamation');
+            }
+            document.body.removeChild(textarea);
+        }
+    </script>
+</body>
+</html>
