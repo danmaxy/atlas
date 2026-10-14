@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Softwares — ATLAS IMPERIUM</title>
+<meta name="description" content="Central de softwares da Atlas: links de download sempre atualizados." />
+<meta name="theme-color" content="#05060a" />
+<link rel="icon" href="../assets/img/logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Chakra+Petch:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/css/style.css" />
+<link rel="stylesheet" href="../assets/css/pages.css" />
+</head>
+<body>
+
+<canvas id="embers" class="fx-embers" aria-hidden="true"></canvas>
+<div class="fx-grid" aria-hidden="true"></div>
+<div class="fx-scales" aria-hidden="true"></div>
+<div class="fx-noise" aria-hidden="true"></div>
+<div class="fx-cursor" id="cursor" aria-hidden="true"></div>
+<div class="scroll-progress"><span id="scrollBar"></span></div>
+
+<header class="header" id="header">
+  <a class="brand" href="../index.html" aria-label="Atlas Imperium — painel">
+    <span class="brand__mark"><img src="../assets/img/logo.png" alt="" onerror="this.style.display='none'" /></span>
+    <span class="brand__txt"><strong>ATLAS</strong><small>IMPERIUM</small></span>
+  </a>
+  <nav class="nav" id="nav">
+    <a href="../index.html" class="nav__link">Painel</a>
+    <a href="orcamento.html" class="nav__link">Orçamento</a>
+    <a href="optiplex.html" class="nav__link">Optiplex</a>
+  </nav>
+  <a class="btn btn--sm btn--primary header__cta magnetic" href="https://wa.me/5586988815862" target="_blank" rel="noopener">
+    <span>Falar agora</span>
+  </a>
+  <button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
+</header>
+
+<main class="page">
+  <div class="shell">
+
+    <div class="page-top">
+      <a href="../index.html" class="back-link">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+        Voltar ao painel
+      </a>
+      <div class="page-head-row">
+        <div>
+          <p class="eyebrow reveal"><span class="eyebrow__dot"></span> Biblioteca Atlas</p>
+          <h1 class="page-title reveal" data-delay="60">Central de <em>Softwares</em></h1>
+          <p class="page-desc reveal" data-delay="120">Links de download organizados e sempre atualizados.</p>
+        </div>
+        <p class="tag tag--on reveal" data-delay="160"><span id="contador">0</span> programas</p>
+      </div>
+    </div>
+
+    <div class="panel reveal" data-delay="200">
+      <div class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="text" class="input" id="busca" placeholder="Buscar software ou categoria..." autocomplete="off" />
+      </div>
+
+      <div class="chips" id="chips"></div>
+
+      <div class="sw-grid" id="lista"></div>
+      <div class="empty" id="vazio" hidden>Nenhum programa encontrado.</div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="shell footer__inner">
+    <div class="footer__brand">
+      <span class="brand__mark brand__mark--sm"><img src="../assets/img/logo.png" alt="" onerror="this.style.display='none'" /></span>
+      <div><strong>ATLAS IMPERIUM</strong><p>Notebooks · Celulares · PCs</p></div>
+    </div>
+    <nav class="footer__nav">
+      <a href="../index.html">Painel</a>
+      <a href="https://wa.me/5586988815862" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="https://instagram.com/atlas.fix" target="_blank" rel="noopener">Instagram</a>
+    </nav>
+    <p class="footer__copy">© <span id="year">2026</span> Atlas Imperium · atlasthe.com</p>
+  </div>
+  <div class="footer__scales" aria-hidden="true"></div>
+</footer>
+
+<script src="../assets/js/main.js"></script>
+<script>
+/* ============================================================
+   >>> PARA ADICIONAR UM SOFTWARE, É SÓ COPIAR UMA LINHA ABAIXO <<<
+   icone: layers | pen | video | file | image | vector | palette | box | cpu | zap
+   ============================================================ */
+const SOFTWARES = [
+  { nome:'Autodesk Revit',     categoria:'BIM / Arquitetura',      icone:'layers',  url:'https://drive.google.com/file/d/1icEoRh-NbNy1pBALH7GVXHTxMUDXXidp/view?usp=sharing' },
+  { nome:'Autodesk AutoCAD',   categoria:'CAD / Engenharia',       icone:'pen',     url:'https://drive.google.com/file/d/1TNuyRAEdVakMkcQKEqWwpgt7NRuU4EBP/view?usp=sharing' },
+  { nome:'Adobe Premiere Pro', categoria:'Edição de Vídeo',        icone:'video',   url:'https://drive.google.com/file/d/1NwXNdqYqfFFuBSvsl_gR2cACiYVU2Vwe/view?usp=sharing' },
+  { nome:'Adobe Acrobat Pro',  categoria:'Documentos PDF',         icone:'file',    url:'https://drive.google.com/file/d/1SzTL6ChyVILzYEaYtttqBll0QNs31oer/view?usp=sharing' },
+  { nome:'Adobe Photoshop',    categoria:'Edição de Imagem',       icone:'image',   url:'https://drive.google.com/file/d/1zwxH0yrGLjEj43xXubASVtvW6OTbxRQP/view?usp=sharing' },
+  { nome:'Adobe Illustrator',  categoria:'Vetor / Design',         icone:'vector',  url:'https://drive.google.com/file/d/177rST7zBH3FfMjO2alp1Fissld0SLDOM/view?usp=sharing' },
+  { nome:'CorelDRAW',          categoria:'Design Gráfico',         icone:'palette', url:'https://drive.google.com/file/d/1H8FutTz5kAfQBXwgOPSgRWgM-vThrXW6/view?usp=sharing' },
+  { nome:'SketchUp Pro',       categoria:'Modelagem 3D',           icone:'box',     url:'https://drive.google.com/file/d/1laUa3RE9_5vf9cRUsWdHte-sUVNgepAo/view?usp=sharing' },
+  { nome:'V-ray',              categoria:'Renderização',           icone:'cpu',     url:'https://drive.google.com/file/d/1U_O_Ji572zJo0lLMwMnWmgPwbaynv0e8/view?usp=sharing' },
+  { nome:'Enscape 4.6',        categoria:'Renderização Real-time', icone:'zap',     url:'https://drive.google.com/file/d/1IUcmH79VDcQhV8XdA8m4zUAiKQ6gzA40/view?usp=sharing' }
+];
+
+const ICONES = {
+  layers : '<path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 12 10 5 10-5"/><path d="m2 17 10 5 10-5"/>',
+  pen    : '<path d="m12 19 7-7 3 3-7 7-3-3Z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5Z"/><path d="M2 2l7.6 7.6"/><circle cx="11" cy="11" r="2"/>',
+  video  : '<path d="m23 7-7 5 7 5V7Z"/><rect x="1" y="5" width="15" height="14" rx="2"/>',
+  file   : '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M16 13H8M16 17H8M10 9H8"/>',
+  image  : '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>',
+  vector : '<rect x="2" y="2" width="4" height="4"/><rect x="18" y="2" width="4" height="4"/><rect x="2" y="18" width="4" height="4"/><rect x="18" y="18" width="4" height="4"/><path d="M6 4h12M4 6v12M20 6v12M6 20h12"/>',
+  palette: '<path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.95 0 1.7-.77 1.7-1.72 0-.45-.18-.85-.45-1.15-.3-.3-.45-.67-.45-1.15a1.7 1.7 0 0 1 1.72-1.72h2.03c3.1 0 5.6-2.5 5.6-5.6C22.15 6 17.6 2 12 2Z"/><circle cx="7.5" cy="11.5" r="1.1"/><circle cx="9.5" cy="7.2" r="1.1"/><circle cx="14.5" cy="6.8" r="1.1"/><circle cx="17.8" cy="10.2" r="1.1"/>',
+  box    : '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
+  cpu    : '<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/>',
+  zap    : '<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/>'
+};
+
+const ICO_DOWNLOAD = '<path d="M12 3v12"/><path d="m8 11 4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>';
+
+const $lista = document.getElementById('lista');
+const $vazio = document.getElementById('vazio');
+const $busca = document.getElementById('busca');
+const $chips = document.getElementById('chips');
+const $contador = document.getElementById('contador');
+
+let categoriaAtiva = 'Todos';
+
+/* escapa texto que vai para dentro do HTML */
+function esc(t) {
+  return String(t).replace(/[&<>"']/g, c => (
+    { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]
+  ));
+}
+
+/* ---------- chips de categoria ---------- */
+function montarChips() {
+  const cats = ['Todos', ...new Set(SOFTWARES.map(s => s.categoria))];
+  $chips.innerHTML = cats.map((c, i) =>
+    `<button class="chip${i === 0 ? ' is-on' : ''}" data-cat="${esc(c)}">${esc(c)}</button>`
+  ).join('');
+
+  $chips.querySelectorAll('.chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      $chips.querySelectorAll('.chip').forEach(b => b.classList.remove('is-on'));
+      btn.classList.add('is-on');
+      categoriaAtiva = btn.dataset.cat;
+      render();
+    });
+  });
+}
+
+/* ---------- lista ---------- */
+function render() {
+  const termo = $busca.value.toLowerCase().trim();
+
+  const itens = SOFTWARES.filter(s => {
+    const naCategoria = categoriaAtiva === 'Todos' || s.categoria === categoriaAtiva;
+    const noTermo = !termo ||
+      s.nome.toLowerCase().includes(termo) ||
+      s.categoria.toLowerCase().includes(termo);
+    return naCategoria && noTermo;
+  });
+
+  $lista.innerHTML = itens.map((s, i) => `
+    <article class="sw" style="animation-delay:${i * 40}ms">
+      <span class="sw__ico"><svg viewBox="0 0 24 24" aria-hidden="true">${ICONES[s.icone] || ICONES.box}</svg></span>
+      <div class="sw__txt">
+        <h3>${esc(s.nome)}</h3>
+        <p class="sw__cat">${esc(s.categoria)}</p>
+      </div>
+      <a class="sw__btn" href="${esc(s.url)}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true">${ICO_DOWNLOAD}</svg> Obter
+      </a>
+    </article>
+  `).join('');
+
+  $vazio.hidden = itens.length > 0;
+  $contador.textContent = itens.length;
+
+  // brilho que segue o mouse em cada card
+  $lista.querySelectorAll('.sw').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+      card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+    });
+  });
+}
+
+montarChips();
+render();
+$busca.addEventListener('input', render);
+</script>
+</body>
+</html>
