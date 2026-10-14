@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Optiplex — ATLAS IMPERIUM</title>
+<meta name="description" content="Monte seu Dell OptiPlex 7010: processador, memória, SSD e periféricos. Feche direto pelo WhatsApp." />
+<meta name="theme-color" content="#05060a" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="ATLAS — Configurador Dell OptiPlex 7010" />
+<meta property="og:description" content="Monte seu computador personalizado com processador, memória, SSD e periféricos de forma rápida e prática!" />
+<meta property="og:url" content="https://atlasthe.com/pages/optiplex.html" />
+<meta property="og:image" content="https://atlasthe.com/assets/img/optiplex.jpg" />
+
+<link rel="icon" href="../assets/img/logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Chakra+Petch:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/css/style.css" />
+<link rel="stylesheet" href="../assets/css/pages.css" />
+</head>
+<body>
+
+<canvas id="embers" class="fx-embers" aria-hidden="true"></canvas>
+<div class="fx-grid" aria-hidden="true"></div>
+<div class="fx-scales" aria-hidden="true"></div>
+<div class="fx-noise" aria-hidden="true"></div>
+<div class="fx-cursor" id="cursor" aria-hidden="true"></div>
+<div class="scroll-progress"><span id="scrollBar"></span></div>
+
+<header class="header" id="header">
+  <a class="brand" href="../index.html" aria-label="Atlas Imperium — painel">
+    <span class="brand__mark"><img src="../assets/img/logo.png" alt="" onerror="this.style.display='none'" /></span>
+    <span class="brand__txt"><strong>ATLAS</strong><small>IMPERIUM</small></span>
+  </a>
+  <nav class="nav" id="nav">
+    <a href="../index.html" class="nav__link">Painel</a>
+    <a href="orcamento.html" class="nav__link">Orçamento</a>
+    <a href="softwares.html" class="nav__link">Softwares</a>
+  </nav>
+  <span class="tag tag--on tag--zap">
+    <span class="eyebrow__dot"></span> Online no Zap
+  </span>
+  <button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
+</header>
+
+<main class="page page--bar">
+  <div class="shell">
+
+    <div class="page-top">
+      <a href="../index.html" class="back-link">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+        Voltar ao painel
+      </a>
+      <p class="eyebrow reveal"><span class="eyebrow__dot"></span> Linha profissional / corporativa</p>
+      <h1 class="page-title reveal" data-delay="60">Configurador <em>OptiPlex 7010</em></h1>
+      <p class="page-desc reveal" data-delay="120">Escolha os componentes e feche o pedido direto pelo WhatsApp.</p>
+    </div>
+
+    <!-- produto -->
+    <div class="panel reveal" data-delay="160">
+      <div class="hero-prod">
+        <div class="hero-prod__img" id="prodImg">
+          <img src="../assets/img/optiplex.jpg" alt="Dell OptiPlex 7010"
+               onerror="document.getElementById('prodImg').remove()" />
+        </div>
+        <div class="hero-prod__txt">
+          <span class="tag tag--on">Desktop corporativo</span>
+          <h2>Dell OptiPlex 7010 Desktop</h2>
+          <p>Robusto, alta durabilidade e excelente desempenho para o seu escritório ou home office.
+             Monte a configuração ideal abaixo — o valor atualiza na hora.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- blocos de opções (gerados pelo script) -->
+    <div id="grupos"></div>
+
+    <!-- resumo -->
+    <div class="panel reveal">
+      <div class="panel__head">
+        <h2 class="panel__title">Resumo da configuração</h2>
+        <span class="tag" id="qtdItens">1 item</span>
+      </div>
+      <div class="resumo" id="resumo"></div>
+    </div>
+
+  </div>
+</main>
+
+<div class="bar">
+  <div class="bar__inner">
+    <div>
+      <span class="bar__label">Valor total</span>
+      <span class="bar__total" id="total">R$ 200,00</span>
+    </div>
+    <button class="btn btn--primary magnetic" id="btnZap">
+      <svg viewBox="0 0 24 24" class="ico-fill" aria-hidden="true" style="width:18px;height:18px;fill:currentColor"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.91-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.08-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.87 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.42-.08-.12-.28-.2-.57-.34M12.05 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.89 9.89-9.89 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.89-9.88 9.89m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.69 1.45c6.55 0 11.89-5.34 11.89-11.89a11.82 11.82 0 0 0-3.48-8.41"/></svg>
+      <span>Pedir no WhatsApp</span>
+    </button>
+  </div>
+</div>
+
+<script src="../assets/js/main.js"></script>
+<script>
+/* ============================================================
+   >>> PREÇOS E OPÇÕES: edite só aqui <<<
+   ============================================================ */
+const WHATSAPP = '5586988815862';
+const PRODUTO  = 'Dell OptiPlex 7010';
+const BASE     = { nome: 'OptiPlex sem nada', preco: 200 };
+
+const GRUPOS = [
+  { id:'cpu', n:1, titulo:'Processador (CPU)', tag:'Obrigatório', tipo:'radio',
+    msg:'Processador', semTexto:'Sem CPU', opcoes:[
+      { v:'sem', nome:'Sem CPU',       preco:0,  padrao:true },
+      { v:'i3',  nome:'Intel Core i3', preco:30 },
+      { v:'i5',  nome:'Intel Core i5', preco:80 }
+  ]},
+
+  { id:'ram', n:2, titulo:'Memória RAM', tag:'Obrigatório', tipo:'radio',
+    msg:'Memória RAM', semTexto:'Sem RAM', opcoes:[
+      { v:'sem', nome:'Sem RAM',  preco:0,  padrao:true },
+      { v:'4gb', nome:'4GB RAM',  preco:30 },
+      { v:'8gb', nome:'8GB RAM',  preco:70 }
+  ]},
+
+  { id:'armazenamento', n:3, titulo:'Armazenamento (HD / SSD)', tag:'Flexível', subgrupos:[
+      { id:'hd', rotulo:'Disco Rígido (HD)', tipo:'radio', msg:'Armazenamento HD', semTexto:null, opcoes:[
+        { v:'sem',   nome:'Sem HD',    preco:0, padrao:true },
+        { v:'500gb', nome:'HD 500GB',  preco:30 }
+      ]},
+      { id:'ssd', rotulo:'Unidade SSD', tipo:'radio', msg:'Armazenamento SSD', semTexto:null, opcoes:[
+        { v:'sem',   nome:'Sem SSD',    preco:0,   padrao:true },
+        { v:'128gb', nome:'SSD 128GB',  preco:165 },
+        { v:'256gb', nome:'SSD 256GB',  preco:275 }
+      ]}
+  ]},
+
+  { id:'perifericos', n:4, titulo:'Periféricos', tag:'Múltipla escolha', tipo:'check',
+    msg:'Periféricos', semTexto:'Nenhum', opcoes:[
+      { v:'sem',           nome:'Sem Periférico',  preco:0,   padrao:true, exclusivo:true },
+      { v:'mouse_teclado', nome:'Mouse e Teclado', preco:50 },
+      { v:'monitor_20',    nome:'Monitor 20" TCN', preco:280 }
+  ]},
+
+  { id:'cabos', n:5, titulo:'Cabos e Conexões', tag:'Múltipla escolha', tipo:'check',
+    msg:'Cabos', semTexto:'Sem cabos', opcoes:[
+      { v:'sem', nome:'Sem Cabos',        preco:0,  padrao:true, exclusivo:true },
+      { v:'vga', nome:'Cabo VGA',         preco:10 },
+      { v:'atx', nome:'Cabo ATX / Força', preco:10 }
+  ]}
+];
+
+/* ---------- utilidades ---------- */
+const brl = v => 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 });
+const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+
+/* lista plana dos subgrupos, para o cálculo e a mensagem */
+const CAMPOS = [];
+GRUPOS.forEach(g => g.subgrupos ? g.subgrupos.forEach(s => CAMPOS.push(s)) : CAMPOS.push(g));
+
+/* ---------- monta a tela ---------- */
+function opcaoHTML(campo, o) {
+  const marcado = o.padrao ? ' checked' : '';
+  const classe  = o.padrao ? ' is-on' : '';
+  const preco   = o.preco > 0 ? '+ ' + brl(o.preco) : brl(0);
+  return `
+    <label class="opt${classe}">
+      <span>
+        <span class="opt__name">${esc(o.nome)}</span>
+        <span class="opt__price">${preco}</span>
+      </span>
+      <input type="${campo.tipo === 'check' ? 'checkbox' : 'radio'}"
+             name="${campo.id}" value="${esc(o.v)}" data-preco="${o.preco}"
+             ${o.exclusivo ? 'data-exclusivo="1"' : ''}${marcado}>
+    </label>`;
+}
+
+document.getElementById('grupos').innerHTML = GRUPOS.map((g, i) => {
+  const corpo = g.subgrupos
+    ? g.subgrupos.map(s => `
+        <span class="sub-label">${esc(s.rotulo)}</span>
+        <div class="opt-grid">${s.opcoes.map(o => opcaoHTML(s, o)).join('')}</div>`).join('')
+    : `<div class="opt-grid">${g.opcoes.map(o => opcaoHTML(g, o)).join('')}</div>`;
+
+  return `
+    <section class="panel reveal" data-delay="${i * 60}">
+      <div class="panel__head">
+        <h2 class="panel__title"><span class="panel__num">${g.n}</span>${esc(g.titulo)}</h2>
+        <span class="tag${g.tag === 'Obrigatório' ? ' tag--on' : ''}">${esc(g.tag)}</span>
+      </div>
+      ${corpo}
+    </section>`;
+}).join('');
+
+if (window.atlasReveal) window.atlasReveal();   // anima os blocos recém-criados
+
+/* ---------- seleção ---------- */
+const $total  = document.getElementById('total');
+const $resumo = document.getElementById('resumo');
+const $qtd    = document.getElementById('qtdItens');
+
+document.querySelectorAll('.opt input').forEach(inp => {
+  inp.addEventListener('change', () => {
+    if (inp.type === 'checkbox') {
+      const irmaos = document.querySelectorAll(`.opt input[name="${inp.name}"]`);
+      if (inp.dataset.exclusivo && inp.checked) {
+        irmaos.forEach(o => { if (o !== inp) o.checked = false; });
+      } else if (inp.checked) {
+        irmaos.forEach(o => { if (o.dataset.exclusivo) o.checked = false; });
+      }
+    }
+    pintar();
+    calcular();
+  });
+});
+
+/* destaca visualmente o que está marcado */
+function pintar() {
+  document.querySelectorAll('.opt').forEach(l => {
+    l.classList.toggle('is-on', l.querySelector('input').checked);
+  });
+}
+
+/* ---------- o que está escolhido, por campo ---------- */
+function escolhas(campo) {
+  const marcados = document.querySelectorAll(`.opt input[name="${campo.id}"]:checked`);
+  return Array.from(marcados)
+    .map(i => campo.opcoes.find(o => o.v === i.value))
+    .filter(o => o && o.v !== 'sem');
+}
+
+/* ---------- total + resumo ---------- */
+function calcular() {
+  let total = BASE.preco;
+  let linhas = `<div class="resumo__row"><span>${esc(PRODUTO)} — ${esc(BASE.nome)}</span><strong>${brl(BASE.preco)}</strong></div>`;
+  let itens = 1;
+
+  CAMPOS.forEach(campo => {
+    escolhas(campo).forEach(o => {
+      total += o.preco;
+      itens++;
+      linhas += `<div class="resumo__row"><span>${esc(o.nome)}</span><span class="add">+ ${brl(o.preco)}</span></div>`;
+    });
+  });
+
+  $resumo.innerHTML = linhas;
+  $qtd.textContent = itens + (itens === 1 ? ' item' : ' itens');
+
+  if ($total.textContent !== brl(total)) {
+    $total.textContent = brl(total);
+    $total.classList.remove('is-bump');
+    void $total.offsetWidth;
+    $total.classList.add('is-bump');
+  }
+  return total;
+}
+
+/* ---------- WhatsApp ---------- */
+document.getElementById('btnZap').addEventListener('click', () => {
+  const total = calcular();
+
+  let msg = `Olá! Gostaria de encomendar um *${PRODUTO}* (*Atlas*) com a seguinte configuração:\n\n`;
+  msg += `• *Modelo Base:* ${BASE.nome} (${brl(BASE.preco)})\n`;
+
+  CAMPOS.forEach(campo => {
+    const sel = escolhas(campo);
+    if (sel.length) {
+      const txt = sel.map(o => `${o.nome} (+${brl(o.preco)})`).join(', ');
+      msg += `• *${campo.msg}:* ${txt}\n`;
+    } else if (campo.semTexto) {
+      msg += `• *${campo.msg}:* ${campo.semTexto}\n`;
+    }
+  });
+
+  msg += `\n*VALOR TOTAL:* *${brl(total)}*`;
+
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+});
+
+pintar();
+calcular();
+</script>
+</body>
+</html>
