@@ -57,7 +57,10 @@
         [cx + Math.cos(a + w) * r,     cy + Math.sin(a + w) * r]
       ];
       p.setAttribute('points', pts.map(q => q[0].toFixed(1) + ',' + q[1].toFixed(1)).join(' '));
-      p.style.animationDelay = (i * 0.08) + 's';
+      if (i % 3 === 0) {                      // só os espinhos longos pulsam
+        p.classList.add('pulse');
+        p.style.animationDelay = (i * 0.08) + 's';
+      }
       g.appendChild(p);
     }
   })();
@@ -69,13 +72,27 @@
     const ctx = cv.getContext('2d');
     let w, h, dpr, parts = [];
 
+    /* sprite pronto da brasa: evita criar 80 gradientes por frame (menos coletas de lixo) */
+    const SPRITE = 48;
+    const sprites = [215, 232].map(hue => {
+      const s = document.createElement('canvas');
+      s.width = s.height = SPRITE;
+      const sc = s.getContext('2d');
+      const g = sc.createRadialGradient(SPRITE/2, SPRITE/2, 0, SPRITE/2, SPRITE/2, SPRITE/2);
+      g.addColorStop(0, 'hsla(' + hue + ',100%,78%,1)');
+      g.addColorStop(1, 'hsla(' + hue + ',100%,60%,0)');
+      sc.fillStyle = g;
+      sc.fillRect(0, 0, SPRITE, SPRITE);
+      return s;
+    });
+
     function resize() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       w = cv.width = innerWidth * dpr;
       h = cv.height = innerHeight * dpr;
       cv.style.width = innerWidth + 'px';
       cv.style.height = innerHeight + 'px';
-      const count = innerWidth < 760 ? 34 : 80;
+      const count = innerWidth < 760 ? 34 : 50;
       parts = Array.from({ length: count }, spawn);
     }
     function spawn() {
@@ -87,7 +104,7 @@
         vx: (Math.random() - 0.5) * 0.22 * dpr,
         a: Math.random() * 0.6 + 0.15,
         tw: Math.random() * Math.PI * 2,
-        hue: Math.random() > 0.78 ? 215 : 232
+        sprite: Math.random() > 0.78 ? 0 : 1
       };
     }
     function tick() {
@@ -97,18 +114,23 @@
         if (p.y < -12) { p.y = h + 12; p.x = Math.random() * w; }
         if (p.x < -12) p.x = w + 12;
         if (p.x > w + 12) p.x = -12;
-        const alpha = p.a * (0.55 + Math.sin(p.tw) * 0.45);
-        const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5);
-        grd.addColorStop(0, 'hsla(' + p.hue + ',100%,78%,' + alpha + ')');
-        grd.addColorStop(1, 'hsla(' + p.hue + ',100%,60%,0)');
-        ctx.fillStyle = grd;
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 5, 0, Math.PI * 2); ctx.fill();
+        const d = p.r * 10;
+        ctx.globalAlpha = p.a * (0.55 + Math.sin(p.tw) * 0.45);
+        ctx.drawImage(sprites[p.sprite], p.x - d / 2, p.y - d / 2, d, d);
       }
-      requestAnimationFrame(tick);
+      ctx.globalAlpha = 1;
+      raf = requestAnimationFrame(tick);
     }
+
+    /* para de desenhar com a aba em segundo plano */
+    let raf = 0;
+    const play = () => { if (!raf) raf = requestAnimationFrame(tick); };
+    const stop = () => { if (raf) { cancelAnimationFrame(raf); raf = 0; } };
+    document.addEventListener('visibilitychange', () => document.hidden ? stop() : play());
+
     resize();
     addEventListener('resize', resize, { passive: true });
-    tick();
+    play();
   })();
 
   /* ---------- 4b. DRAGÃO SERPENTE (canvas, desenhado por código) ---------- */
@@ -181,8 +203,9 @@
       ctx.shadowColor = 'rgba(77,107,255,.55)';
       ctx.shadowBlur = 26;
 
-      /* --- espinhos das costas --- */
+      /* --- espinhos das costas (sem sombra: o halo do corpo já cobre eles) --- */
       ctx.fillStyle = grad;
+      ctx.shadowBlur = 0;
       for (let s = 0.05; s < 0.94; s += 0.05) {
         const p = spine(s), n = normal(s), w = thick(s);
         const len = w * (s < 0.5 ? 0.75 : 0.55) + 3;
@@ -195,6 +218,7 @@
       }
 
       /* --- corpo --- */
+      ctx.shadowBlur = 26;
       ctx.beginPath();
       for (let i = 0; i <= N; i++) {
         const s = i / N, p = spine(s), n = normal(s), w = thick(s);
@@ -238,12 +262,29 @@
     function loop() {
       t += 0.009;
       draw();
-      requestAnimationFrame(loop);
+      raf = requestAnimationFrame(loop);
     }
+
+    /* só anima quando o herói está na tela e a aba está em primeiro plano */
+    let raf = 0, naTela = true;
+    const play = () => { if (!raf && naTela && !document.hidden) raf = requestAnimationFrame(loop); };
+    const stop = () => { if (raf) { cancelAnimationFrame(raf); raf = 0; } };
+    document.addEventListener('visibilitychange', () => document.hidden ? stop() : play());
 
     resize();
     addEventListener('resize', resize, { passive: true });
-    if (reduced) { draw(); } else { loop(); }
+
+    if (reduced) {
+      draw();
+      return;
+    }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(e => {
+        naTela = e[0].isIntersecting;
+        naTela ? play() : stop();
+      }, { threshold: 0 }).observe(cv);
+    }
+    play();
   })();
 
   /* ---------- 5. CURSOR LUMINOSO ---------- */
