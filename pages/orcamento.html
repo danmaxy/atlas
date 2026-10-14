@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Orçamento — ATLAS IMPERIUM</title>
+<meta name="description" content="Gerador de orçamentos da Atlas: monte, imprima em PDF e envie pelo WhatsApp." />
+<meta name="theme-color" content="#05060a" />
+<link rel="icon" href="../assets/img/logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Chakra+Petch:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/css/style.css" />
+<link rel="stylesheet" href="../assets/css/pages.css" />
+</head>
+<body>
+
+<canvas id="embers" class="fx-embers" aria-hidden="true"></canvas>
+<div class="fx-grid" aria-hidden="true"></div>
+<div class="fx-scales" aria-hidden="true"></div>
+<div class="fx-noise" aria-hidden="true"></div>
+<div class="fx-cursor" id="cursor" aria-hidden="true"></div>
+<div class="scroll-progress"><span id="scrollBar"></span></div>
+
+<header class="header no-print" id="header">
+  <a class="brand" href="../index.html" aria-label="Atlas Imperium — painel">
+    <span class="brand__mark"><img src="../assets/img/logo.png" alt="" onerror="this.style.display='none'" /></span>
+    <span class="brand__txt"><strong>ATLAS</strong><small>IMPERIUM</small></span>
+  </a>
+  <nav class="nav" id="nav">
+    <a href="../index.html" class="nav__link">Painel</a>
+    <a href="softwares.html" class="nav__link">Softwares</a>
+    <a href="optiplex.html" class="nav__link">Optiplex</a>
+  </nav>
+  <a class="btn btn--sm btn--primary header__cta magnetic" href="https://wa.me/5586988815862" target="_blank" rel="noopener">
+    <span>Falar agora</span>
+  </a>
+  <button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
+</header>
+
+<main class="page">
+  <div class="shell">
+
+    <div class="page-top no-print">
+      <a href="../index.html" class="back-link">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+        Voltar ao painel
+      </a>
+      <div class="page-head-row">
+        <div>
+          <p class="eyebrow reveal"><span class="eyebrow__dot"></span> Assistência técnica e serviços</p>
+          <h1 class="page-title reveal" data-delay="60">Gerador de <em>Orçamentos</em></h1>
+          <p class="page-desc reveal" data-delay="120">Preencha, gere o PDF e mande pro cliente pelo WhatsApp.</p>
+        </div>
+        <div class="tools reveal" data-delay="160">
+          <button class="btn btn--sm btn--ghost magnetic" id="btnPrint">
+            <svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+            <span>Imprimir / PDF</span>
+          </button>
+          <button class="btn btn--sm btn--primary magnetic" id="btnZap">
+            <svg viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px;fill:currentColor"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.91-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.08-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.87 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.42-.08-.12-.28-.2-.57-.34M12.05 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.89 9.89-9.89 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.89-9.88 9.89m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.69 1.45c6.55 0 11.89-5.34 11.89-11.89a11.82 11.82 0 0 0-3.48-8.41"/></svg>
+            <span>Copiar p/ WhatsApp</span>
+          </button>
+          <button class="btn btn--sm btn--ghost magnetic" id="btnReset" title="Limpar formulário">
+            <svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+            <span>Limpar</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== cabeçalho do documento ===== -->
+    <section class="panel">
+      <div class="doc-head">
+        <div>
+          <div class="doc-head__id">ATLAS</div>
+          <div class="doc-head__cnpj">CNPJ: 60.883.284/0001-33</div>
+        </div>
+        <div class="doc-head__contato">
+          <span><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.1a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg> (86) 98881-5862</span><br>
+          <span><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg> atlasfixthe@gmail.com</span><br>
+          <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20Z"/></svg> atlasthe.com</span>
+        </div>
+      </div>
+
+      <div class="panel__head" style="border-bottom:0;margin-bottom:0;padding-bottom:0">
+        <h2 class="panel__title">Orçamento de serviços</h2>
+        <div style="min-width:150px">
+          <label class="label" for="orcId">Nº do orçamento</label>
+          <input type="text" class="input" id="orcId" value="001/2026" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== cliente ===== -->
+    <section class="panel">
+      <div class="panel__head"><h2 class="panel__title"><span class="panel__num">1</span>Dados do cliente</h2></div>
+      <div class="grid-form">
+        <div class="col-2">
+          <label class="label" for="cliNome">Nome do cliente *</label>
+          <input type="text" class="input" id="cliNome" placeholder="Ex: João da Silva" />
+        </div>
+        <div>
+          <label class="label" for="cliTel">Telefone / WhatsApp</label>
+          <input type="text" class="input" id="cliTel" placeholder="(86) 99999-9999" />
+        </div>
+        <div>
+          <label class="label" for="cliEmail">E-mail</label>
+          <input type="email" class="input" id="cliEmail" placeholder="cliente@email.com" />
+        </div>
+        <div>
+          <label class="label" for="dataEmissao">Data de emissão</label>
+          <input type="date" class="input" id="dataEmissao" />
+        </div>
+        <div>
+          <label class="label" for="validade">Validade (dias)</label>
+          <input type="number" class="input" id="validade" value="10" min="1" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== itens ===== -->
+    <section class="panel">
+      <div class="panel__head">
+        <h2 class="panel__title"><span class="panel__num">2</span>Itens ou serviços</h2>
+        <button class="btn btn--sm btn--primary no-print magnetic" id="btnAdd">
+          <svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          <span>Adicionar item</span>
+        </button>
+      </div>
+
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th class="num">#</th>
+              <th>Descrição do item / serviço</th>
+              <th style="width:90px;text-align:center">Qtd</th>
+              <th style="width:130px;text-align:right">Valor unit.</th>
+              <th style="width:130px;text-align:right">Subtotal</th>
+              <th class="acao no-print"></th>
+            </tr>
+          </thead>
+          <tbody id="itens"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== observações + totais ===== -->
+    <section class="panel">
+      <div class="grid-form" style="grid-template-columns:1fr 1fr;align-items:start">
+        <div class="col-2" style="grid-column:span 1">
+          <label class="label" for="obs">Observações / garantia</label>
+          <textarea class="textarea" id="obs" placeholder="Ex: Garantia de 90 dias para os serviços executados. Forma de pagamento: 50% de entrada e restante na entrega."></textarea>
+        </div>
+        <div class="totais">
+          <div class="totais__row">
+            <span>Subtotal dos itens</span>
+            <strong id="subtotal" class="val">R$ 0,00</strong>
+          </div>
+          <div class="totais__row">
+            <span style="display:flex;align-items:center;gap:10px">
+              Desconto (R$)
+              <input type="number" class="input desc-input no-print" id="desconto" value="0" min="0" step="0.01" style="padding:7px 10px;text-align:right" />
+            </span>
+            <span id="descontoShow" style="color:#ff8ba0">- R$ 0,00</span>
+          </div>
+          <div class="totais__row totais__row--final">
+            <span>Valor total</span>
+            <span class="totais__final" id="valorTotal">R$ 0,00</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="assinaturas">
+        <div>Assinatura do técnico / responsável</div>
+        <div>De acordo do cliente</div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="footer no-print">
+  <div class="shell footer__inner">
+    <div class="footer__brand">
+      <span class="brand__mark brand__mark--sm"><img src="../assets/img/logo.png" alt="" onerror="this.style.display='none'" /></span>
+      <div><strong>ATLAS IMPERIUM</strong><p>CNPJ 60.883.284/0001-33</p></div>
+    </div>
+    <nav class="footer__nav">
+      <a href="../index.html">Painel</a>
+      <a href="https://wa.me/5586988815862" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="https://instagram.com/atlas.fix" target="_blank" rel="noopener">Instagram</a>
+    </nav>
+    <p class="footer__copy">© <span id="year">2026</span> Atlas Imperium · atlasthe.com</p>
+  </div>
+  <div class="footer__scales" aria-hidden="true"></div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="../assets/js/main.js"></script>
+<script>
+const EMPRESA = {
+  nome: 'ATLAS',
+  cnpj: '60.883.284/0001-33',
+  tel:  '(86) 98881-5862',
+  site: 'atlasthe.com'
+};
+
+const brl = v => 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 });
+const $   = id => document.getElementById(id);
+
+const $itens = $('itens');
+
+/* ---------- aviso rápido ---------- */
+let tToast;
+function aviso(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('is-on');
+  clearTimeout(tToast);
+  tToast = setTimeout(() => t.classList.remove('is-on'), 3000);
+}
+
+/* ---------- linhas da tabela ---------- */
+function addItem(descricao = '', qtd = 1, valor = 0) {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td class="num"></td>
+    <td><input type="text" class="cell-input it-desc" placeholder="Descreva o item ou serviço..."></td>
+    <td><input type="number" class="cell-input ta-c it-qtd" min="1" step="1"></td>
+    <td><input type="number" class="cell-input ta-r it-valor" min="0" step="0.01"></td>
+    <td class="money sub">R$ 0,00</td>
+    <td class="acao no-print">
+      <button class="icon-btn" title="Remover item" aria-label="Remover item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="m19 6-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+      </button>
+    </td>`;
+
+  tr.querySelector('.it-desc').value  = descricao;
+  tr.querySelector('.it-qtd').value   = qtd;
+  tr.querySelector('.it-valor').value = valor.toFixed(2);
+
+  tr.querySelectorAll('.it-qtd, .it-valor').forEach(i => i.addEventListener('input', calcular));
+  // arredonda para 2 casas ao sair do campo (fica certo no PDF)
+  tr.querySelector('.it-valor').addEventListener('blur', e => {
+    e.target.value = (parseFloat(e.target.value) || 0).toFixed(2);
+    calcular();
+  });
+  tr.querySelector('.icon-btn').addEventListener('click', () => {
+    if ($itens.rows.length <= 1) { aviso('O orçamento precisa ter pelo menos um item.'); return; }
+    tr.remove();
+    calcular();
+  });
+
+  $itens.appendChild(tr);
+  calcular();
+}
+
+/* ---------- cálculo ---------- */
+function calcular() {
+  let subtotal = 0;
+
+  Array.from($itens.rows).forEach((row, i) => {
+    const qtd   = parseFloat(row.querySelector('.it-qtd').value)   || 0;
+    const valor = parseFloat(row.querySelector('.it-valor').value) || 0;
+    const sub   = qtd * valor;
+    subtotal += sub;
+    row.querySelector('.num').textContent = i + 1;
+    row.querySelector('.sub').textContent = brl(sub);
+  });
+
+  const desconto = parseFloat($('desconto').value) || 0;
+  const total = Math.max(0, subtotal - desconto);
+
+  $('subtotal').textContent     = brl(subtotal);
+  $('descontoShow').textContent = '- ' + brl(desconto);
+  $('valorTotal').textContent   = brl(total);
+}
+
+/* ---------- texto para o WhatsApp ---------- */
+function textoOrcamento() {
+  const nome     = $('cliNome').value.trim() || 'Cliente';
+  const id       = $('orcId').value.trim();
+  const data     = $('dataEmissao').value;
+  const validade = $('validade').value;
+  const obs      = $('obs').value.trim();
+  const dataBR   = data ? data.split('-').reverse().join('/') : '';
+
+  let t = `*ORÇAMENTO - ${EMPRESA.nome}*\n`;
+  t += `*Nº:* ${id}\n`;
+  t += `*Cliente:* ${nome}\n`;
+  if (dataBR) t += `*Data:* ${dataBR} (validade: ${validade} dias)\n`;
+  t += `\n*Itens / Serviços:*\n`;
+
+  Array.from($itens.rows).forEach((row, i) => {
+    const desc = row.querySelector('.it-desc').value.trim() || 'Item sem descrição';
+    const qtd  = row.querySelector('.it-qtd').value;
+    const sub  = row.querySelector('.sub').textContent;
+    t += `${i + 1}. ${desc} (${qtd}x) - ${sub}\n`;
+  });
+
+  const desconto = parseFloat($('desconto').value) || 0;
+  if (desconto > 0) t += `\nDesconto: - ${brl(desconto)}\n`;
+
+  t += `\n*VALOR TOTAL: ${$('valorTotal').textContent}*\n`;
+  if (obs) t += `\n*Observações:* ${obs}\n`;
+  t += `\n*${EMPRESA.nome}* | CNPJ: ${EMPRESA.cnpj}\nTel: ${EMPRESA.tel}\n${EMPRESA.site}`;
+
+  return t;
+}
+
+async function copiarTexto(txt) {
+  try {
+    await navigator.clipboard.writeText(txt);
+    return true;
+  } catch (e) {
+    // navegador antigo ou página sem HTTPS
+    const ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(ta);
+    ta.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+}
+
+/* ---------- botões ---------- */
+$('btnAdd').addEventListener('click', () => addItem());
+$('desconto').addEventListener('input', calcular);
+$('btnPrint').addEventListener('click', () => window.print());
+
+$('btnZap').addEventListener('click', async () => {
+  const ok = await copiarTexto(textoOrcamento());
+  aviso(ok ? 'Orçamento copiado! É só colar no WhatsApp.' : 'Não consegui copiar — selecione e copie manualmente.');
+});
+
+$('btnReset').addEventListener('click', () => {
+  if (!confirm('Deseja limpar todos os campos do orçamento?')) return;
+  ['cliNome','cliTel','cliEmail','obs'].forEach(id => $(id).value = '');
+  $('desconto').value = '0';
+  $itens.innerHTML = '';
+  addItem();
+  aviso('Formulário limpo.');
+});
+
+/* ---------- início ---------- */
+const hoje = new Date();
+const z = n => String(n).padStart(2, '0');
+// data local, não UTC (toISOString viraria o dia à noite)
+$('dataEmissao').value = `${hoje.getFullYear()}-${z(hoje.getMonth() + 1)}-${z(hoje.getDate())}`;
+$('orcId').value = '001/' + hoje.getFullYear();
+addItem('Serviço de Diagnóstico / Manutenção Técnica', 1, 150);
+</script>
+</body>
+</html>
