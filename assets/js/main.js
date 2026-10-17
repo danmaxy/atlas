@@ -10,6 +10,44 @@
   const $  = (s, c) => (c || document).querySelector(s);
   const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
 
+  /* ---------- 0. AJUDANTES DE DESEMPENHO ---------- */
+
+  /* Resolucao de canvas. Os desenhos daqui sao borroes e silhuetas suaves,
+     entao dpr 2 so dobra o trabalho da placa de video sem ganho visivel.
+     O limite de pixels segura telas grandes: e isso que e enviado a GPU
+     a cada frame. */
+  function escalaCanvas(maxPx) {
+    let e = Math.min(window.devicePixelRatio || 1, 1);
+    const px = innerWidth * innerHeight * e * e;
+    if (px > maxPx) e *= Math.sqrt(maxPx / px);
+    return e;
+  }
+
+  /* Movimentos lentos nao precisam de 60fps. 30 corta pela metade
+     o que o compositor tem que refazer. */
+  const MS_FRAME = 1000 / 30;
+
+  /* Le a posicao do elemento UMA vez (no mouseenter) e escreve no maximo
+     uma vez por frame. Ler getBoundingClientRect() a cada mousemove forca
+     o navegador a recalcular layout dezenas de vezes por segundo. */
+  function seguirPonteiro(el, aoMover, aoSair) {
+    let r = null, x = 0, y = 0, pendente = 0;
+    const escrever = () => { pendente = 0; aoMover(x, y, r); };
+    el.addEventListener('mouseenter', () => { r = el.getBoundingClientRect(); });
+    el.addEventListener('mousemove', e => {
+      if (!r) r = el.getBoundingClientRect();
+      x = (e.clientX - r.left) / r.width;
+      y = (e.clientY - r.top) / r.height;
+      if (!pendente) pendente = requestAnimationFrame(escrever);
+    });
+    el.addEventListener('mouseleave', () => {
+      r = null;
+      if (pendente) { cancelAnimationFrame(pendente); pendente = 0; }
+      if (aoSair) aoSair();
+    });
+  }
+  window.atlasSeguirPonteiro = seguirPonteiro;
+
   /* ---------- 1. PRELOADER ---------- */
   function hidePreloader() {
     const pre = $('#preloader');
@@ -87,9 +125,9 @@
     });
 
     function resize() {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      w = cv.width = innerWidth * dpr;
-      h = cv.height = innerHeight * dpr;
+      dpr = escalaCanvas(2.2e6);
+      w = cv.width = Math.round(innerWidth * dpr);
+      h = cv.height = Math.round(innerHeight * dpr);
       cv.style.width = innerWidth + 'px';
       cv.style.height = innerHeight + 'px';
       const count = innerWidth < 760 ? 34 : 50;
@@ -100,17 +138,21 @@
         x: Math.random() * w,
         y: Math.random() * h,
         r: (Math.random() * 1.9 + 0.5) * dpr,
-        vy: -(Math.random() * 0.35 + 0.08) * dpr,
-        vx: (Math.random() - 0.5) * 0.22 * dpr,
+        vy: -(Math.random() * 0.7 + 0.16) * dpr,
+        vx: (Math.random() - 0.5) * 0.44 * dpr,
         a: Math.random() * 0.6 + 0.15,
         tw: Math.random() * Math.PI * 2,
         sprite: Math.random() > 0.78 ? 0 : 1
       };
     }
-    function tick() {
+    let ultimo = 0;
+    function tick(t) {
+      raf = requestAnimationFrame(tick);
+      if (t - ultimo < MS_FRAME) return;      // 30fps basta para brasas
+      ultimo = t;
       ctx.clearRect(0, 0, w, h);
       for (const p of parts) {
-        p.y += p.vy; p.x += p.vx; p.tw += 0.03;
+        p.y += p.vy; p.x += p.vx; p.tw += 0.06;
         if (p.y < -12) { p.y = h + 12; p.x = Math.random() * w; }
         if (p.x < -12) p.x = w + 12;
         if (p.x > w + 12) p.x = -12;
@@ -119,7 +161,6 @@
         ctx.drawImage(sprites[p.sprite], p.x - d / 2, p.y - d / 2, d, d);
       }
       ctx.globalAlpha = 1;
-      raf = requestAnimationFrame(tick);
     }
 
     /* para de desenhar com a aba em segundo plano */
@@ -161,7 +202,7 @@
 
     function resize() {
       const r = cv.getBoundingClientRect();
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = escalaCanvas(1.6e6);
       W = r.width; H = r.height;
       cv.width = Math.max(1, W * dpr);
       cv.height = Math.max(1, H * dpr);
@@ -259,10 +300,13 @@
       ctx.restore();
     }
 
-    function loop() {
-      t += 0.009;
-      draw();
+    let ultimoQuadro = 0;
+    function loop(ts) {
       raf = requestAnimationFrame(loop);
+      if (ts - ultimoQuadro < MS_FRAME) return;   // 30fps: a ondulacao e lenta
+      ultimoQuadro = ts;
+      t += 0.018;        // dobrado para compensar a metade dos frames
+      draw();
     }
 
     /* só anima quando o herói está na tela e a aba está em primeiro plano */
@@ -291,17 +335,20 @@
   (function cursorGlow() {
     const c = $('#cursor');
     if (!c || isTouch || reduced) return;
-    let tx = 0, ty = 0, cx = 0, cy = 0;
-    addEventListener('mousemove', e => {
-      tx = e.clientX; ty = e.clientY;
-      document.body.classList.add('has-cursor');
-    }, { passive: true });
-    (function loop() {
+    let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
+    function loop() {
       cx += (tx - cx) * 0.12;
       cy += (ty - cy) * 0.12;
       c.style.transform = 'translate(' + cx + 'px,' + cy + 'px)';
-      requestAnimationFrame(loop);
-    })();
+      // alcancou o ponteiro: para o laco em vez de girar a 60fps a toa
+      if (Math.abs(tx - cx) < 0.4 && Math.abs(ty - cy) < 0.4) { raf = 0; return; }
+      raf = requestAnimationFrame(loop);
+    }
+    addEventListener('mousemove', e => {
+      tx = e.clientX; ty = e.clientY;
+      document.body.classList.add('has-cursor');
+      if (!raf) raf = requestAnimationFrame(loop);
+    }, { passive: true });
   })();
 
   /* ---------- 6. SCROLL: header, barra de progresso, parallax ---------- */
@@ -363,17 +410,13 @@
   (function tiltCards() {
     if (isTouch || reduced) return;
     $$('.card').forEach(card => {
-      card.addEventListener('mousemove', e => {
-        const r = card.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width;
-        const py = (e.clientY - r.top) / r.height;
+      seguirPonteiro(card, (px, py) => {
         card.style.transform =
           'perspective(900px) rotateX(' + ((0.5 - py) * 8).toFixed(2) + 'deg) rotateY(' +
           ((px - 0.5) * 10).toFixed(2) + 'deg) translateY(-6px)';
         card.style.setProperty('--mx', (px * 100) + '%');
         card.style.setProperty('--my', (py * 100) + '%');
-      });
-      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+      }, () => { card.style.transform = ''; });
     });
   })();
 
@@ -381,13 +424,11 @@
   (function magnetic() {
     if (isTouch || reduced) return;
     $$('.magnetic').forEach(el => {
-      el.addEventListener('mousemove', e => {
-        const r = el.getBoundingClientRect();
-        const x = e.clientX - r.left - r.width / 2;
-        const y = e.clientY - r.top - r.height / 2;
+      seguirPonteiro(el, (px, py, r) => {
+        const x = (px - 0.5) * r.width;
+        const y = (py - 0.5) * r.height;
         el.style.transform = 'translate(' + x * 0.18 + 'px,' + (y * 0.25 - 3) + 'px)';
-      });
-      el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+      }, () => { el.style.transform = ''; });
     });
   })();
 
