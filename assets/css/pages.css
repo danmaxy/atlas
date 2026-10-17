@@ -351,3 +351,133 @@
   .bar__inner{ gap:12px; }
   .bar .btn{ padding:13px 18px; }
 }
+
+/* ============================================================
+   13. GESTOR — login e painel de dados
+   Paleta dos graficos validada com o validador do dataviz
+   (modo escuro): #5b7cff, #22ab9e
+   ============================================================ */
+
+/* ---------- login ---------- */
+.login{
+  position:fixed; inset:0; z-index:850;
+  display:grid; place-items:center; padding:24px;
+  background:radial-gradient(circle at 50% 40%, #0b0f22 0%, var(--black) 65%);
+}
+.login[hidden]{ display:none; }
+.login__box{
+  width:min(100%,400px); text-align:center;
+  padding:40px 32px; border-radius:22px;
+  border:1px solid var(--line);
+  background:linear-gradient(165deg, rgba(14,17,32,.95), rgba(5,6,10,.95));
+  box-shadow:0 30px 80px rgba(0,0,0,.7), 0 0 60px rgba(43,43,216,.15);
+}
+.login__mark{
+  width:74px; height:74px; margin:0 auto 22px; display:grid; place-items:center;
+  border-radius:20px; overflow:hidden;
+  border:1px solid var(--line-strong);
+  background:linear-gradient(145deg, rgba(77,107,255,.2), rgba(20,20,158,.06));
+  box-shadow:inset 0 0 22px rgba(77,107,255,.2);
+}
+.login__mark img{ width:100%; height:100%; object-fit:contain; }
+.login__mark svg{ width:30px; height:30px; fill:none; stroke:var(--blue-ice); stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+.login h1{ font-family:var(--ff-display); font-size:1.4rem; font-weight:800; letter-spacing:.04em; }
+.login p{ color:var(--muted); font-size:.86rem; margin:8px 0 26px; }
+.login .input{ text-align:center; letter-spacing:.2em; }
+.login .btn{ width:100%; justify-content:center; margin-top:14px; }
+.login__erro{
+  margin-top:14px; font-size:.84rem; color:#ff8ba0; min-height:20px;
+}
+.login__box.is-erro{ animation:tremer .4s; }
+@keyframes tremer{ 0%,100%{ transform:translateX(0) } 25%{ transform:translateX(-9px) } 75%{ transform:translateX(9px) } }
+
+/* ---------- KPIs ---------- */
+.kpis{ display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(238px,1fr)); margin-bottom:18px; }
+.kpi{
+  position:relative; overflow:hidden; padding:20px;
+  border-radius:16px; border:1px solid var(--line);
+  background:linear-gradient(160deg, rgba(255,255,255,.04), rgba(255,255,255,.008));
+  transition:transform .4s var(--ease), border-color .4s;
+}
+.kpi:hover{ transform:translateY(-3px); border-color:var(--line-strong); }
+.kpi__rotulo{
+  display:flex; align-items:center; gap:8px; margin-bottom:12px;
+  font-family:var(--ff-head); font-size:.64rem; letter-spacing:.17em;
+  text-transform:uppercase; color:var(--muted-2);
+}
+.kpi__rotulo svg{ width:14px; height:14px; flex:0 0 auto; fill:none; stroke:var(--blue-ice); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.kpi__valor{
+  font-family:var(--ff-display); font-weight:900; font-size:clamp(1rem,1.85vw,1.4rem);
+  white-space:nowrap;
+  background:var(--grad-text); -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.kpi__nota{ margin-top:7px; font-size:.76rem; color:var(--muted-2); }
+.kpi--positivo .kpi__valor{ background:none; -webkit-text-fill-color:#4fd1a5; color:#4fd1a5; }
+.kpi--negativo .kpi__valor{ background:none; -webkit-text-fill-color:#ff8ba0; color:#ff8ba0; }
+
+/* ---------- graficos ---------- */
+.graficos{ display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(330px,1fr)); }
+
+.legenda{ display:flex; gap:18px; flex-wrap:wrap; margin-bottom:18px; }
+.legenda span{ display:inline-flex; align-items:center; gap:8px; font-size:.8rem; color:var(--muted); }
+.legenda i{ width:11px; height:11px; border-radius:3px; flex:0 0 auto; }
+
+/* barras horizontais (serie unica = uma cor so) */
+.barras-h{ display:flex; flex-direction:column; gap:17px; }
+.barra-h__topo{ display:flex; justify-content:space-between; gap:12px; margin-bottom:7px; font-size:.84rem; }
+.barra-h__nome{ color:var(--muted); }
+.barra-h__valor{ font-family:var(--ff-head); font-weight:600; color:var(--white); white-space:nowrap; }
+.barra-h__trilho{ height:12px; border-radius:6px; background:rgba(255,255,255,.05); overflow:hidden; }
+.barra-h__fill{
+  height:100%; border-radius:0 4px 4px 0; background:#5b7cff;
+  transform-origin:left; animation:crescerX .8s var(--ease) backwards;
+}
+@keyframes crescerX{ from{ transform:scaleX(0) } }
+
+/* colunas empilhadas */
+.colunas{ display:flex; align-items:flex-end; gap:clamp(8px,2.5vw,22px); height:220px; padding-top:26px; }
+.coluna{ flex:1; display:flex; flex-direction:column; justify-content:flex-end; height:100%; position:relative; min-width:0; }
+.coluna__total{
+  position:absolute; top:-24px; left:0; right:0; text-align:center;
+  font-family:var(--ff-head); font-size:.74rem; font-weight:600; color:var(--white); white-space:nowrap;
+}
+.coluna__pilha{ display:flex; flex-direction:column; justify-content:flex-end; gap:2px; height:100%; }
+.coluna__seg{ border-radius:4px 4px 0 0; animation:crescerY .8s var(--ease) backwards; transform-origin:bottom; }
+.coluna__seg + .coluna__seg{ border-radius:0; }
+.coluna__seg:hover{ filter:brightness(1.25); }
+@keyframes crescerY{ from{ transform:scaleY(0) } }
+.coluna__dia{
+  margin-top:11px; text-align:center; font-size:.72rem; color:var(--muted-2);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+
+/* dica flutuante */
+.dica{
+  position:fixed; z-index:960; pointer-events:none; opacity:0;
+  padding:9px 13px; border-radius:10px; font-size:.8rem; line-height:1.5;
+  background:rgba(10,13,26,.97); border:1px solid var(--line-strong);
+  box-shadow:0 12px 32px rgba(0,0,0,.6);
+  transition:opacity .18s;
+}
+.dica.is-on{ opacity:1; }
+.dica b{ color:var(--white); }
+
+/* ---------- selos de status ---------- */
+.selo{
+  display:inline-flex; align-items:center; gap:6px; white-space:nowrap;
+  padding:4px 10px; border-radius:999px;
+  font-family:var(--ff-head); font-size:.68rem; font-weight:600;
+}
+.selo svg{ width:11px; height:11px; fill:none; stroke:currentColor; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; }
+.selo--vendido{ color:#4fd1a5; background:rgba(79,209,165,.12); border:1px solid rgba(79,209,165,.3); }
+.selo--transito{ color:#e0b050; background:rgba(224,176,80,.12); border:1px solid rgba(224,176,80,.3); }
+.selo--estoque{ color:var(--blue-ice); background:rgba(77,107,255,.12); border:1px solid rgba(77,107,255,.3); }
+
+.pos{ color:#4fd1a5; }
+.neg{ color:#ff8ba0; }
+
+.aviso-dados{
+  padding:18px 20px; border-radius:14px; margin-bottom:18px;
+  border:1px solid rgba(224,176,80,.3); background:rgba(224,176,80,.07);
+  color:#e8c87a; font-size:.88rem;
+}
