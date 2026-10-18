@@ -126,20 +126,23 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 }
 @keyframes gridDrift{ to{ transform:translate3d(68px,68px,0); } }
 
-/* escamas de dragão */
+/* escamas de dragao + ruido na MESMA camada fixa.
+   Cada elemento position:fixed de tela cheia e uma camada que o compositor
+   mistura em TODO frame, e o custo e proporcional a AREA — num 1920x1080
+   sao ~6x mais pixels que num celular. Duas camadas viraram uma. */
 .fx-scales{
   position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.14;
-  background-image:radial-gradient(circle at 50% 100%, transparent 58%, rgba(77,107,255,.5) 60%, transparent 62%);
-  background-size:38px 24px;
+  background-image:
+    radial-gradient(circle at 50% 100%, transparent 58%, rgba(77,107,255,.5) 60%, transparent 62%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E");
+  background-size:38px 24px, 160px 160px;
   mask-image:linear-gradient(to bottom, #000, transparent 45%);
   -webkit-mask-image:linear-gradient(to bottom, #000, transparent 45%);
 }
 
-/* sem mix-blend-mode: o blend obrigava a misturar a tela inteira a cada frame */
-.fx-noise{
-  position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.045;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
-}
+/* .fx-noise foi absorvido por .fx-scales acima. A regra fica vazia so para
+   nao quebrar nada que ainda referencie a classe. */
+.fx-noise{ display:none; }
 
 .fx-cursor{
   position:fixed; top:0; left:0; width:380px; height:380px; z-index:2;
@@ -153,8 +156,11 @@ body.has-cursor .fx-cursor{ opacity:1; }
   position:fixed; top:0; left:0; right:0; height:2px; z-index:900;
   background:rgba(140,165,255,.08);
 }
+/* width:100% + scaleX em vez de mexer na width: mudar width dispara LAYOUT
+   da pagina a cada frame de rolagem; scaleX roda so no compositor. */
 .scroll-progress span{
-  display:block; height:100%; width:0;
+  display:block; height:100%; width:100%;
+  transform:scaleX(0); transform-origin:left center;
   background:linear-gradient(90deg, var(--blue-deep), var(--blue-bright), var(--blue-ice));
   box-shadow:0 0 12px var(--blue-bright);
 }
@@ -164,13 +170,17 @@ body.has-cursor .fx-cursor{ opacity:1; }
   position:fixed; top:0; left:0; right:0; z-index:800;
   display:flex; align-items:center; gap:24px;
   padding:20px clamp(18px,4vw,48px);
-  transition:padding .4s var(--ease), background .4s, border-color .4s, backdrop-filter .4s;
+  transition:padding .4s var(--ease), background .4s, border-color .4s;
   border-bottom:1px solid transparent;
 }
 .header.is-stuck{
   padding:12px clamp(18px,4vw,48px);
-  background:rgba(5,6,10,.78);
-  backdrop-filter:blur(16px);
+  /* SEM backdrop-filter. A barra e fixa POR CIMA do canvas de brasas, que
+     repinta 30x/s: o navegador era obrigado a reamostrar e desfocar a faixa
+     inteira (1920px no desktop contra 390px no celular) a cada frame. Era
+     essa a diferenca principal entre PC e celular. Um fundo quase opaco da
+     o mesmo visual sobre uma pagina escura, de graca. */
+  background:linear-gradient(to bottom, rgba(5,6,10,.97), rgba(5,6,10,.90));
   border-bottom-color:var(--line);
 }
 
@@ -216,7 +226,9 @@ body.has-cursor .fx-cursor{ opacity:1; }
   padding:14px 26px; border-radius:999px; overflow:hidden;
   font-family:var(--ff-head); font-weight:600; font-size:.88rem; letter-spacing:.04em;
   transition:transform .35s var(--ease), box-shadow .35s, color .35s;
-  will-change:transform;
+  /* sem will-change fixo: ele promovia CADA botao a uma camada propria de
+     GPU permanente, mesmo parado. Com dezenas deles o compositor paga por
+     todas em todo frame. O transform do hover promove na hora certa. */
 }
 .btn .ico, .btn .ico-fill{ width:17px; height:17px; }
 .btn .ico{ fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
@@ -299,20 +311,34 @@ body.has-cursor .fx-cursor{ opacity:1; }
 
 .hero__content{ position:relative; z-index:4; }
 
-/* emblema (logo) acima do título */
+/* emblema (logo) acima do titulo.
+   Antes: filter:drop-shadow(38px) num elemento com animation:float — o
+   navegador refazia o desfoque a cada frame. Agora o halo e um gradiente
+   estatico atras, pintado uma vez e so transladado pela GPU. */
 .hero__emblem{
+  position:relative;
   width:clamp(104px,16vw,168px); margin:0 auto 10px;
-  filter:drop-shadow(0 0 38px rgba(77,107,255,.5));
   animation:float 6s ease-in-out infinite;
 }
-.hero__emblem img{ width:100%; mix-blend-mode:screen; }
+.hero__emblem::before{
+  content:''; position:absolute; inset:-42%; z-index:-1; pointer-events:none;
+  background:radial-gradient(circle, rgba(77,107,255,.42) 0%, rgba(77,107,255,.14) 40%, transparent 70%);
+}
+/* o PNG agora tem canal alfa de verdade (logo-384.png), entao sai o
+   mix-blend-mode:screen — ele forcava o navegador a reler o fundo inteiro,
+   canvas do dragao incluso, sempre que qualquer coisa atras mudava. */
+/* height:auto e obrigatorio junto com os atributos width/height do HTML:
+   eles viram "hints" de apresentacao (height:384px) e, sem isso, a imagem
+   estica. Os atributos ficam porque reservam o espaco certo antes do PNG
+   carregar — e o que evita o pulo de layout. */
+.hero__emblem img{ position:relative; width:100%; height:auto; }
 
 .eyebrow{
   display:inline-flex; align-items:center; gap:9px;
   font-family:var(--ff-head); font-size:.7rem; letter-spacing:.3em;
   text-transform:uppercase; color:var(--muted);
   padding:7px 16px; border:1px solid var(--line); border-radius:999px;
-  background:rgba(255,255,255,.02); backdrop-filter:blur(6px);
+  background:rgba(255,255,255,.035);
 }
 .eyebrow__dot{
   width:6px; height:6px; border-radius:50%; background:var(--blue-bright);
@@ -327,7 +353,9 @@ body.has-cursor .fx-cursor{ opacity:1; }
   margin:22px 0 0;
   background:var(--grad-text);
   -webkit-background-clip:text; background-clip:text; color:transparent;
-  filter:drop-shadow(0 0 34px rgba(77,107,255,.35));
+  /* sem drop-shadow: somado a background-clip:text ele cai no caminho lento
+     de pintura, e no desktop a fonte chega a 11rem (176px) — area enorme
+     para borrar. No celular sao 16vw (~62px), por isso la nao pesava. */
 }
 .hero__title .char{
   display:inline-block;
@@ -421,7 +449,7 @@ body.has-cursor .fx-cursor{ opacity:1; }
   background:radial-gradient(circle at 50% 0%, rgba(77,107,255,.18), transparent 65%);
   transition:opacity .5s;
 }
-.feat:hover{ transform:translateY(-8px); border-color:var(--line-strong); box-shadow:0 22px 60px rgba(0,0,0,.6), var(--glow-soft); }
+.feat:hover{ transform:translateY(-8px); border-color:var(--line-strong); box-shadow:0 14px 34px rgba(0,0,0,.65), 0 0 30px rgba(43,43,216,.25); }
 .feat:hover::before{ opacity:1; }
 .feat__ico{
   position:relative; width:52px; height:52px; display:grid; place-items:center;
@@ -453,20 +481,18 @@ body.has-cursor .fx-cursor{ opacity:1; }
   background:linear-gradient(165deg, rgba(14,17,32,.9), rgba(5,6,10,.92));
   transform-style:preserve-3d;
   transition:transform .35s var(--ease), border-color .45s, box-shadow .45s;
-  will-change:transform;
+  /* idem botoes: nada de camada permanente por card */
 }
-/* a borda só gira durante o hover — antes os 6 cards repintavam sem parar,
-   mesmo com a borda invisível */
+/* A borda agora e um gradiente conico ESTATICO que so aparece no hover.
+   Antes ela girava animando a custom property --a (registrada via @property),
+   o que obriga o navegador a REPINTAR o gradiente conico inteiro no main
+   thread a cada frame — e isso acontecia junto com o tilt 3D, o brilho que
+   segue o mouse e duas sombras de 70px. Era o hover que travava no PC. */
 .card__bg{
   position:absolute; inset:-1px; z-index:-2; border-radius:inherit; opacity:0;
-  background:conic-gradient(from var(--a,0deg), transparent 0deg, var(--blue-bright) 60deg, var(--blue-ice) 110deg, transparent 180deg, transparent 360deg);
+  background:conic-gradient(from 135deg, transparent 0deg, var(--blue-bright) 60deg, var(--blue-ice) 110deg, transparent 185deg, transparent 360deg);
   transition:opacity .45s;
-  animation:rotateBorder 4s linear infinite;
-  animation-play-state:paused;
 }
-.card:hover .card__bg{ animation-play-state:running; }
-@property --a{ syntax:'<angle>'; inherits:false; initial-value:0deg; }
-@keyframes rotateBorder{ to{ --a:360deg; } }
 .card::after{
   content:''; position:absolute; inset:1px; z-index:-1; border-radius:calc(var(--radius) - 1px);
   background:linear-gradient(165deg, #0d1020, #05060a);
@@ -476,7 +502,8 @@ body.has-cursor .fx-cursor{ opacity:1; }
   background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%), rgba(120,150,255,.18), transparent 60%);
   transition:opacity .4s;
 }
-.card:hover{ border-color:transparent; box-shadow:0 26px 70px rgba(0,0,0,.65), 0 0 50px rgba(43,43,216,.25); }
+/* raios menores: pintar uma sombra custa proporcional ao raio de desfoque */
+.card:hover{ border-color:transparent; box-shadow:0 16px 38px rgba(0,0,0,.7), 0 0 26px rgba(43,43,216,.3); }
 .card:hover .card__bg{ opacity:1; }
 .card:hover .card__shine{ opacity:1; }
 
@@ -508,7 +535,7 @@ body.has-cursor .fx-cursor{ opacity:1; }
 .card__go i{ font-style:normal; transition:transform .4s var(--ease); }
 .card:hover .card__go i{ transform:translateX(7px); }
 
-.card--wa:hover{ box-shadow:0 26px 70px rgba(0,0,0,.65), 0 0 50px rgba(37,211,102,.18); }
+.card--wa:hover{ box-shadow:0 16px 38px rgba(0,0,0,.7), 0 0 26px rgba(37,211,102,.22); }
 .card--wa .card__ico{ background:linear-gradient(145deg, rgba(37,211,102,.18), rgba(77,107,255,.06)); }
 .card--wa .card__ico .ico-fill{ fill:#48e08a; }
 .card--ig .card__ico{ background:linear-gradient(145deg, rgba(221,42,123,.16), rgba(77,107,255,.1)); }
@@ -560,7 +587,6 @@ body.has-cursor .fx-cursor{ opacity:1; }
   font-family:var(--ff-head); font-size:.85rem;
   background:rgba(10,13,26,.95); border:1px solid var(--line-strong);
   box-shadow:0 14px 40px rgba(0,0,0,.6), var(--glow);
-  backdrop-filter:blur(10px);
   transition:opacity .4s var(--ease), translate .4s var(--ease);
 }
 .toast.is-on{ opacity:1; translate:-50% 0; }
