@@ -120,10 +120,12 @@
 @keyframes swIn{ from{ opacity:0; transform:translateY(14px) } }
 .sw::before{
   content:''; position:absolute; inset:0; opacity:0; pointer-events:none;
-  background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(77,107,255,.16), transparent 60%);
+  /* 420px -> 260px: esse gradiente e REPINTADO a cada movimento do mouse,
+     e o custo cresce com a area do circulo. */
+  background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%), rgba(77,107,255,.2), transparent 60%);
   transition:opacity .4s;
 }
-.sw:hover{ transform:translateY(-3px); border-color:var(--line-strong); box-shadow:0 18px 44px rgba(0,0,0,.5), 0 0 34px rgba(43,43,216,.2); }
+.sw:hover{ transform:translateY(-3px); border-color:var(--line-strong); box-shadow:0 12px 26px rgba(0,0,0,.55), 0 0 20px rgba(43,43,216,.25); }
 .sw:hover::before{ opacity:1; }
 .sw__ico{
   position:relative; width:48px; height:48px; flex:0 0 auto; display:grid; place-items:center;
@@ -192,7 +194,10 @@
 .bar{
   position:fixed; left:0; right:0; bottom:0; z-index:700;
   padding:14px clamp(18px,4vw,48px);
-  background:rgba(5,6,10,.93); backdrop-filter:blur(16px);
+  /* sem backdrop-filter: a barra e fixa por cima do conteudo que rola, e o
+     desfoque de fundo tinha de ser recalculado em toda a largura da tela a
+     cada frame de rolagem. Fundo opaco custa zero. */
+  background:rgba(5,6,10,.975);
   border-top:1px solid var(--line-strong);
   box-shadow:0 -14px 40px rgba(0,0,0,.6);
 }
@@ -480,4 +485,18 @@
   padding:18px 20px; border-radius:14px; margin-bottom:18px;
   border:1px solid rgba(224,176,80,.3); background:rgba(224,176,80,.07);
   color:#e8c87a; font-size:.88rem;
+}
+
+/* ============================================================
+   ACESSIBILIDADE / DESEMPENHO
+   Mesmo bloco que ja existia em style.css: quem liga "reduzir
+   movimento" no sistema (ou precisa economizar bateria/CPU)
+   desliga as animacoes tambem nas paginas internas.
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important; animation-iteration-count:1 !important;
+    transition-duration:.01ms !important; scroll-behavior:auto !important;
+  }
+  .sw::before, .card__shine{ display:none !important; }
 }
