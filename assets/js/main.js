@@ -27,6 +27,17 @@
      o que o compositor tem que refazer. */
   const MS_FRAME = 1000 / 30;
 
+  /* Redimensionar a janela no desktop dispara 'resize' dezenas de vezes por
+     segundo. Sem isso, cada evento realocava os dois canvas e sorteava as
+     brasas de novo — travava so de arrastar a borda da janela. */
+  function aoRedimensionar(fn) {
+    let t = 0;
+    addEventListener('resize', function () {
+      clearTimeout(t);
+      t = setTimeout(fn, 150);
+    }, { passive: true });
+  }
+
   /* Le a posicao do elemento UMA vez (no mouseenter) e escreve no maximo
      uma vez por frame. Ler getBoundingClientRect() a cada mousemove forca
      o navegador a recalcular layout dezenas de vezes por segundo. */
@@ -125,7 +136,10 @@
     });
 
     function resize() {
-      dpr = escalaCanvas(2.2e6);
+      /* 2.2M -> 1.3M pixels. As brasas sao borroes de 20-40px: em tela cheia
+         de 1080p o canvas inteiro era desenhado e composto 30x/s sem que a
+         resolucao extra aparecesse. */
+      dpr = escalaCanvas(1.3e6);
       w = cv.width = Math.round(innerWidth * dpr);
       h = cv.height = Math.round(innerHeight * dpr);
       cv.style.width = innerWidth + 'px';
@@ -170,7 +184,7 @@
     document.addEventListener('visibilitychange', () => document.hidden ? stop() : play());
 
     resize();
-    addEventListener('resize', resize, { passive: true });
+    aoRedimensionar(resize);
     play();
   })();
 
@@ -202,7 +216,7 @@
 
     function resize() {
       const r = cv.getBoundingClientRect();
-      dpr = escalaCanvas(1.6e6);
+      dpr = escalaCanvas(1.0e6);
       W = r.width; H = r.height;
       cv.width = Math.max(1, W * dpr);
       cv.height = Math.max(1, H * dpr);
@@ -241,12 +255,27 @@
 
       ctx.save();
       ctx.globalAlpha = 0.55;
-      ctx.shadowColor = 'rgba(77,107,255,.55)';
-      ctx.shadowBlur = 26;
 
-      /* --- espinhos das costas (sem sombra: o halo do corpo já cobre eles) --- */
+      /* --- halo ---
+         Antes: ctx.shadowBlur = 26 no corpo e na cabeca. Sombra de canvas e
+         um desfoque gaussiano feito no main thread sobre TODA a area pintada
+         — num hero de 1920px isso custava mais que desenhar o dragao inteiro,
+         e acontecia 30x por segundo. Dois tracos translucidos ao longo da
+         espinha dao o mesmo halo por uma fracao do preco. */
+      ctx.lineJoin = ctx.lineCap = 'round';
+      for (let passo = 0; passo < 2; passo++) {
+        ctx.beginPath();
+        for (let i = 0; i <= 40; i++) {
+          const p = spine(i / 40);
+          if (i === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
+        }
+        ctx.strokeStyle = passo ? 'rgba(77,107,255,.11)' : 'rgba(77,107,255,.06)';
+        ctx.lineWidth = maxW * (passo ? 2.5 : 4.3);
+        ctx.stroke();
+      }
+
+      /* --- espinhos das costas --- */
       ctx.fillStyle = grad;
-      ctx.shadowBlur = 0;
       for (let s = 0.05; s < 0.94; s += 0.05) {
         const p = spine(s), n = normal(s), w = thick(s);
         const len = w * (s < 0.5 ? 0.75 : 0.55) + 3;
@@ -259,7 +288,6 @@
       }
 
       /* --- corpo --- */
-      ctx.shadowBlur = 26;
       ctx.beginPath();
       for (let i = 0; i <= N; i++) {
         const s = i / N, p = spine(s), n = normal(s), w = thick(s);
@@ -290,8 +318,7 @@
       hg.addColorStop(0.55, '#3a46e8');
       hg.addColorStop(1, '#7a94ff');
 
-      HEAD_PARTS.forEach((part, i) => {
-        if (i === 5) ctx.shadowBlur = 0;            // detalhes sem halo
+      HEAD_PARTS.forEach(part => {
         ctx.fillStyle = part.fill === 'grad' ? hg : part.fill;
         ctx.fill(part.path);
       });
@@ -316,7 +343,7 @@
     document.addEventListener('visibilitychange', () => document.hidden ? stop() : play());
 
     resize();
-    addEventListener('resize', resize, { passive: true });
+    aoRedimensionar(function () { resize(); if (!raf) draw(); });
 
     if (reduced) {
       draw();
@@ -356,26 +383,48 @@
     const header = $('#header');
     const bar = $('#scrollBar');
     const par = $$('[data-parallax]');
-    let ticking = false;
+    let ticking = false, max = 0, preso = null;
+
+    /* A altura da pagina era lida com document.body.scrollHeight DENTRO do
+       laco de rolagem. Ler scrollHeight forca o navegador a recalcular o
+       layout inteiro na hora (reflow sincrono) — a cada frame de scroll, com
+       todas as camadas fixas por cima. Agora mede so quando a pagina muda
+       de tamanho de verdade. */
+    function medir() {
+      max = document.documentElement.scrollHeight - innerHeight;
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }
 
     function update() {
       const y = window.scrollY;
-      const max = document.body.scrollHeight - innerHeight;
-      if (header) header.classList.toggle('is-stuck', y > 40);
-      if (bar) bar.style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
+
+      /* so mexe na classe quando o estado MUDA: toggle() com o mesmo valor
+         ainda assim invalida estilo do header em todo frame */
+      const stuck = y > 40;
+      if (header && stuck !== preso) { header.classList.toggle('is-stuck', stuck); preso = stuck; }
+
+      /* scaleX em vez de width: width dispara layout, scaleX fica no compositor */
+      if (bar) bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(y / max, 1) : 0) + ')';
+
       if (!reduced) {
         par.forEach(el => {
           const k = parseFloat(el.dataset.parallax) || 0.1;
           // a centralização já vem da propriedade `translate` no CSS
-          el.style.transform = 'translateY(' + (y * k) + 'px)';
+          el.style.transform = 'translateY(' + (y * k).toFixed(1) + 'px)';
         });
       }
       ticking = false;
     }
+
     addEventListener('scroll', () => {
       if (!ticking) { ticking = true; requestAnimationFrame(update); }
     }, { passive: true });
-    update();
+
+    medir();
+    aoRedimensionar(medir);
+    /* paginas que montam HTML via JS (orcamento, gestor) mudam a altura
+       depois do load; o observer remede sozinho em vez de ler por frame */
+    if ('ResizeObserver' in window) new ResizeObserver(medir).observe(document.body);
   })();
 
   /* ---------- 7. REVEAL AO ROLAR ----------
